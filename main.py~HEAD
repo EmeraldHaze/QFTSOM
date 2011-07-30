@@ -1,7 +1,7 @@
 from core import battle, haggle
 
 from content import battle_mods, glob_acts, people, meta
-from nodemap import nodemap
+from content.nodemap import nodemap
 
 
 ###Start node actions
@@ -17,26 +17,29 @@ def travel(nodemap):
             cmd, args = do.split(" ", 1)
             globals()[cmd](args)
 
-        if node.exit_: return node.exit_
         
         if node.net:
             nodename = traval(node)
             
         else:
+            #Check for exit
+            if node.exit_: return node.exit_
+            
             ops = len(node.links)
             #Print all options
-            for i in range(ops):print "(",i,")",node.links[i]
+            for i in range(ops):print "("+str(i)+")",node.links[i]
             
-            #Get valid option
-            op = input(node.q)
-            while ops>op=>0:
+            #Get valid option#############################################IO
+            op = input(node.q+"\n")
+            while not 0<=op<ops:
                 print "invalid answer"
-                op = input(node.q)
+                op = input(node.q)+"\n")
+                ##########################################################IO
 
             #Get node name
             nodename = node.names[op]
 
         node = nodemap[nodename]
             
-travel(nodemap)
-    
+print travel(nodemap)
+   
