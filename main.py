@@ -15,11 +15,11 @@ def travel(nodemap):
     while 1:
         for do in node.does:
             cmd, args = do.split(" ", 1)
-            globals()[cmd](args)
+            globals()["do_"+cmd](args)
 
         
         if node.net:
-            nodename = traval(node)
+            nodename = travel(node)
             
         else:
             #Check for exit
@@ -33,7 +33,7 @@ def travel(nodemap):
             op = input(node.q+"\n")
             while not 0<=op<ops:
                 print "invalid answer"
-                op = input(node.q)+"\n")
+                op = input(node.q+"\n")
                 ##########################################################IO
 
             #Get node name
