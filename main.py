@@ -27,13 +27,14 @@ def travel(nodemap):
             
             ops = len(node.links)
             #Print all options
-            for i in range(ops):print "(",i,")",node.links[i]
+            for i in range(ops):print "("+str(i)+")",node.links[i]
             
-            #Get valid option
-            op = input(node.q)
-            while 0<=op<ops:
+            #Get valid option#############################################IO
+            op = input(node.q+"\n")
+            while not 0<=op<ops:
                 print "invalid answer"
-                op = input(node.q)
+                op = input(node.q)+"\n")
+                ##########################################################IO
 
             #Get node name
             nodename = node.names[op]
