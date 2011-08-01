@@ -1,9 +1,10 @@
+from collections import deque
 def start(people, exits, mods):
     setup()
-    #Sets up the clock, sceduals eavrybody, generates ability lists, and makes a dict of players, with there names as the keys. Also makes a trigger stack, trigs
+    #Sets up the battletime, sceduals eavrybody, generates ability lists, and makes a dict of players, with there names as the keys. Also makes a trigger stack, trigs
     while 1:
         ###Make players of this tick go
-        for player in clock.players():
+        for player in battletime.players():
             #For each player
             action = player.think(players)
             #Get his action
@@ -18,12 +19,12 @@ def start(people, exits, mods):
             ####Rescedule- Must be worked out. Important
             
         ###Apply effects of this tick
-        for effect in clock.effect():
+        for effect in battletime.effect():
             target, stat, change = effect
             players[target].stats[stat]+=effect
 
         ###Apply actions of this tick
-        for action in clock.actions(): do_action(action)
+        for action in battletime.actions(): do_action(action)
 
         ##Check for exit conditions
         for player in players.keys():
@@ -32,7 +33,7 @@ def start(people, exits, mods):
                     exit.effect(players[player])
                     del players[player]
         ###next tick
-        clock.tick()
+        battletime.tick()
 
 def do_action(action):
     for act in action:
@@ -48,8 +49,52 @@ def do_action(action):
             #The triggering action must be hooked
         else:
             #If it has no trigger
-            global clock
-            clock.addeffect(effect)
+            global battletime
+            battletime.addeffect(effect)
             #Add the event. addevent puts it event[0] ticks away from now.
+
+
     
-                    
+class clock:
+    """A scrolling timeline with a nuber of types of slot for each tick.
+    (E.g. each tick has a number of named list
+    clock.add<listname>(item) assumes that item[0] is how many ticks away to secedual that item
+    clock.add<listname>(item, time) sceduals item time ticks away from now
+    clock.<listname>s() returns the list of items scedualed for this tick
+    """
+
+    def __init__(self, *args):
+        self.splits = {}
+        for split in args: self.splits[split] = deque()
+
+    def __getattr__(self, attr):
+        if attr[:3] == "add":
+            return lambda item, tick = None: self.add(attr[3:], item, tick)
+            #Return a wrapper for the correct split add
+            
+        elif attr[-1] == 's':
+            return lambda :self.get(attr[:-1])
+        else:
+            return self.splits[attr]              
+            
+
+    def add(self, split, item, tick = None):
+        if not tick: tick, item = item[0], item[1:]
+        #If we don't have the tick, extract the tick
+        split = self.splits[split]
+        l = len(split)
+        if l>tick:
+            #If the target tick is beyond our scope...
+            split.extend([[]]*tick-l)
+            #Extend just enough for it to be within our scope (extend with blank lists)
+        split[tick].append(item)
+
+    def get(self, split):
+        return self.splits[split][0]
+
+    def tick(self):
+        for split in self.splits.items():
+            #For each dequeue
+            split.popleft()
+            #Pop the first item, hence ticking
+
