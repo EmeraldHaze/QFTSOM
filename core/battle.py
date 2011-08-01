@@ -1,7 +1,14 @@
 from collections import deque
+
+
 def start(people, exits, mods):
-    setup()
-    #Sets up the battletime, sceduals eavrybody, generates ability lists, and makes a dict of players, with there names as the keys. Also makes a trigger stack, trigs
+    players, trigs = ({},)*2
+    #trigs is the trigger stack. It will be used by do_action.
+    for person in people: players[person.name] = person
+    #Fill up players dict with name:person
+    
+    battletime = clock('player', 'effect', 'actions')
+    
     while 1:
         ###Make players of this tick go
         for player in battletime.players():
@@ -12,14 +19,14 @@ def start(people, exits, mods):
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player untill the next time he is caleld
             #Actions are ussally lists of tuples of this form:
-            #Trigger, Time, Target, Effect
+            #Trigger(s)*, None, Time, Target, Effect
             #If there is a non-recurisve trigger present, then it will be
             #Trigger, None, Time, Target, Effect
             do_action(action)
             ####Rescedule- Must be worked out. Important
             
         ###Apply effects of this tick
-        for effect in battletime.effect():
+        for effect in battletime.effects():
             target, stat, change = effect
             players[target].stats[stat]+=effect
 
@@ -52,8 +59,10 @@ def do_action(action):
             global battletime
             battletime.addeffect(effect)
             #Add the event. addevent puts it event[0] ticks away from now.
-
-
+    
+    for person in people: players[person.name] = person
+    #Fill up players dict
+    battletime = clock(
     
 class clock:
     """A scrolling timeline with a nuber of types of slot for each tick.
