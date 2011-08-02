@@ -1,6 +1,6 @@
 from core import battle, haggle
 
-from data import battle_mods, glob_acts, beings
+from data import battle_mods, glob_acts, beings, exits
 from data.nodemap import nodemap
 
 
@@ -8,11 +8,11 @@ from data.nodemap import nodemap
 def do_say(s): print s
 
 def do_battle(arg):
-    persons, exits, mods = arg.split(" | ")
-    persons = [getattr(people, person) for person in persons.split(", ")]
-    exits = [getattr(battle_mods, exit) for exit in exit.split(", ")]
+    players, game_exits, mods = arg.split("|")
+    players = [getattr(beings, player) for player in players.split(", ")]
+    game_exits = [getattr(exits, exit) for exit in game_exits.split(", ")]
     mods = [getattr(battle_mods, mod) for mod in mods.split(", ")]
-    battle.start(persons, exits, mods)
+    battle.start(players, game_exits, mods)
     
 ###Main function
 def travel(nodemap):

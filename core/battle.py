@@ -9,7 +9,7 @@ def start(people, exits, mods):
     battletime = clock('player', 'effect')
     
     ###Generate player action lists
-    for player in player.values():
+    for player in players.values():
         for belong in player.belongs: player.actions.extend(belong.actions)
     
     ##Scedual players
@@ -46,7 +46,7 @@ def start(people, exits, mods):
         for player in players.keys():
             for exit in exits:
                 if exit.condition(players[player]):
-                    exit.effect(players[player])
+                    exit.effect(players[player], players)
                     del players[player]
         ###next tick
         battletime.tick()
