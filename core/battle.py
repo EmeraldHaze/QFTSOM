@@ -19,9 +19,7 @@ def start(people, exits, mods):
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player untill the next time he is caleld
             #Actions are ussally lists of tuples of this form:
-            #Trigger(s)*, None, Time, Target, Effect
-            #If there is a non-recurisve trigger present, then it will be
-            #Trigger, None, Time, Target, Effect
+
             do_action(action)
             ####Rescedule- Must be worked out. Important
             

@@ -10,8 +10,8 @@ def do_say(s): print s
 def do_battle(arg):
     persons, exits, mods = arg.split(" | ")
     persons = [getattr(people, person) for person in persons.split(", ")]
-    mods = [getattr(battle_mods, mod) for mod in mods.split(", ")]
     exits = [getattr(battle_mods, exit) for exit in exit.split(", ")]
+    mods = [getattr(battle_mods, mod) for mod in mods.split(", ")]
     battle.start(persons, exits, mods)
     
 ###Main function
@@ -52,6 +52,9 @@ def travel(nodemap):
             
         node = nodemap[nodename]
         #Set the node
-        
+
+
+
+
 print travel(nodemap)
 #Travel the root network
