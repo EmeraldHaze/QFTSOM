@@ -1,6 +1,6 @@
 class being:
     """Fully descrbes an entity. """
-    def __init__(self, name, thinker stats, belongings, params = {}):
+    def __init__(self, name, thinker, stats, belongings, params = {}):
         self.thinker = thinker
         self.stats = stats
         self.belongs = belongings

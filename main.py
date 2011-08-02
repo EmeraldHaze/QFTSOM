@@ -1,7 +1,7 @@
 from core import battle, haggle
 
-from content import battle_mods, glob_acts, people, meta
-from content.nodemap import nodemap
+from data import battle_mods, glob_acts, beings
+from data.nodemap import nodemap
 
 
 ###Start node actions
