@@ -1,5 +1,5 @@
 class belong:
-    def __init__(self, name, skills, stats):
+    def __init__(self, name, actions = [], stats = {}):
         self.name = name
-        self.skills = skills
+        self.actions = actions
         self.stats = stats

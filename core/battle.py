@@ -6,32 +6,41 @@ def start(people, exits, mods):
     #trigs is the trigger stack. It will be used by do_action.
     for person in people: players[person.name] = person
     #Fill up players dict with name:person
+    battletime = clock('player', 'effect')
     
-    battletime = clock('player', 'effect', 'actions')(
+    ###Generate player action lists
+    for player in player.values():
+        for belong in player.belongs: player.actions.extend(belong.actions)
     
+    ##Scedual players
+    t = 0
+    for players in player.values:
+        battletime.addplayer(player, t)
+        t+=1
+        
+        
     while 1:
         ###Make players of this tick go
         for player in battletime.players():
             #For each player
-            action = player.think(players)
+            action = player.thinker.think(players)
             #Get his action
             #Calls the thinker of a player and supply him with info about the players.
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player untill the next time he is caleld
-            #Actions are ussally lists of tuples of this form:
-            #Trigger(s)*, None, Time, Target, Effect
-            #If there is a non-recurisve trigger present, then it will be
-            #Trigger, None, Time, Target, Effect
+            print player.name, "had done ", action.name+"!"
             do_action(action)
             ####Rescedule- Must be worked out. Important
+            battletime.addplayer(player, 2)
             
         ###Apply effects of this tick
         for effect in battletime.effects():
-            target, stat, change = effect
-            players[target].stats[stat]+=change
-
-        ###Apply actions of this tick
-        for action in battletime.actions(): do_action(action)
+            target, changes = effect
+            for change in changes.items():
+                players[target].stats[change[0]]+=change[1]
+                print target, "'s ', change[0], 'has changed by ', change[1]"
+            
+            #For each change, apply the change to the target
 
         ##Check for exit conditions
         for player in players.keys():
@@ -43,22 +52,8 @@ def start(people, exits, mods):
         battletime.tick()
 
 def do_action(action):
-    for act in action:
-        #For each part of his action
-        trigger, effect = act[0], act[1:]
-        if act[0]:
-            global trigs
-            #If this part has a trigger 
-            trigs[trigger] = effect
-            #Add it to the trigger stack
-            #Notes:  This can means that triggers can be stacked.
-            #Triggers are not finnished 
-            #The triggering action must be hooked
-        else:
-            #If it has no trigger
-            global battletime
-            battletime.addeffect(effect)
-            #Add the event. addevent puts it event[0] ticks away from now.
+    for effect in action.effects: battletime.addeffect((effect, action.targettarget), tick)
+
     
 class clock:
     """A scrolling timeline with a nuber of types of slot for each tick.
