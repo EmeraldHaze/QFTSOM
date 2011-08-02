@@ -6,7 +6,7 @@ class being:
         self.belongs = belongings
         self.params = params
         self.actions = []
-        for belong in self.belongs.values:addbelong(belong)
+        for belong in self.belongs.values():self.addbelong(belong)
 
     def addbelong(self, belong):
         if type(belong) == str: belong = self.belongs[belong]
