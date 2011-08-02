@@ -4,7 +4,7 @@ def man(self, players):
     return action
 
 def player(self, players):
-    print 'HP (him):',player[0].stats['hp']
+    print '(Thinker)HP (him):',players.values()[0].stats['hp']
     choice = input('Choice? ')
     action = self.actions[choice]
     action.target = players.keys()[0]

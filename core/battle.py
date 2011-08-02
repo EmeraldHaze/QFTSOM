@@ -23,12 +23,12 @@ def start(people, exits, mods):
         ###Make players of this tick go
         for player in battletime.players():
             #For each player
-            action = player.think(players)
+            action = player.think(player, players)
             #Get his action
             #Calls the thinker of a player and supply him with info about the players.
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player untill the next time he is caleld
-            print player.name, "had done ", action.name+"!"
+            print player.name, "has done ", action.name+"!"
             do_action(action)
             ####Rescedule- Must be worked out. Important
             battletime.addplayer(player, 2)
@@ -38,7 +38,7 @@ def start(people, exits, mods):
             target, changes = effect
             for change in changes.items():
                 players[target].stats[change[0]]+=change[1]
-                print target, "'s ', change[0], 'has changed by ', change[1]"
+                print target, "'s ", change[0], 'has changed by ', change[1]
             
             #For each change, apply the change to the target
 
@@ -52,6 +52,7 @@ def start(people, exits, mods):
         battletime.tick()
 
 def do_action(action):
+    global battletime
     for effect in action.effects: battletime.addeffect((effect, action.targettarget), tick)
 
     

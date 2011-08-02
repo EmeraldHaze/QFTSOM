@@ -1,6 +1,7 @@
 class action:
     def __init__(self, name,  *args):
         """Each arg is a tuple of changes, delay = 0, trigs = []"""
+        self.name = name
         self.effects = []
         for effect_data in args:
             self.effects.append(effect(effect_data))
