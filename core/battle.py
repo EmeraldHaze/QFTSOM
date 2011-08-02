@@ -10,11 +10,11 @@ def start(people, exits, mods):
     
     ###Generate player action lists
     for player in players.values():
-        for belong in player.belongs: player.actions.extend(belong.actions)
+        for belong in player.belongs.values(): player.actions.extend(belong.actions)
     
     ##Scedual players
     t = 0
-    for players in player.values:
+    for player in players.values():
         battletime.addplayer(player, t)
         t+=1
         
@@ -23,7 +23,7 @@ def start(people, exits, mods):
         ###Make players of this tick go
         for player in battletime.players():
             #For each player
-            action = player.thinker.think(players)
+            action = player.think(players)
             #Get his action
             #Calls the thinker of a player and supply him with info about the players.
             #If he is honest, he will only take as much as he should have.
@@ -79,13 +79,14 @@ class clock:
             
 
     def add(self, split, item, tick = None):
-        if not tick: tick, item = item[0], item[1:]
+        if tick is None: tick, item = item[0], item[1:]
         #If we don't have the tick, extract the tick
         split = self.splits[split]
-        l = len(split)
-        if l>tick:
+        l = len(split)-1
+        #This accounts for the current tick
+        if l<tick:
             #If the target tick is beyond our scope...
-            split.extend([[]]*tick-l)
+            split.extend([[]]*(tick-l))
             #Extend just enough for it to be within our scope (extend with blank lists)
         split[tick].append(item)
 
