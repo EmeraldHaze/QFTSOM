@@ -18,6 +18,9 @@ class effect:
             tick = effect_data[1]
             if l>2: trigs = effect_data[2]
         #Set optinal vars if they exist.
+        self.changes = changes
+        self.tick = tick
+        self.trigs = trigs
         
     def poptrig(self):
         return self.trigs.pop()

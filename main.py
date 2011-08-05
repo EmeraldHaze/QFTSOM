@@ -33,7 +33,8 @@ def travel(nodemap):
             
         else:
             #If this node is an exit, return where it wants to exit too.
-            #Unless this is the root network, in which case it's a message to be printed
+            #Unless this is the root network,
+            #in which case exit_ will be a printed messege
             if node.exit_: return node.exit_
             
             ops = len(node.links)

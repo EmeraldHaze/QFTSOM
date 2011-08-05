@@ -1,10 +1,16 @@
 from collections import deque
 
 
-def start(people, exits, mods):
-    players, trigs = ({},)*2
+def start(player_list, exits, mods):
+    """Starts battle"""
+    def do_action(action):
+        for effect in action.effects: battletime.addeffect((effect, action.target), effect.tick)
+    
+
+
+    players, trigs = {}, {}
     #trigs is the trigger stack. It will be used by do_action.
-    for person in people: players[person.name] = person
+    for player in player_list: players[player.name] = player
     #Fill up players dict with name:person
     battletime = clock('player', 'effect')
     
@@ -17,26 +23,31 @@ def start(people, exits, mods):
     for player in players.values():
         battletime.addplayer(player, t)
         t+=1
-        
-        
+
+    exitlist = []
+    player_num = len(players)
+    #This is to make end-of-battle cleaner
+    
     while 1:
         ###Make players of this tick go
         for player in battletime.players():
             #For each player
-            action = player.think(player, players)
-            #Get his action
-            #Calls the thinker of a player and supply him with info about the players.
-            #If he is honest, he will only take as much as he should have.
-            #He can store info in the player untill the next time he is caleld
-            print player.name, "has done ", action.name+"!"
-            do_action(action)
-            ####Rescedule- Must be worked out. Important
-            battletime.addplayer(player, 2)
-            
+            if player.name not in exitlist:
+                #If the player isn't killed (this is for end-of-battle errors)
+                action = player.think(player, players)
+                #Get his action
+                #Call the player's thinker and give him info about the players.
+                #If he is honest, he will only take as much as he should have.
+                #He can store info in the player 'til the next time he is called
+                print player.name, "has done ", action.name+"!"
+                do_action(action)
+                ####Rescedule- Must be worked out. Important
+                battletime.addplayer(player, 2)
+                
         ###Apply effects of this tick
         for effect in battletime.effects():
-            target, changes = effect
-            for change in changes.items():
+            effect, target = effect
+            for change in effect.changes.items():
                 players[target].stats[change[0]]+=change[1]
                 print target, "'s ", change[0], 'has changed by ', change[1]
             
@@ -48,18 +59,18 @@ def start(people, exits, mods):
                 if exit.condition(players[player]):
                     exit.effect(players[player], players)
                     del players[player]
+                    exitlist.append(player)
+                    player_num-=1
+                    if not player_num: break
+                    #Handle player exit stuff and break if eavryone is dead.
+                    
         ###next tick
         battletime.tick()
-
-def do_action(action):
-    global battletime
-    for effect in action.effects: battletime.addeffect((effect, action.targettarget), tick)
 
     
 class clock:
     """A scrolling timeline with a nuber of types of slot for each tick.
     (E.g. each tick has a number of named list
-    clock.add<listname>(item) assumes that item[0] is how many ticks away to secedual that item
     clock.add<listname>(item, time) sceduals item time ticks away from now
     clock.<listname>s() returns the list of items scedualed for this tick
     """
@@ -75,13 +86,13 @@ class clock:
             
         elif attr[-1] == 's':
             return lambda :self.get(attr[:-1])
+            
         else:
-            return self.splits[attr]              
+            return self.splits[attr]
+     
             
 
-    def add(self, split, item, tick = None):
-        if tick is None: tick, item = item[0], item[1:]
-        #If we don't have the tick, extract the tick
+    def add(self, split, item, tick):
         split = self.splits[split]
         l = len(split)-1
         #This accounts for the current tick
@@ -95,7 +106,7 @@ class clock:
         return self.splits[split][0]
 
     def tick(self):
-        for split in self.splits.items():
+        for split in self.splits.values():
             #For each dequeue
             split.popleft()
             #Pop the first item, hence ticking
