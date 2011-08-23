@@ -1,4 +1,4 @@
-class being:
+class Being:
     """Fully descrbes an entity. """
     def __init__(self, name, thinker, stats, belongings, params = {}):
         self.think = thinker

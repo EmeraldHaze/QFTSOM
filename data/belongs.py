@@ -1,3 +1,3 @@
-from api.belong import belong
+from api.belong import Belong
 from data import actions
-stick = belong('stick', [actions.poke])
+stick = Belong('stick', [actions.poke])

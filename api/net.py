@@ -1,4 +1,4 @@
-class node:
+class Node:
     def __init__(self, names, links, does = [], q = "Where do you want to go?", exit_ = False):
         self.links = links
         self.names = names
@@ -7,7 +7,7 @@ class node:
         self.q = q
         self.net = False
 
-class net:
+class Net:
     
     def __init__(self, start, nodes, does = []):
         """Nodes are a dict of all nodes in this network.

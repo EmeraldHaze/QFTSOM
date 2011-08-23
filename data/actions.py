@@ -1,2 +1,2 @@
-from api.action import action
-poke = action('poke', {'hp':-1})
+from api.action import Action
+poke = Action('poke', {'hp':-1})
