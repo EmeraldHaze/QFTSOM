@@ -1,7 +1,7 @@
 class Action:
     def __init__(self, name,  *args):
         """Each arg is a tuple of changes, delay = 0, trigs = []"""
-        self.name = name
+        self.name = name        
         self.effects = []
         for effect_data in args:
             self.effects.append(Effect(effect_data))

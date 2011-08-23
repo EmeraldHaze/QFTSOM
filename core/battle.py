@@ -39,7 +39,7 @@ def start(player_list, exits, mods):
                 #Call the player's thinker and give him info about the players.
                 #If he is honest, he will only take as much as he should have.
                 #He can store info in the player 'til the next time he is called
-                print player.name, "has done ", action.name+"!"
+                print player.name, "has", action.name+"'d "+action.target+"!"
                 do_action(action)
                 ####Rescedule- Must be worked out. Important
                 battletime.addplayer(player, 2)
