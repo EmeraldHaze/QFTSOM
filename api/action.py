@@ -4,7 +4,7 @@ class Action:
         self.name = name
         self.effects = []
         for effect_data in args:
-            self.effects.append(effect(effect_data))
+            self.effects.append(Effect(effect_data))
             #For each effect given, add it to our effects as an effect object.
         
 class Effect:
