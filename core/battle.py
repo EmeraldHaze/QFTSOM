@@ -5,7 +5,7 @@ def start(player_list, exits, mods):
     """Starts battle"""
     def do_action(action):
         for effect in action.effects:
-            battletime.addeffect((effect, action.target), effect.tick)
+            battletime.addeffect(effect, effect.tick)
     
 
 
@@ -17,12 +17,15 @@ def start(player_list, exits, mods):
     
     ###Generate player action lists
     for player in players.values():
-        for belong in player.belongs.values(): player.actions.extend(belong.actions)
+        for belong in player.belongs.values():
+            player.actions.extend(belong.actions)
     
     ##Scedual players
     #t = 0
+    #pdb.set_trace()
     for player in players.values():
-        battletime.addplayer(player, 0)
+        battletime.addplayer(player, 1)
+        print player
         #t+=1
 
     exitlist = []
@@ -30,7 +33,9 @@ def start(player_list, exits, mods):
     #This is to make end-of-battle cleaner
     
     while 1:
+        #pdb.set_trace()
         ###Make players of this tick go
+        print battletime.splits
         for player in battletime.players():
             #For each player
             if player.name not in exitlist:
@@ -47,10 +52,10 @@ def start(player_list, exits, mods):
                 
         ###Apply effects of this tick
         for effect in battletime.effects():
-            effect, target = effect
-            for change in effect.changes.items():
-                players[target].stats[change[0]]+=change[1]
-                print target, "'s ", change[0], 'has changed by ', change[1]
+            for target in effect.targets:
+                for change in effect.changes.items():
+                    players[target].stats[change[0]]+=change[1]
+                    print target, "'s ", change[0], 'has changed by ', change[1]
             
             #For each change, apply the change to the target
 
@@ -82,7 +87,7 @@ class clock:
 
     def __getattr__(self, attr):
         if attr[:3] == "add":
-            return lambda item, tick = None: self.add(attr[3:], item, tick)
+            return lambda item, tick: self.add(attr[3:], item, tick)
             #Return a wrapper for the correct split add
             
         elif attr[-1] == 's':
@@ -97,12 +102,12 @@ class clock:
         split = self.splits[split]
         l = len(split)-1
         #This accounts for the current tick
-        if l<tick:
+        if l<tick+1:
             #If the target tick is beyond our scope...
             split.extend([[]]*(tick-l+1))
             #Extend just enough for it to be within our scope + 1
             #The incremnt is so that we don't crash when people stop scedualing
-            split[tick].append(item)
+        split[tick].append(item)
 
     def get(self, split):
         return self.splits[split][0]

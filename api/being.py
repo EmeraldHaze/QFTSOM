@@ -8,7 +8,10 @@ class Being:
         self.actions = []
         self.name = name
         for belong in self.belongs.values():self.addbelong(belong)
-
+        
+    def __repr__(self):
+        return '<'+self.name+'>'
+        
     def addbelong(self, belong):
         if type(belong) == str: belong = self.belongs[belong]
         for stat in belong.stats.items(): stat.stats[stat[0]] += stat[1]

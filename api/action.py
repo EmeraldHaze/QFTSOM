@@ -6,6 +6,10 @@ class Action:
         for effect_data in args:
             self.effects.append(Effect(effect_data))
             #For each effect given, add it to our effects as an effect object.
+
+    def set_target(self, target):
+        for effect in self.effects:
+            effect.target = target
         
 class Effect:
     def __init__(self, effect_data):
