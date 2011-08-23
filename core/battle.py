@@ -1,10 +1,11 @@
 from collections import deque
-
+import pdb
 
 def start(player_list, exits, mods):
     """Starts battle"""
     def do_action(action):
-        for effect in action.effects: battletime.addeffect((effect, action.target), effect.tick)
+        for effect in action.effects:
+            battletime.addeffect((effect, action.target), effect.tick)
     
 
 
@@ -19,10 +20,10 @@ def start(player_list, exits, mods):
         for belong in player.belongs.values(): player.actions.extend(belong.actions)
     
     ##Scedual players
-    t = 0
+    #t = 0
     for player in players.values():
-        battletime.addplayer(player, t)
-        t+=1
+        battletime.addplayer(player, 0)
+        #t+=1
 
     exitlist = []
     player_num = len(players)
@@ -42,7 +43,7 @@ def start(player_list, exits, mods):
                 print player.name, "has", action.name+"'d "+action.target+"!"
                 do_action(action)
                 ####Rescedule- Must be worked out. Important
-                battletime.addplayer(player, 2)
+                battletime.addplayer(player, 1)
                 
         ###Apply effects of this tick
         for effect in battletime.effects():
@@ -98,9 +99,10 @@ class clock:
         #This accounts for the current tick
         if l<tick:
             #If the target tick is beyond our scope...
-            split.extend([[]]*(tick-l))
-            #Extend just enough for it to be within our scope (extend with blank lists)
-        split[tick].append(item)
+            split.extend([[]]*(tick-l+1))
+            #Extend just enough for it to be within our scope + 1
+            #The incremnt is so that we don't crash when people stop scedualing
+            split[tick].append(item)
 
     def get(self, split):
         return self.splits[split][0]
