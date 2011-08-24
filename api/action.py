@@ -7,9 +7,12 @@ class Action:
             self.effects.append(Effect(effect_data))
             #For each effect given, add it to our effects as an effect object.
 
-    def set_target(self, target):
+    def set_targets(self, targets):
+        if type(targets) == str:
+            targets = [targets]
+        self.targets = targets
         for effect in self.effects:
-            effect.target = target
+            effect.targets = targets
         
 class Effect:
     def __init__(self, effect_data):

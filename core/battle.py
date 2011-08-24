@@ -11,9 +11,10 @@ def start(player_list, exits, mods):
 
     players, trigs = {}, {}
     #trigs is the trigger stack. It will be used by do_action.
-    for player in player_list: players[player.name] = player
+    for player in player_list:
+        players[player.name] = player
     #Fill up players dict with name:person
-    battletime = clock('player', 'effect')
+    battletime = Clock('player', 'effect')
     
     ###Generate player action lists
     for player in players.values():
@@ -22,18 +23,16 @@ def start(player_list, exits, mods):
     
     ##Scedual players
     #t = 0
-    #pdb.set_trace()
     for player in players.values():
-        battletime.addplayer(player, 1)
+        battletime.addplayer(player, 0)
         print player
         #t+=1
-
+    
     exitlist = []
     player_num = len(players)
     #This is to make end-of-battle cleaner
     
     while 1:
-        #pdb.set_trace()
         ###Make players of this tick go
         print battletime.splits
         for player in battletime.players():
@@ -45,12 +44,13 @@ def start(player_list, exits, mods):
                 #Call the player's thinker and give him info about the players.
                 #If he is honest, he will only take as much as he should have.
                 #He can store info in the player 'til the next time he is called
-                print player.name, "has", action.name+"'d "+action.target+"!"
+                print player.name, "has", action.name, "'d ", ', '.join(action.targets), "!"
                 do_action(action)
                 ####Rescedule- Must be worked out. Important
                 battletime.addplayer(player, 1)
                 
         ###Apply effects of this tick
+        print 'Applying effects'
         for effect in battletime.effects():
             for target in effect.targets:
                 for change in effect.changes.items():
@@ -74,7 +74,7 @@ def start(player_list, exits, mods):
         battletime.tick()
 
     
-class clock:
+class Clock:
     """A scrolling timeline with a nuber of types of slot for each tick.
     (E.g. each tick has a number of named list
     clock.add<listname>(item, time) sceduals item time ticks away from now
@@ -104,7 +104,8 @@ class clock:
         #This accounts for the current tick
         if l<tick+1:
             #If the target tick is beyond our scope...
-            split.extend([[]]*(tick-l+1))
+            for i in range(tick-l+1):
+                split.extend([[]])
             #Extend just enough for it to be within our scope + 1
             #The incremnt is so that we don't crash when people stop scedualing
         split[tick].append(item)

@@ -12,7 +12,7 @@ def man(self, players):
         otherhp = player[1].stats['hp']
         if otherhp < lowest[0]:
             lowest = (otherhp, player[0])
-    action.target = lowest[1]
+    action.set_targets(lowest[1])
     return action
 
 def player(self, players):
@@ -21,5 +21,5 @@ def player(self, players):
         print '[T] {n}. {name}: {hp}'.format(n = p, name = player.name, hp = player.stats['hp'])
     choice = input('Choice? ')
     action = self.actions[0]
-    action.target = players.keys()[choice]
+    action.set_targets(players.keys()[choice])
     return action
