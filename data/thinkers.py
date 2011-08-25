@@ -5,7 +5,9 @@ def man(self, players):
     
     action = self.actions[0]
     #Choose the first action
-    others = dict((k, v) for k, v in players.items() if v != self)
+    action = action.copy('man thinker')
+    #Use a copy so we don'y chnage the original
+    others = dict([(k, v) for k, v in players.items() if v != self])
     #Make a dict of eavryone who isn't me
     lowest = (10, '')
     for player in others.items():
@@ -15,11 +17,30 @@ def man(self, players):
     action.set_targets(lowest[1])
     return action
 
+
+def other_man(self, players):
+    """A wierd mundane thinker who
+    attacks the player with the
+    most HP"""
+    
+    action = self.actions[0]
+    #Choose the first action
+    others = dict([(k, v) for k, v in players.items() if v != self])
+    #Make a dict of eavryone who isn't me
+    most = (0, '')
+    for player in others.items():
+        otherhp = player[1].stats['hp']
+        if otherhp > most[0]:
+            most = (otherhp, player[0])
+    action.set_targets(most[1])
+    return action
+
 def player(self, players):
     for p in range(len(players)):
         player = players.values()[p]
         print '[T] {n}. {name}: {hp}'.format(n = p, name = player.name, hp = player.stats['hp'])
     choice = input('Choice? ')
     action = self.actions[0]
+    action = action.copy('player thinker')
     action.set_targets(players.keys()[choice])
     return action

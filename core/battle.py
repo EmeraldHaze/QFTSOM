@@ -1,37 +1,37 @@
 from collections import deque
-import pdb
 
 def start(player_list, exits, mods):
     """Starts battle"""
     def do_action(action):
         for effect in action.effects:
+            print (effect.targets, id(effect))
             battletime.addeffect(effect, effect.tick)
-    
-
-
+            
     players, trigs = {}, {}
     #trigs is the trigger stack. It will be used by do_action.
     for player in player_list:
         players[player.name] = player
     #Fill up players dict with name:person
     battletime = Clock('player', 'effect')
-    
     ###Generate player action lists
     for player in players.values():
+        #For each player
         for belong in player.belongs.values():
-            player.actions.extend(belong.actions)
+            #For each of his belongings
+            for action in belong.actions:
+                #For each of it's actions
+                player.actions.append(action.copy('action list generation'))
+                #Append a copy [So that the original doesn't change]
     
     ##Scedual players
     #t = 0
     for player in players.values():
         battletime.addplayer(player, 0)
-        print player
         #t+=1
     
     exitlist = []
     player_num = len(players)
     #This is to make end-of-battle cleaner
-    
     while 1:
         ###Make players of this tick go
         print battletime.splits
@@ -50,6 +50,7 @@ def start(player_list, exits, mods):
                 battletime.addplayer(player, 1)
                 
         ###Apply effects of this tick
+        print battletime.effects()
         print 'Applying effects'
         for effect in battletime.effects():
             for target in effect.targets:
@@ -73,7 +74,7 @@ def start(player_list, exits, mods):
         ###next tick
         battletime.tick()
 
-    
+        
 class Clock:
     """A scrolling timeline with a nuber of types of slot for each tick.
     (E.g. each tick has a number of named list
@@ -99,6 +100,7 @@ class Clock:
             
 
     def add(self, split, item, tick):
+        s = split
         split = self.splits[split]
         l = len(split)-1
         #This accounts for the current tick
@@ -112,10 +114,12 @@ class Clock:
 
     def get(self, split):
         return self.splits[split][0]
+        
 
     def tick(self):
         for split in self.splits.values():
             #For each dequeue
             split.popleft()
             #Pop the first item, hence ticking
-
+    
+    
