@@ -16,7 +16,7 @@ class Action:
         new.effects = []
         for effect in self.effects:
             print effect
-            new.effects.append(effect.copy)
+            new.effects.append(effect.copy())
         new.copy_stats = self.copy_status + 1
         print 'Copy:',new is not self and id(new) != id(self)
         return new
@@ -52,6 +52,6 @@ class Effect:
     def copy(self):
         new = Effect({})
         new.changes = self.changes
-        new.tick = tick
-        new.trigs = trigs
+        new.tick = self.tick
+        new.trigs = self.trigs
 
