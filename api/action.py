@@ -19,7 +19,8 @@ class Action:
         new.copy_stats = self.copy_status + 1
         return new
         
-    def set_targets(self, targets):
+    def complete(self, actor, targets):
+        self.actor = actor
         if type(targets) == str:
             targets = [targets]
         self.targets = targets

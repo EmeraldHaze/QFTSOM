@@ -14,7 +14,7 @@ def man(self, players):
         otherhp = player[1].stats['hp']
         if otherhp < lowest[0]:
             lowest = (otherhp, player[0])
-    action.set_targets(lowest[1])
+    action.complete(self, lowest[1])
     return action
 
 
@@ -32,7 +32,7 @@ def other_man(self, players):
         otherhp = player[1].stats['hp']
         if otherhp > most[0]:
             most = (otherhp, player[0])
-    action.set_targets(most[1])
+    action.complete(self, most[1])
     return action
 
 def player(self, players):
@@ -42,5 +42,5 @@ def player(self, players):
     choice = input('Choice? ')
     action = self.actions[0]
     action = action.copy('player thinker')
-    action.set_targets(players.keys()[choice])
+    action.complete(self, players.keys()[choice])
     return action
