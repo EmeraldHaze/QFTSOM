@@ -12,5 +12,5 @@ def win_effect(player, players):
     player.stats['hp'] = player.stats["maxhp"]
     player.stats['win'] = 0
     
-die = Exit(lambda player:player.stats['hp']<=0, die_effect)
-win = Exit(lambda player:player.stats['win'], win_effect)
+die = Exit(lambda player, players:player.stats['hp']<=0, die_effect)
+win = Exit(lambda player, players:len(players) == 1 and players.values[0] == player, win_effect)

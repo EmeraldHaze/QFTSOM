@@ -62,7 +62,7 @@ def start(player_list, exits, mods):
         ##Check for exit conditions
         for player in players.keys():
             for exit in exits:
-                if exit.condition(players[player]):
+                if exit.condition(players[player], players):
                     exit.effect(players[player], players)
                     del players[player]
                     exitlist.append(player)
@@ -70,6 +70,7 @@ def start(player_list, exits, mods):
                     print "Someone exited. Players:", player_num
                     if player_num == 0:
                         run = False
+                    break
                     #Handle player exit stuff and break if eavryone is dead.
                     
         ###next tick
