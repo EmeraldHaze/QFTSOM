@@ -39,7 +39,7 @@ def start(player_list, exits, mods):
             #For each player
             if player.name not in exitlist:
                 #If the player isn't killed (this is for end-of-battle errors)
-                action = player.think(player, players)
+                action = player.think(player, players, battletime)
                 #Get his action
                 #Call the player's thinker and give him info about the players.
                 #If he is honest, he will only take as much as he should have.

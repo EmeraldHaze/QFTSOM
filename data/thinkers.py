@@ -1,4 +1,4 @@
-def man(self, players):
+def man(self, players, battletime):
     """A basic mundane thinker who
     attacks the player with the
     least HP with his first attack"""
@@ -18,7 +18,7 @@ def man(self, players):
     return action
 
 
-def other_man(self, players):
+def other_man(self, players, battletime):
     """A wierd mundane thinker who
     attacks the player with the
     most HP"""
@@ -35,7 +35,7 @@ def other_man(self, players):
     action.complete(self, most[1])
     return action
 
-def player(self, players):
+def player(self, players, battletime):
     for p in range(len(players)):
         player = players.values()[p]
         print '[T] {n}. {name}: {hp}'.format(n = p, name = player.name, hp = player.stats['hp'])
