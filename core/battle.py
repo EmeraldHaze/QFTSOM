@@ -4,7 +4,6 @@ def start(player_list, exits, mods):
     """Starts battle"""
     def do_action(action):
         for effect in action.effects:
-            print (effect.targets, id(effect))
             battletime.addeffect(effect, effect.tick)
             
     players, trigs = {}, {}
@@ -32,9 +31,11 @@ def start(player_list, exits, mods):
     exitlist = []
     player_num = len(players)
     #This is to make end-of-battle cleaner
-    while 1:
+    run = True
+    while run:
         ###Make players of this tick go
         print battletime.splits
+        print "Making choices"
         for player in battletime.players():
             #For each player
             if player.name not in exitlist:
@@ -50,7 +51,6 @@ def start(player_list, exits, mods):
                 battletime.addplayer(player, 1)
                 
         ###Apply effects of this tick
-        print battletime.effects()
         print 'Applying effects'
         for effect in battletime.effects():
             for target in effect.targets:
@@ -68,7 +68,9 @@ def start(player_list, exits, mods):
                     del players[player]
                     exitlist.append(player)
                     player_num-=1
-                    if not player_num: break
+                    print "Someone exited. Players:", player_num
+                    if player_num == 0:
+                        run = False
                     #Handle player exit stuff and break if eavryone is dead.
                     
         ###next tick

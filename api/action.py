@@ -15,10 +15,8 @@ class Action:
         new = Action(self.name, 'Copy at '+where)
         new.effects = []
         for effect in self.effects:
-            print effect
             new.effects.append(effect.copy())
         new.copy_stats = self.copy_status + 1
-        print 'Copy:',new is not self and id(new) != id(self)
         return new
         
     def set_targets(self, targets):
@@ -28,7 +26,6 @@ class Action:
         for effect in self.effects:
             effect.targets = targets
 
-        
 class Effect:
     def __init__(self, effect_data):
         l = len(effect_data)
@@ -54,4 +51,5 @@ class Effect:
         new.changes = self.changes
         new.tick = self.tick
         new.trigs = self.trigs
+        return new
 
