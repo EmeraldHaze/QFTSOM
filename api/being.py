@@ -1,6 +1,7 @@
+from data import statrules
 class Being:
     """Fully descrbes an entity. """
-    def __init__(self, name, thinker, stats, belongings, params = {}):
+    def __init__(self, name, thinker, stats, belongings, params = {}, rules = statrules.default):
         self.think = thinker
         self.stats = stats
         self.belongs = belongings
@@ -8,6 +9,8 @@ class Being:
         self.actions = []
         self.name = name
         for belong in self.belongs.values():self.addbelong(belong)
+        for rule in rules.items():
+            self.stats[rule[0]] = eval(rule[1])
         
     def __repr__(self):
         return '<'+self.name+'>'
