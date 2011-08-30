@@ -102,6 +102,7 @@ class Clock:
             
 
     def add(self, split, item, tick):
+        tick+=self.tick
         s = split
         split = self.splits[split]
         l = len(split)-1
