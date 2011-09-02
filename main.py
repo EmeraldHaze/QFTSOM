@@ -1,9 +1,10 @@
 """Starts the game, and defines highlevel noderunning"""
 from core import battle, haggle
+#Import engines
 
 from data import battle_mods, glob_acts, beings, exits
 from data.nodemap import nodemap
-
+#Import data for nodemaps and starting battles
 
 ###Start node actions
 def do_say(string):
@@ -15,11 +16,13 @@ def do_battle(arg):
     """Start a battle- arg should be formatted like this:
     player1, player2, etc|exit1, exit2, etc|battlemod1, battlemod2, etc"""
     players, game_exits, mods = arg.split("|")
+    #Split the arg into things needed for battle
     players = [getattr(beings, player) for player in players.split(", ")]
     game_exits = [getattr(exits, exit) for exit in game_exits.split(", ")]
     mods = [getattr(battle_mods, mod) for mod in mods.split(", ")]
+    #Make lists of the actual objects named in the arg
     battle.start(players, game_exits, mods)
-
+    #And start a battle
 
 ###Main function
 def travel(nodemap):
@@ -43,7 +46,7 @@ def travel(nodemap):
         else:
             #If this node is an exit, return where it wants to exit too.
             #Unless this is the root network,
-            #in which case exit_ will be a printed messege
+            #in which case exit_ will be printed
             if node.exit_:
                 return node.exit_
 
