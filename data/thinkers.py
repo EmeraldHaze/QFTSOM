@@ -2,7 +2,7 @@ def man(self, players, battletime):
     """A basic mundane thinker who
     attacks the player with the
     least HP with his first attack"""
-    
+
     action = self.actions[0]
     #Choose the first action
     action = action.copy('man thinker')
@@ -22,7 +22,7 @@ def other_man(self, players, battletime):
     """A wierd mundane thinker who
     attacks the player with the
     most HP"""
-    
+
     action = self.actions[0]
     #Choose the first action
     others = dict([(k, v) for k, v in players.items() if v != self])
@@ -35,10 +35,13 @@ def other_man(self, players, battletime):
     action.complete(self, most[1])
     return action
 
+
 def player(self, players, battletime):
     for p in range(len(players)):
         player = players.values()[p]
-        print '[T] {n}. {name}: {hp}'.format(n = p, name = player.name, hp = player.stats['hp'])
+        print '[T] {n}. {name}: {hp}'.format(n=p,
+            name=player.name,
+            hp=player.stats['hp'])
     choice = input('Choice? ')
     action = self.actions[0]
     action = action.copy('player thinker')

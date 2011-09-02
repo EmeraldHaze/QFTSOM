@@ -1,1 +1,1 @@
-default = {"maxhp":"self.stats['hp']"}
+default = {"maxhp": "self.stats['hp']"}
