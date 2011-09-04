@@ -1,3 +1,9 @@
+"""
+Thinkers files
+Thinkers are functions that are given a player, players, and battletime.
+Honest thinkers should not abuse this, and only use what info their player has
+Returns an action with complete() called on it
+"""
 def man(self, players, battletime):
     """A basic mundane thinker who
     attacks the player with the

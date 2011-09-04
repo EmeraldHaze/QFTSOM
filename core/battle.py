@@ -1,6 +1,6 @@
 from collections import deque
 
-def do_action(action):
+def do_action(battletime, action):
     for effect in action.effects:
         battletime.addeffect(effect, effect.tick)
 
@@ -8,6 +8,13 @@ def start(player_list, exits, mods):
     """
     Starts battle
 
+    Misc prep
+    Player startup
+    End of battle
+    Main
+        Player choices
+        Effects
+        Exits
     """
 
 
@@ -16,59 +23,48 @@ def start(player_list, exits, mods):
     trigs = {}
     #trigs is the trigger stack. It will be used by do_action.
     battletime = Clock('player', 'effect')
-    #Battletime is the clock, obviously
 
-    ###Mass player operations###
+    ###Player startup###
     players = {}
     for player in player_list:
-        ###Generate action lists###
         for belong in player.belongs.values():
-            #For each of his belongings
             for action in belong.actions:
-                #For each of it's actions
                 player.actions.append(action.copy('action list generation'))
-                #Append a copy [So that the original doesn't change]
+                #Copy so that the original doesn't change
 
-        ###Sceduale###
-        for player in players.values():
-            battletime.addplayer(player, 0)
+        battletime.addplayer(player, 0)
 
-        ###Fill players dict###
         players[player.name] = player
 
-    ###End of battle stuff###
+    ###End of battle###
     exitlist = []
     player_num = len(players)
     run = True
 
     while run:
-        ###Make players of this tick go
+        ###Player choices###
         print "Making choices"
         for player in battletime.players():
-            #For each player
             if player.name not in exitlist:
                 #If the player isn't killed (this is for end-of-battle errors)
                 action = player.think(player, players, battletime)
-                #Get his action
-                #Call the player's thinker and give him info about the players.
                 #If he is honest, he will only take as much as he should have.
                 #He can store info in the player 'til the next time he is called
                 print player.name, "has", action.name, "'d ", ', '.join(action.targets), "!"
-                do_action(action)
+                do_action(battletime, action)
                 ####Rescedule- Must be worked out. Important
                 battletime.addplayer(player, 1)
 
-        ###Apply effects of this tick
+        ###Effects###
         print 'Applying effects'
         for effect in battletime.effects():
             for target in effect.targets:
                 for change in effect.changes.items():
                     players[target].stats[change[0]] += change[1]
                     print target, "'s ", change[0], 'has changed by ', change[1]
+            #For each change of each effect, apply the change to the target
 
-            #For each change, apply the change to the target
-
-        ##Check for exit conditions
+        ###Exits###
         for player in players.keys():
             for exit in exits:
                 if exit.condition(players[player], players):
@@ -80,9 +76,7 @@ def start(player_list, exits, mods):
                     if player_num == 0:
                         run = False
                     break
-                    #Handle player exit stuff and break if eavryone is dead.
 
-        ###next tick
         battletime.next_tick()
 
 
