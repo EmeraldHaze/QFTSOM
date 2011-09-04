@@ -3,6 +3,8 @@ written in Python.
 
 Contributing:
   Dev:
+    If you're just passing by, comment on a issue saying that you want to do it, then give a pull request.
+    Otherwise, I'll add you to the team
     * Github account (they have a pretty good tutorial. As to git, progit.org/book)
     * Git set up
     * Python
@@ -11,3 +13,4 @@ Contributing:
   Design:
     * Python/git/github untill we set up network access to the game
     * Google account for google docs
+
