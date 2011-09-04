@@ -1,2 +1,13 @@
 Quest For The Sword Of Metagaming, a highly extensible stratagy/RPG game
 written in Python.
+
+Contributing:
+  Dev:
+    * Github account (they have a pretty good tutorial. As to git, progit.org/book)
+    * Git set up
+    * Python
+    * IDE
+    * Hopefully linux, that will make the above much easier
+  Design:
+    * Python/git/github untill we set up network access to the game
+    * Google account for google docs
