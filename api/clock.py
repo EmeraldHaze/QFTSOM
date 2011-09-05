@@ -1,3 +1,4 @@
+from collections import deque
 class Clock:
     """A timeline with a number of types of slot for each tick, and a pointer
     (E.g. each tick has a number of named list
@@ -41,3 +42,6 @@ class Clock:
 
     def next_tick(self):
         self.tick += 1
+
+    def __repr__(self):
+        return "<Clock instance tick {tick} splits {splits}".format(tick = self.tick, splits = self.splits.keys())

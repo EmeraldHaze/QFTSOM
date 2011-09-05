@@ -20,12 +20,13 @@ def do_say(string):
 def do_battle(arg):
     """Start a battle- arg should be formatted like this:
     player1, player2, etc|exit1, exit2, etc|battlemod1, battlemod2, etc"""
-    players, game_exits, mods = arg.split("|")
-    players = [getattr(beings, player) for player in players.split(", ")]
-    game_exits = [getattr(exits, exit) for exit in game_exits.split(", ")]
-    mods = [getattr(battle_mods, mod) for mod in mods.split(", ")]
     #Make lists of the actual objects named in the arg
-    battle.start(players, game_exits, mods)
+    player_names, exit_names, mod_names = arg.split("|")
+    player_list = [getattr(beings, player) for player in player_names.split(", ")]
+    exit_list = [getattr(exits, exit) for exit in exit_names.split(", ")]
+    mod_list = [getattr(battle_mods, mod) for mod in mod_names.split(", ")]
+    b = battle.Battle(player_list, exit_list, mod_list)
+    b.start()
 
 
 ###Main###
@@ -58,7 +59,7 @@ def travel(nodemap):
 
             #Get valid option
             op = input(node.q + "\n")
-            while not 0 <= op < ops:
+            while not 0 <= op < len(node.links):
                 print "invalid answer"
                 op = input(node.q + "\n")
 
