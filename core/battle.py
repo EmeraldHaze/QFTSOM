@@ -23,7 +23,7 @@ class Battle:
     def choices(self):
         print "Making choices"
         for player in self.timeline.players():
-            action = player.think(player, self.players, self.timeline)
+            action = player.think(self)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
             print player.name, "has", action.name, "'d ", ', '.join(action.targets), "!"

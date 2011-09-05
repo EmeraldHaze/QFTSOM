@@ -1,11 +1,11 @@
 from data import statrules
-
+from types import MethodType
 
 class Being:
     """Fully descrbes an entity. """
     def __init__(self, name, thinker, stats, belongings,
         params={}, rules=statrules.default):
-        self.think = thinker
+        self.think = MethodType(thinker, self, Being)
         self.stats = stats
         self.belongs = belongings
         self.params = params
