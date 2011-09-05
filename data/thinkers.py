@@ -1,10 +1,10 @@
 """
 Thinkers files
-Thinkers are functions that are given a player, players, and battletime.
+Thinkers are functions that are given a player, players, and timeline.
 Honest thinkers should not abuse this, and only use what info their player has
 Returns an action with complete() called on it
 """
-def man(self, players, battletime):
+def man(self, players, timeline):
     """A basic mundane thinker who
     attacks the player with the
     least HP with his first attack"""
@@ -24,7 +24,7 @@ def man(self, players, battletime):
     return action
 
 
-def other_man(self, players, battletime):
+def other_man(self, players, timeline):
     """A wierd mundane thinker who
     attacks the player with the
     most HP"""
@@ -42,7 +42,7 @@ def other_man(self, players, battletime):
     return action
 
 
-def player(self, players, battletime):
+def player(self, players, timeline):
     for p in range(len(players)):
         player = players.values()[p]
         print '[T] {n}. {name}: {hp}'.format(n=p,

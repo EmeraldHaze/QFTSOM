@@ -56,12 +56,11 @@ def travel(nodemap):
             for i in range(len(node.links)):
                 print "(" + str(i) + ")", node.links[i]
 
-            #Get valid option#############################################IO
+            #Get valid option
             op = input(node.q + "\n")
             while not 0 <= op < ops:
                 print "invalid answer"
                 op = input(node.q + "\n")
-                ##########################################################IO
 
             nodename = node.names[op]
 
