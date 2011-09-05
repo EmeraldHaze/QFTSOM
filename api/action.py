@@ -1,9 +1,7 @@
 class Action:
-    def __init__(self, name, made_at, *args):
+    def __init__(self, name, *args):
         """Each arg is a tuple:
-            (changes, delay = 0, trigs = [])
-           If name is 'blank', makes a blank object"""
-        self.made_at = made_at
+            (changes, delay = 0, trigs = [])"""
         self.name = name
         self.effects = []
         self.copy_status = 0
@@ -12,7 +10,7 @@ class Action:
             #For each effect given, add it to our effects as an effect object.
 
     def copy(self, where):
-        new = Action(self.name, 'Copy at ' + where)
+        new = Action(self.name)
         new.effects = []
         for effect in self.effects:
             new.effects.append(effect.copy())
@@ -26,6 +24,7 @@ class Action:
         self.targets = targets
         for effect in self.effects:
             effect.targets = targets
+            effect.actor = actor
 
 
 class Effect:
@@ -44,6 +43,10 @@ class Effect:
         self.changes = changes
         self.tick = tick
         self.trigs = trigs
+
+    def __repr__(self):
+        return  "<Effect instance target " + str(self.targets) + " changes " +\
+         str(self.changes)+" from " + str(self.actor) + ">"
 
     def poptrig(self):
         return self.trigs.pop()

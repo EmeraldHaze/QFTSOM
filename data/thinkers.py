@@ -8,7 +8,6 @@ def man(self, battle):
     """A basic mundane thinker who
     attacks the player with the
     least HP with his first attack"""
-
     action = self.actions[0]
     #Choose the first action
     action = action.copy('man thinker')

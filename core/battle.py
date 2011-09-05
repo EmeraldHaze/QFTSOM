@@ -26,10 +26,14 @@ class Battle:
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            print player.name, "has", action.name, "'d ", ', '.join(action.targets), "!"
+            print player.name, "has", action.name+"'d ", ', '.join(action.targets), "!"
             self.do_action(action)
             ####Rescedule- Must be worked out. Important
             self.timeline.addplayer(player, 1)
+
+    def do_action(self, action):
+        for effect in action.effects:
+            self.timeline.addeffect(effect, effect.tick)
 
     def effects(self):
         print 'Applying effects'
@@ -40,23 +44,30 @@ class Battle:
                     print target, "'s ", change[0], 'has changed by ', change[1]
             #For each change of each effect, apply the change to the target
 
-    def do_action(self, action):
-        for effect in action.effects:
-            self.timeline.addeffect(effect, effect.tick)
-
     def check_exits(self, dep):
         changed = []
         for exit in self.exits[dep]:
             for player in self.players.keys():
-                    if exit.condition(self.players[player], self.players):
-                        exit.effect(self.players[player], self.players)
+                    if exit.condition(self.players[player], self):
+                        exit.effect(self.players[player], self)
                         changed.extend(exit.changes)
-                        del self.players[player]
+                        self.remove_player(player)
                         print player," exited. Players:", len(self.players)
                         if not len(self.players):
                             self.end = True
         for change in changed:
             self.check_exits(change)
+
+    def remove_player(self, player_name):
+        player = self.players[player_name]
+        split = self.timeline.player
+        l = len(split)
+        try:
+            for i in range(self.timeline.tick, l):
+                split[i] = [item for item in split[i] if item != player]
+        except:
+            pdb.set_trace()
+        del self.players[player_name]
 
     def player_startup(self):
         self.players = {}
