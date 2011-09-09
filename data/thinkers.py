@@ -16,9 +16,9 @@ def man(self, battle):
     #Make a dict of eavryone who isn't me
     lowest = (10, '')
     for player in others.items():
-        otherhp = player[1].stats['hp']
-        if otherhp < lowest[0]:
-            lowest = (otherhp, player[0])
+        otherHP = player[1].stats['HP']
+        if otherHP < lowest[0]:
+            lowest = (otherHP, player[0])
     action.complete(self, lowest[1])
     return action
 
@@ -34,9 +34,9 @@ def other_man(self, battle):
     #Make a dict of eavryone who isn't me
     most = (0, '')
     for player in others.items():
-        otherhp = player[1].stats['hp']
-        if otherhp > most[0]:
-            most = (otherhp, player[0])
+        otherHP = player[1].stats['HP']
+        if otherHP > most[0]:
+            most = (otherHP, player[0])
     action.complete(self, most[1])
     return action
 
@@ -44,9 +44,9 @@ def other_man(self, battle):
 def player(self, battle):
     for p in range(len(battle.players)):
         player = battle.players.values()[p]
-        print '[T] {n}. {name}: {hp}'.format(n=p,
+        print '[T] {n}. {name}: {HP}'.format(n=p,
             name=player.name,
-            hp=player.stats['hp'])
+            HP=player.stats['HP'])
     choice = input('Choice? ')
     action = self.actions[0]
     action = action.copy('player thinker')

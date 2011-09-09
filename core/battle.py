@@ -1,18 +1,21 @@
 from collections import defaultdict
-from api.clock import Clock
+from types import MethodType
+
+from core.clock import Clock
+
 import pdb
+
 class Battle:
-    def __init__(self, player_list, exit_list, mod_list):
+    def __init__(self, player_list, exit_list, rule_dict):
         self.player_list = player_list
         self.exit_list = exit_list
-        self.mod_list = mod_list
+        self.rules = defaultdict(lambda :lambda *args:None, rule_dict)
 
     def start(self):
-        self.trigs = {}
-        #trigs is the trigger stack. It will be used by do_action.
         self.timeline = Clock('player', 'effect')
         self.player_startup()
         self.exit_startup()
+        self.rules['init'](self)
         self.end = False
         while not self.end:
             self.choices()
@@ -27,9 +30,10 @@ class Battle:
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
             print player.name, "has", action.name+"'d ", ', '.join(action.targets), "!"
+            player.last_act = action
             self.do_action(action)
             ####Rescedule- Must be worked out. Important
-            self.timeline.addplayer(player, 1)
+            self.rules['schedule'](self, player)
 
     def do_action(self, action):
         for effect in action.effects:
@@ -77,11 +81,11 @@ class Battle:
                     player.actions.append(action.copy('action list generation'))
                     #Copy so that the original doesn't change
 
-            #Make this into a data function, shouldn't be part of core
-            self.timeline.addplayer(player, 0)
+            self.rules['schedule'](self, player)
 
             self.players[player.name] = player
         print self.players
+
     def exit_startup(self):
         self.exits = defaultdict(lambda :[])
         for exit in self.exit_list:

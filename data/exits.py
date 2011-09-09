@@ -5,11 +5,11 @@ def die_effect(player, battle):
 
 def win_effect(player, battle):
     print player.name, "has won!"
-    player.stats['hp'] = player.stats["maxhp"]
+    player.stats['HP'] = player.stats["MAXHP"]
 
 def win_check(player, battle):
-    return len(players) == 1 and players.values()[0] == player
+    return len(battle.players) == 1 and battle.players.values()[0] == player
 
 
-die = Exit(lambda player, players: player.stats['hp'] <= 0, die_effect, ["main", "hp"], ["players"])
+die = Exit(lambda player, players: player.stats['HP'] <= 0, die_effect, ["main", "HP"], ["players"])
 win = Exit(win_check, win_effect, ['players'], ["players"])

@@ -8,7 +8,7 @@ Main
 ###Imports###
 from core import battle, haggle
 
-from data import battle_mods, glob_acts, beings, exits
+from data import rules, glob_acts, beings, exits
 from data.nodemap import nodemap
 
 ###Node actions###
@@ -19,13 +19,14 @@ def do_say(string):
 
 def do_battle(arg):
     """Start a battle- arg should be formatted like this:
-    player1, player2, etc|exit1, exit2, etc|battlemod1, battlemod2, etc"""
+    player1, player2, etc|exit1, exit2, etc|rule1, rule2, etc"""
     #Make lists of the actual objects named in the arg
-    player_names, exit_names, mod_names = arg.split("|")
-    player_list = [getattr(beings, player) for player in player_names.split(", ")]
+    player_names, exit_names, rule_names = arg.split("|")
+    player_list = [getattr(beings, player)\
+     for player in player_names.split(", ")]
     exit_list = [getattr(exits, exit) for exit in exit_names.split(", ")]
-    mod_list = [getattr(battle_mods, mod) for mod in mod_names.split(", ")]
-    b = battle.Battle(player_list, exit_list, mod_list)
+    rule_dict = [(pair.split(" = ")[0], getattr(rules, pair.split(" = ")[1])) for pair in rule_names.split(", ")]
+    b = battle.Battle(player_list, exit_list, rule_dict)
     b.start()
 
 
