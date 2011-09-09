@@ -10,7 +10,7 @@ class Clock:
         self.tick = 0
         self.splits = {}
         for split in args:
-            self.splits[split] = deque()
+            self.splits[split] = deque([[]])
 
     def __getattr__(self, attr):
         if attr[:3] == "add":

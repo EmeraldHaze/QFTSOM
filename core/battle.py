@@ -29,7 +29,7 @@ class Battle:
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            print player.name, "has", action.name+"'d ", ', '.join(action.targets), "!"
+            print player.name, "has", action.name+"'d ", ', '.join(action.targets)+"!"
             player.last_act = action
             self.do_action(action)
             ####Rescedule- Must be worked out. Important
@@ -84,7 +84,6 @@ class Battle:
             self.rules['schedule'](self, player)
 
             self.players[player.name] = player
-        print self.players
 
     def exit_startup(self):
         self.exits = defaultdict(lambda :[])

@@ -26,6 +26,7 @@ def do_battle(arg):
      for player in player_names.split(", ")]
     exit_list = [getattr(exits, exit) for exit in exit_names.split(", ")]
     rule_dict = [(pair.split(" = ")[0], getattr(rules, pair.split(" = ")[1])) for pair in rule_names.split(", ")]
+    global b
     b = battle.Battle(player_list, exit_list, rule_dict)
     b.start()
 
