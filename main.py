@@ -14,7 +14,7 @@ from data.nodemap import nodemap
 ###Node actions###
 def do_say(string):
     """do_ node executer print function"""
-    print string
+    print(string)
 
 
 def do_battle(arg):
@@ -57,13 +57,13 @@ def travel(nodemap):
                 return node.exit_
 
             for i in range(len(node.links)):
-                print "(" + str(i) + ")", node.links[i]
+                print("(" + str(i) + ")", node.links[i])
 
             #Get valid option
-            op = input(node.q + "\n")
+            op = eval(input(node.q + "\n"))
             while not 0 <= op < len(node.links):
-                print "invalid answer"
-                op = input(node.q + "\n")
+                print("invalid answer")
+                op = eval(input(node.q + "\n"))
 
             nodename = node.names[op]
 
@@ -71,5 +71,5 @@ def travel(nodemap):
         #Set the node
 
 
-print travel(nodemap)
+print(travel(nodemap))
 #Travel the root network

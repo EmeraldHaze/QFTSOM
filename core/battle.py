@@ -24,12 +24,12 @@ class Battle:
             self.timeline.next_tick()
 
     def choices(self):
-        print "Making choices"
+        print("Making choices")
         for player in self.timeline.players():
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            print player.name, "has", action.name+"'d ", ', '.join(action.targets)+"!"
+            print(player.name, "has", action.name+"'d ", ', '.join(action.targets)+"!")
             player.last_act = action
             self.do_action(action)
             ####Rescedule- Must be worked out. Important
@@ -40,23 +40,23 @@ class Battle:
             self.timeline.addeffect(effect, effect.tick)
 
     def effects(self):
-        print 'Applying effects'
+        print('Applying effects')
         for effect in self.timeline.effects():
             for target in effect.targets:
-                for change in effect.changes.items():
+                for change in list(effect.changes.items()):
                     self.players[target].stats[change[0]] += change[1]
-                    print target, "'s ", change[0], 'has changed by ', change[1]
+                    print(target, "'s ", change[0], 'has changed by ', change[1])
             #For each change of each effect, apply the change to the target
 
     def check_exits(self, dep):
         changed = []
         for exit in self.exits[dep]:
-            for player in self.players.keys():
+            for player in list(self.players.keys()):
                     if exit.condition(self.players[player], self):
                         exit.effect(self.players[player], self)
                         changed.extend(exit.changes)
                         self.remove_player(player)
-                        print player," exited. Players:", len(self.players)
+                        print(player," exited. Players:", len(self.players))
                         if not len(self.players):
                             self.end = True
         for change in changed:
@@ -76,7 +76,7 @@ class Battle:
     def player_startup(self):
         self.players = {}#OrderedDict()
         for player in self.player_list:
-            for belong in player.belongs.values():
+            for belong in list(player.belongs.values()):
                 for action in belong.actions:
                     player.actions.append(action.copy('action list generation'))
                     #Copy so that the original doesn't change
