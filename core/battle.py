@@ -1,5 +1,5 @@
-from collections import defaultdict
-from types import MethodType
+from collections import defaultdict#, OrderedDict
+#from types import MethodType
 
 from core.clock import Clock
 
@@ -74,7 +74,7 @@ class Battle:
         del self.players[player_name]
 
     def player_startup(self):
-        self.players = {}
+        self.players = {}#OrderedDict()
         for player in self.player_list:
             for belong in player.belongs.values():
                 for action in belong.actions:
