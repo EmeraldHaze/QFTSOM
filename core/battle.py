@@ -24,7 +24,6 @@ class Battle:
             self.timeline.next_tick()
 
     def choices(self):
-        print("Making choices")
         for player in self.timeline.players():
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
@@ -36,7 +35,6 @@ class Battle:
             self.rules['schedule'](self, player)
 
     def actions(self):
-        print('Executing actions')
         for action in self.timeline.actions():
             action.listners['exec'](action)
 
@@ -58,11 +56,9 @@ class Battle:
         player = self.players[player_name]
         split = self.timeline.player
         l = len(split)
-        try:
-            for i in range(self.timeline.tick, l):
-                split[i] = [item for item in split[i] if item != player]
-        except:
-            pdb.set_trace()
+        for i in range(self.timeline.tick, l):
+            split[i] = [item for item in split[i] if item != player]
+
         del self.players[player_name]
 
     def player_startup(self):

@@ -3,3 +3,6 @@ class Belong:
         self.name = name
         self.actions = actions
         self.stats = stats
+
+    def __str__(self):
+        return "<" + self.name + ">"

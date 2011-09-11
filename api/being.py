@@ -1,20 +1,23 @@
 from data import statrules
 from types import MethodType
+from pdb import set_trace
 
 class Being:
     """Fully descrbes an entity. """
     def __init__(self, name, thinker, stats, belongings,
-        params={}, rules=statrules.default):
+        params={}, rules="old_qftsom"):
         self.think = MethodType(thinker, self)
         self.stats = stats
         self.belongs = belongings
         self.params = params
         self.actions = []
         self.name = name
-        for belong in list(self.belongs.values()):
-            self.addbelong(belong)
-        for rule in list(rules.items()):
+        rules = getattr(statrules, rules)
+        for rule in rules.items():
             self.stats[rule[0]] = eval(rule[1])
+
+        for belong in self.belongs.values():
+            self.addbelong(belong)
 
     def __repr__(self):
         return '<' + self.name + '>'
@@ -23,7 +26,8 @@ class Being:
         if type(belong) == str:
             belong = self.belongs[belong]
         for stat in list(belong.stats.items()):
-            stat.stats[stat[0]] += stat[1]
+            self.stats[stat[0]] += stat[1]
+
 
     def rmbelong(self, belong):
         if type(belong) == str:
