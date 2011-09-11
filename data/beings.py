@@ -13,4 +13,4 @@ dwarf = Being('Dwarf', thinkers.dwarf,
     {'STR':13,'INT':7}, {'Axe':belongs.axe, "Helm":belongs.helm})
 
 player = Being('Player', thinkers.player,
-    {'STR': 15, 'INT':15}, {'Staff': belongs.staff})
+    {'STR': 10, 'INT':10}, {'Staff': belongs.staff})

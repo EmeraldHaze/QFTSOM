@@ -42,15 +42,14 @@ def other_man(self, battle):
 
 
 def player(self, battle):
-    for p in range(len(battle.players)):
-        player = list(battle.players.values())[p]
-        print('[T]{name}: {HP}'.format(name=player.name,
-            HP=player.stats['HP']))
-    print("0-attack, 1-heal")
-    choice = eval(input('Choice? '))
-    action = self.actions[choice].copy(battle)
-    action = action.copy(battle)
+    available_acts = [action for action in self.actions if action.metadata['MPcost'] < self.stats['MP']]
     other = [player for player in list(battle.players.values()) if player != self][0]
+    print("You have {} HP, {} MP, the Dwarf has {} HP".format(self.stats['HP'], self.stats["MP"], other.stats["HP"]))
+    for p in range(len(available_acts)):
+        print("{p}: {name} MP cost: {mp}".format(p = p, name = available_acts[p].name, mp = available_acts[p].metadata["MPcost"]))
+    choice = eval(input('Choice? '))
+    action = available_acts[choice].copy(battle)
+    action = action.copy(battle)
     action.complete(self, other)
     return action
 

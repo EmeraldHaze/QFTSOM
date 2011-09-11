@@ -1,12 +1,17 @@
 from api.exit import Exit
 
+def reset(player):
+    player.actions = []
+    player.stats['HP'] = player.stats["MAXHP"]
+    player.stats['MP'] = player.stats["MAXMP"]
+
 def die_effect(player, battle):
     print(player.name, 'has died!')
+    reset(player)
 
 def win_effect(player, battle):
     print(player.name, "has won!")
-    player.stats['HP'] = player.stats["MAXHP"]
-
+    reset(player)
 def win_check(player, battle):
     return len(battle.players) == 1 and list(battle.players.values())[0] == player
 

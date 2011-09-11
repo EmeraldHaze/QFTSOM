@@ -33,3 +33,6 @@ class Action:
                 raise Exception(self.actor.name+\
                 "'s thinker passed an invalid amount of targets to action "+self.name)
         self.listners['init'](self)
+
+    def __repr__(self):
+        return "<"+self.name+">"
