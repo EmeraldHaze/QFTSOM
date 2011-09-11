@@ -1,5 +1,5 @@
-from collections import defaultdict#, OrderedDict
-#from types import MethodType
+from collections import defaultdict, OrderedDict
+
 
 from core.clock import Clock
 
@@ -12,14 +12,14 @@ class Battle:
         self.rules = defaultdict(lambda :lambda *args:None, rule_dict)
 
     def start(self):
-        self.timeline = Clock('player', 'effect')
+        self.timeline = Clock('player', 'action')
         self.player_startup()
         self.exit_startup()
         self.rules['init'](self)
         self.end = False
         while not self.end:
             self.choices()
-            self.effects()
+            self.actions()
             self.check_exits("main")
             self.timeline.next_tick()
 
@@ -29,24 +29,16 @@ class Battle:
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            print(player.name, "has", action.name+"'d ", ', '.join(action.targets)+"!")
+            print(player.name, "has", action.name+"'d ",
+             ', '.join([target.name for target in action.targets])+"!")
             player.last_act = action
-            self.do_action(action)
-            ####Rescedule- Must be worked out. Important
+            self.timeline.addaction(action, action.metadata["delay"])
             self.rules['schedule'](self, player)
 
-    def do_action(self, action):
-        for effect in action.effects:
-            self.timeline.addeffect(effect, effect.tick)
-
-    def effects(self):
-        print('Applying effects')
-        for effect in self.timeline.effects():
-            for target in effect.targets:
-                for change in list(effect.changes.items()):
-                    self.players[target].stats[change[0]] += change[1]
-                    print(target, "'s ", change[0], 'has changed by ', change[1])
-            #For each change of each effect, apply the change to the target
+    def actions(self):
+        print('Executing actions')
+        for action in self.timeline.actions():
+            action.listners['exec'](action)
 
     def check_exits(self, dep):
         changed = []
@@ -74,12 +66,14 @@ class Battle:
         del self.players[player_name]
 
     def player_startup(self):
-        self.players = {}#OrderedDict()
+        self.players = OrderedDict()
         for player in self.player_list:
             for belong in list(player.belongs.values()):
                 for action in belong.actions:
-                    player.actions.append(action.copy('action list generation'))
+                    player.actions.append(action.copy(battle = self))
                     #Copy so that the original doesn't change
+
+            player.last_act = None
 
             self.rules['schedule'](self, player)
 

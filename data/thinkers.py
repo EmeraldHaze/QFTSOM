@@ -12,13 +12,13 @@ def man(self, battle):
     #Choose the first action
     action = action.copy('man thinker')
     #Use a copy so we don'y chnage the original
-    others = dict([(k, v) for k, v in list(battle.players.items()) if v != self])
+    others = [player for player in list(battle.players.values()) if player != self]
     #Make a dict of eavryone who isn't me
     lowest = (10, '')
-    for player in list(others.items()):
-        otherHP = player[1].stats['HP']
+    for player in others:
+        otherHP = player.stats['HP']
         if otherHP < lowest[0]:
-            lowest = (otherHP, player[0])
+            lowest = (otherHP, player)
     action.complete(self, lowest[1])
     return action
 
@@ -30,13 +30,13 @@ def other_man(self, battle):
 
     action = self.actions[0]
     #Choose the first action
-    others = dict([(k, v) for k, v in list(battle.players.items()) if v != self])
+    others = [player for player in list(battle.players.values()) if player != self]
     #Make a dict of eavryone who isn't me
     most = (0, '')
-    for player in list(others.items()):
-        otherHP = player[1].stats['HP']
+    for player in others:
+        otherHP = player.stats['HP']
         if otherHP > most[0]:
-            most = (otherHP, player[0])
+            most = (otherHP, player)
     action.complete(self, most[1])
     return action
 
@@ -50,5 +50,5 @@ def player(self, battle):
     choice = eval(input('Choice? '))
     action = self.actions[0]
     action = action.copy('player thinker')
-    action.complete(self, list(battle.players.keys())[choice])
+    action.complete(self, list(battle.players.values())[choice])
     return action

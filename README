@@ -7,10 +7,10 @@ Contributing:
     Otherwise, I'll add you to the team
     * Github account (they have a pretty good tutorial. As to git, progit.org/book)
     * Git set up
-    * Python
+    * Python3
     * IDE
     * Hopefully linux, that will make the above much easier
   Design:
-    * Python/git/github untill we set up network access to the game
+    * Python3/git/github untill we set up network access to the game
     * Google account for google docs
 

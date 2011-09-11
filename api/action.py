@@ -1,59 +1,35 @@
+from collections import defaultdict
 class Action:
-    def __init__(self, name, *args):
-        """Each arg is a tuple:
-            (changes, delay = 0, trigs = [])"""
+    def __init__(self, name, listners, mintargets = 1, maxtargets = 1, metadata = {"delay":0}):
         self.name = name
-        self.effects = []
+        self.listners = defaultdict(lambda :lambda *args:None, listners)
+        self.mint = mintargets
+        self.maxt = maxtargets
+        self.metadata = metadata
         self.copy_status = 0
-        for effect_data in args:
-            self.effects.append(Effect(effect_data))
-            #For each effect given, add it to our effects as an effect object.
 
-    def copy(self, where):
-        new = Action(self.name)
-        new.effects = []
-        for effect in self.effects:
-            new.effects.append(effect.copy())
+    def copy(self, battle):
+        new = Action(self.name, self.listners, self.mint, self.maxt, self.metadata)
+        new.battle = battle
         new.copy_stats = self.copy_status + 1
         return new
 
     def complete(self, actor, targets):
         self.actor = actor
-        if type(targets) == str:
+        if type(targets) != list:
             targets = [targets]
-        self.targets = targets
-        for effect in self.effects:
-            effect.targets = targets
-            effect.actor = actor
 
+        if self.mint >= 0 and self.maxt >= 0:
+            if self.mint <= len(targets) <= self.maxt:
+                self.targets = targets
+            else:
+                raise Exception(self.actor.name+\
+                "'s thinker passed an invalid amount of targets to action "+self.name)
 
-class Effect:
-    def __init__(self, effect_data):
-        l = len(effect_data)
-        if type(effect_data) == dict:
-            effect_data = [effect_data]
-        #If it's one item, make it so you don't have to put []s youself.
-        changes, tick, trigs = effect_data[0], 0, []
-        #Set manditory and defaults
-        if l > 1:
-            tick = effect_data[1]
-            if l > 2:
-                trigs = effect_data[2]
-                #Set optinal vars if they exist.
-        self.changes = changes
-        self.tick = tick
-        self.trigs = trigs
-
-    def __repr__(self):
-        return  "<Effect instance target " + str(self.targets) + " changes " +\
-         str(self.changes)+" from " + str(self.actor) + ">"
-
-    def poptrig(self):
-        return self.trigs.pop()
-
-    def copy(self):
-        new = Effect({})
-        new.changes = self.changes
-        new.tick = self.tick
-        new.trigs = self.trigs
-        return new
+        elif self.mint < 0 and self.maxt < 0:
+            if abs(self.mint + 1) <= len(targets) <= abs(self.maxt + 1):
+                self.targets = [player for player in self.battle.players.values if player not in targets]
+            else:
+                raise Exception(self.actor.name+\
+                "'s thinker passed an invalid amount of targets to action "+self.name)
+        self.listners['init'](self)

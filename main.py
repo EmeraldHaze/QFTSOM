@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Starts the game, and defines highlevel noderunning
 
