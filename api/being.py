@@ -5,13 +5,15 @@ from pdb import set_trace
 class Being:
     """Fully descrbes an entity. """
     def __init__(self, name, thinker, stats, belongings,
-        params={}, rules="old_qftsom"):
+        params={}, thinkinit = lambda *args:None, rules="old_qftsom"):
         self.think = MethodType(thinker, self)
+        self.thinkinit = MethodType(thinkinit, self)
         self.stats = stats
         self.belongs = belongings
         self.params = params
         self.actions = []
         self.name = name
+        self.happenings = []
         rules = getattr(statrules, rules)
         for rule in rules.items():
             self.stats[rule[0]] = eval(rule[1])
@@ -23,13 +25,18 @@ class Being:
         return '<' + self.name + '>'
 
     def addbelong(self, belong):
+        """Adds a belonging to this being"""
         if type(belong) == str:
             belong = self.belongs[belong]
         for stat in list(belong.stats.items()):
             self.stats[stat[0]] += stat[1]
 
+    def changestats(self, stat, change, actor):
+        self.stats[stat] += change
+        self.happenings.append([stat, change, actor])
 
     def rmbelong(self, belong):
+        """Removes a belonging from this being"""
         if type(belong) == str:
             belong = self.belongs[belong]
         for stat in list(belong.stats.items()):

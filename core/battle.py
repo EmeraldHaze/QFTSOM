@@ -74,6 +74,8 @@ class Battle:
             self.rules['schedule'](self, player)
 
             self.players[player.name] = player
+        for player in self.player_list:
+            player.thinkinit(self)
 
     def exit_startup(self):
         self.exits = defaultdict(lambda :[])
