@@ -18,14 +18,13 @@ def player(self, battle):
     target = int(input('Target? '))
     action = int(input('Action? '))
     action = possib_acts[action].copy(battle)
-    action = action.copy(battle)
     action.complete(self, people[target])
     return action
 
 def simple(self, battle):
     process_threat(self)
     target = sorted(self.enemies, key = compare_threat)[0][0]
-    print({enemy[0]:compare_threat(enemy) for enemy in self.enemies})
+    #print(self.enemies)
     action = self.actions[0]
     action.complete(self, target)
     return action
@@ -36,7 +35,8 @@ def process_threat(self):
         lastact = enemy[0].last_act
         if lastact:
             if self in lastact.metadata['dmg']:
-                dmg = enemy[1]['admg given']
+                dmg = lastact.metadata['dmg'][self]
+
         if enemy[1]['admg given'] == None:
             enemy[1]['admg given'] = dmg
         else:
@@ -50,20 +50,12 @@ def process_threat(self):
 
 def compare_threat(player):
     player, stats = player
-    try:
-        life_turns = player.stats["HP"]/sint(stats["admg taken"])
-        return life_turns*stats["admg given"]
-    except TypeError:
-        return 0
+    taken = stats["admg taken"]
+    if taken == None or taken <= 0:
+        life_turns = float("inf")
+    else:
+        life_turns = player.stats["HP"]/taken
+    return life_turns*stats["admg given"]
 
 def stdinit(self, battle):
     self.enemies = [(player, {"admg given":None, "admg taken":None, "lasthp":player.stats["HP"]}) for player in battle.players.values() if player != self]
-
-class sint(int):
-    def __rdiv__(self, other):
-        if self == 0:
-            sign = ""
-            if other < 0: sign = "-"
-            return float(sign+"inf")
-        else:
-            return self.__div(other, self)

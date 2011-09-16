@@ -7,4 +7,5 @@ old_qftsom = OrderedDict([("HP", "self.stats['STR']*5+50"),
     ("MAXMP", "self.stats['MP']"),
     ("MAXHP",   "self.stats['HP']"),
     ("MAXWPNDMG", "0"),
-    ("MINWPNDMG", "0")])
+    ("MINWPNDMG", "0"),
+    ("Dodge", "self.stats['STR']*self.stats['INT']")])

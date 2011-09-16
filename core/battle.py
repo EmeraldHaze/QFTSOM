@@ -60,6 +60,8 @@ class Battle:
             split[i] = [item for item in split[i] if item != player]
 
         del self.players[player_name]
+        self.player_list.remove(player)
+        del player
 
     def player_startup(self):
         self.players = OrderedDict()

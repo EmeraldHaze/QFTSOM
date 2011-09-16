@@ -18,5 +18,5 @@ player = Being('Player', thinkers.player,
 dwarf2 = Being('Dwarf2', thinkers.simple,
     {'STR':13,'INT':7}, {'Axe':belongs.axe, "Helm":belongs.helm}, thinkinit = thinkers.stdinit)
 
-#rouge = Being("Rouge", thinkers.thief,
-#    {"STR":10, "INT":12}, {"Dagger":belongs.dagger, "Bomb":belongs.bomb, "Quick Shoes":belongs.shoes})
+rouge = Being("Rouge", thinkers.player,
+    {"STR":10, "INT":12}, {"Dagger":belongs.dagger, "Bomb":belongs.bomb, "Quick Shoes":belongs.shoes})

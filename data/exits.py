@@ -6,11 +6,11 @@ def reset(player):
     player.stats['MP'] = player.stats["MAXMP"]
 
 def die_effect(player, battle):
-    print(player.name, 'has died!')
+    print(player.name, 'has become sane!')
     reset(player)
 
 def win_effect(player, battle):
-    print(player.name, "has won!")
+    print(player.name, "has attained insanity!")
     reset(player)
 def win_check(player, battle):
     return len(battle.players) == 1 and list(battle.players.values())[0] == player
