@@ -1,11 +1,19 @@
 from collections import OrderedDict
-default = {"MAXHP": "self.stats['HP']"}
-old_qftsom = OrderedDict([("HP", "self.stats['STR']*5+50"),
-    ("MP", "self.stats['INT']*5+50"),
-    ("DEF", "self.stats['STR']"),
-    ("MDEF", "self.stats['INT']"),
-    ("MAXMP", "self.stats['MP']"),
-    ("MAXHP",   "self.stats['HP']"),
-    ("MAXWPNDMG", "0"),
-    ("MINWPNDMG", "0"),
-    ("Dodge", "self.stats['STR']*self.stats['INT']")])
+mardek = {"HP":"self.stats['basehp']+self.stats['lvl']*self.stats['hplvl']",
+    "MP":"self.stats['SPR']*self.stats['lvl']",
+    "MAXHP":"self.stats['HP']",
+    "MAXMP":"self.stats['MP]",
+    "CRIT":0,
+    "POW":0,
+    "FireRes":0,
+    "WaterRes":0,
+    "EarthRes":0,
+    "AirRes":0,
+    "LightRes":0,
+    "DarkRes":0,
+    "FigRes":0,
+    "AetherRes":0,
+    "DevineRes":0,
+    "PhysicalRes":0,
+    "ThaumaRes":0
+    }

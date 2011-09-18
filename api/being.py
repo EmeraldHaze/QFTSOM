@@ -4,13 +4,12 @@ from pdb import set_trace
 
 class Being:
     """Fully descrbes an entity. """
-    def __init__(self, name, thinker, stats, belongings,
-        params={}, thinkinit = lambda *args:None, rules="old_qftsom"):
+    def __init__(self, name, thinker, stats, belongings, data = {},  thinkinit = lambda *args:None, rules="mardek"):
         self.think = MethodType(thinker, self)
         self.thinkinit = MethodType(thinkinit, self)
         self.stats = stats
         self.belongs = belongings
-        self.params = params
+        self.data = data
         self.actions = []
         self.name = name
         self.happenings = []

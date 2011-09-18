@@ -66,10 +66,15 @@ class Battle:
     def player_startup(self):
         self.players = OrderedDict()
         for player in self.player_list:
+            player.status = []
+            player.actions = []
+            player.act_dict = {}
             for belong in list(player.belongs.values()):
                 for action in belong.actions:
-                    player.actions.append(action.copy(battle = self))
+                    act = action.copy(battle = self)
                     #Copy so that the original doesn't change
+                    player.actions.append(act)
+                    player.act_dict[act.name] = act
 
             player.last_act = None
 
