@@ -19,7 +19,7 @@ def agl(battle, player):
     battle.timeline.schedule(player, tick)
 
 def teams(battle):
-    battle.teams = deafultdict(lambda :[])
+    battle.teams = defaultdict(lambda :[])
     for player in battle.player_list:
         battle.teams[player.data["team"]].append(player)
 

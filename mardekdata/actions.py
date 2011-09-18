@@ -17,19 +17,19 @@ def attack(self):
 
     if "miss" in self.metadata:
         if randint(0, 100) < self.metadata["miss"]:
-            print("Miss!", end = " ")
+            print("Miss!")
             dmg *= 0
 
     if randint(0, 100) < target.stats["EVE"]:
-        print("Evade!", end = " ")
+        print("Evade!")
         dmg *= 0
 
     if randint(0, 100)<=self.actor.stats["CRIT"]:
-        print("Crit!", end = " ")
+        print("Crit!")
         dmg *= 2
 
     if self.metadata["type"] == "Physical" and "m. sheild" in target.status or self.metadata["type"] == "Magical" and "sheild" in target.status:
-        print("Sheild'd", end = " ")
+        print("Sheild'd")
         dmg /= 2
 
     if "mod" in self.metadata:

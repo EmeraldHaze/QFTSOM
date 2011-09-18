@@ -11,7 +11,7 @@ class Action:
         self.completed = False
 
     def copy(self, battle):
-        new = Action(self.name, self.listners, self.mint, self.maxt, self.metadata)
+        new = Action(self.name, self.listners, self.metadata, self.mint, self.maxt)
         new.battle = battle
         new.copy_status = self.copy_status + 1
         new.completed = False
