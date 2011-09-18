@@ -10,12 +10,49 @@ def execer(self):
 def attack(self):
     target = self.targets[0]
     actor = self.actor
-    dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"]
+    dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"] if self.metadata["type"] == "Physical"\
+    else actor.stats["SPR"]+actor.stats["POW"]-target.stats["MDEF"]
+
     dmg *= target.stats[self.element+"Res"]
+
+    if "miss" in self.metadata:
+        if randint(0, 100) < self.metadata["miss"]:
+            print("Miss!", end = " ")
+            dmg *= 0
+
+    if randint(0, 100) < target.stats["EVE"]:
+        print("Evade!", end = " ")
+        dmg *= 0
+
     if randint(0, 100)<=self.actor.stats["CRIT"]:
         print("Crit!", end = " ")
-        dmg *= dmg
+        dmg *= 2
+
+    if self.metadata["type"] == "Physical" and "m. sheild" in target.status or self.metadata["type"] == "Magical" and "sheild" in target.status:
+        print("Sheild'd", end = " ")
+        dmg /= 2
+
+    if "mod" in self.metadata:
+        dmg *= self.metadata["mod"]
+
+    dmg = int(dmg)
     print(target.name, "has taken", dmg, " damadge!")
     target.stats["HP"]-=dmg
 
-msheild = Action("m. sheild", {"exec":execer}, metadata = {"delay":0, "status":{"m. sheild":"")
+    if "status" in self.metadata:
+        for status, chance in self.metadata["status"].items():
+            if randint(0, 100) > chance:
+                print(target.name, "was", status+"'d")
+                target.status[status] = 1
+    return dmg
+
+attack = Action("attack", {"exec":attack}, {"type":"Physical", "element":"Physical"})
+
+msheild = Action("m. sheild", {"exec":execer}, {"status":{"m. shield":1}, "type":"Magical"})
+sheild = Action("sheild", {"exec":execer}, {"status":{"shield":1}, "type":"Magical"})
+regen = Action("regen", {"exec":execer}, {"status":{"regen":1}, "type":"Magical"})
+cure = Action("cure", {"exec":attack}, {"type":"Magical", "element":"Light"})
+
+immolate = Action("immolate", {"exec":attack}, {"type":"Magical", "element":"Fire"})
+glaciate = Action("glaciate", {"exec":attack}, {"type":"Magical", "element":"Water"})
+thunderstorm = Action("immolate", {"exec":attack}, {"type":"Magical", "element":"fire", "status":{"Paralysis":25}}, 2, 10)

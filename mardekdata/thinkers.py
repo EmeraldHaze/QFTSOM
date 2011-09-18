@@ -30,6 +30,20 @@ def healer(self, battle):
         action.complete(self, wounded[0])
     else:
         action = choice("sheild", "m. shield", "regen")
-        target = [ally for ally in self.battle.player_list if ally.data["team"] == self.datga["team"] and action not in ally.status][0]
+        targets = [ally for ally in self.battle.player_list if ally.data["team"] == self.datga["team"] and action not in ally.status]
+        while not targets:
+            print("Remaking choice")
+            action = choice("sheild", "m. shield", "regen")
+            targets = [ally for ally in self.battle.player_list if ally.data["team"] == self.datga["team"] and action not in ally.status]
         acttion.complete(self, target)
     return action
+
+def attacker(self, battle):
+    action = choice(self.actions)
+    if action.metadata["target"] == "norm":
+        action.complete(choice(battle.player_list))
+    else:
+        action.complete(self, battle.teams["mar"])
+    return action
+
+

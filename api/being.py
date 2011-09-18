@@ -12,9 +12,8 @@ class Being:
         self.data = data
         self.actions = []
         self.name = name
-        self.happenings = []
         rules = getattr(statrules, rules)
-        for rule in rules.items():
+        for rule in rules:
             self.stats[rule[0]] = eval(rule[1])
 
         for belong in self.belongs.values():

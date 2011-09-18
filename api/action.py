@@ -1,11 +1,12 @@
 from collections import defaultdict
 class Action:
-    def __init__(self, name, listners, mintargets = 1, maxtargets = 1, metadata = {"delay":0}):
+    def __init__(self, name, listners, metadata = {}, mintargets = 1, maxtargets = 1):
         self.name = name
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mintargets
         self.maxt = maxtargets
-        self.metadata = metadata
+        self.metadata = {"delay":0, "target":"norm"}
+        self.metadata.update(metadata)
         self.copy_status = 0
         self.completed = False
 
