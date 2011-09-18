@@ -12,7 +12,7 @@ def player(self, battle):
     for i in range(len(people)):
         print("{i}: {name}, HP:{hp}".format(i = i, name = people[i].name, hp = people[i].stats["HP"]))
 
-    possib_acts = [action for action in self.actions if action.metadata['MPcost'] <= self.stats['MP']]
+    possib_acts = [action for action in self.actions]
     print("Actions:")
     for i in range(len(possib_acts)):
         print("{i}: {name} MP cost: {mp}".format(i = i, name = possib_acts[i].name, mp = possib_acts[i].metadata["MPcost"]))
@@ -45,5 +45,14 @@ def attacker(self, battle):
     else:
         action.complete(self, battle.teams["mar"])
     return action
+
+def bart(self, battle):
+    if len(battle.teams[self.data["team"]]) == 1 and "berseck" not in self.status:
+        action = self.actions["avengance"]
+        action.complete(self, self)
+    else:
+        return attacker(self, battle)
+
+
 
 

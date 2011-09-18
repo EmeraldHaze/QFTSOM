@@ -47,12 +47,18 @@ def attack(self):
     return dmg
 
 attack = Action("attack", {"exec":attack}, {"type":"Physical", "element":"Physical"})
+powerattack = Action("attack", {"exec":attack}, {"type":"Physical", "element":"Physical", "mod":2})
+avengance = Action("Avengance!", {"exec":execer}, {"status":{"berserk":1}})
 
 msheild = Action("m. sheild", {"exec":execer}, {"status":{"m. shield":1}, "type":"Magical"})
 sheild = Action("sheild", {"exec":execer}, {"status":{"shield":1}, "type":"Magical"})
 regen = Action("regen", {"exec":execer}, {"status":{"regen":1}, "type":"Magical"})
-cure = Action("cure", {"exec":attack}, {"type":"Magical", "element":"Light"})
+cure = Action("cure", {"exec":attack}, {"type":"Magical", "element":"Light", "mod":-1})
 
 immolate = Action("immolate", {"exec":attack}, {"type":"Magical", "element":"Fire"})
 glaciate = Action("glaciate", {"exec":attack}, {"type":"Magical", "element":"Water"})
-thunderstorm = Action("immolate", {"exec":attack}, {"type":"Magical", "element":"fire", "status":{"Paralysis":25}}, 2, 10)
+thunderstorm = Action("immolate", {"exec":attack}, {"type":"Magical", "element":"Fire", "status":{"paralysis":25}}, 2, 10)
+
+viperfang = Action("viperfang", {"exec":attack}, {"type":"Physical", "element":"Earth", "status":{"poison":35}})
+eyegouge = Action("eye gouge", {"exec":attack}, {"type":"Physical", "element":"Dark", "status":{"blind":35}})
+slumberstab = Action("slumberstab", {"exec":attack}, {"type":"Physical", "element":"Air", "status":{"sleep":35}})
