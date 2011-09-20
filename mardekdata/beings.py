@@ -19,6 +19,6 @@ vennie = Being("Vennie", thinkers.player, {"STR":12, "VIT":14, "SPR":10, "AGL": 
 bartholio = Being("Bartholio", thinkers.bart, {"STR":22, "VIT":19, "SPR":8, "AGL":11,
     "EVA":0, "basehp":45, "hplvl":18, "LVL":7},
     {"Mythril Greatblade":belongs.mythrilblade, "Bronze Armor":belongs.bronzearmor,
-    "Gauntlet":belongs.gauntlet, "Green Beads":belongs.greenbeads}, {"team":"sav"})
+    "Gauntlet":belongs.gauntlet, "Green Beads":belongs.greenbeads}, {"team":"mar"})
 
 #mardek = Being("Mardek", thinkers.player, {"STR":17, "VIT":15, "SPR":12, "AGL":9, ""})

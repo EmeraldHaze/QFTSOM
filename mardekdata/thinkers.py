@@ -41,7 +41,7 @@ def healer(self, battle):
 def attacker(self, battle):
     action = choice(self.actions)
     if action.metadata["target"] == "norm":
-        action.complete(choice(battle.player_list))
+        action.complete(self, choice(battle.player_list))
     else:
         action.complete(self, battle.teams["mar"])
     return action

@@ -1,6 +1,4 @@
 from collections import defaultdict, OrderedDict
-
-
 from core.clock import Clock
 
 import pdb
@@ -21,9 +19,11 @@ class Battle:
             self.choices()
             self.actions()
             self.check_exits("main")
+            self.rules["tick"](self)
             self.timeline.next_tick()
 
     def choices(self):
+        print(self.timeline.player)
         for player in self.timeline.players():
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
@@ -65,6 +65,7 @@ class Battle:
         del player
 
     def player_startup(self):
+        self.rules["player_init"](self)
         self.players = OrderedDict()
         for player in self.player_list:
             player.status = []

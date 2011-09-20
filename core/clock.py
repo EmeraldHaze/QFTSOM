@@ -38,7 +38,6 @@ class Clock:
         split[tick].append(item)
 
     def get(self, split):
-        print(self.splits,split,self.splits[split])
         return self.splits[split][self.tick]
 
     def next_tick(self):

@@ -10,20 +10,19 @@ def next(battle, player):
             break
     battle.timeline.addplayer(player, tick - battle.timeline.tick)
 
-def agl(battle, player):
-    if len(battle.cycle) < battle.cycletick:
-        battle.cycle = sort(battle.player_list, key = lambda player:player.stats["AGL"])
-        battle.cycletick = 0
-    battle.cycletick += 0
-    tick = battle.cycle.index[player]
-    battle.timeline.schedule(player, tick)
+def cycel_tick(battle):
+    cycel = sorted(battle.player_list, key = lambda player:player.stats["AGL"])
+    for tick in range(len(cycel)):
+        battle.timeline.addplayer(cycel[tick], tick)
+
+null = lambda battle, player:None
 
 def teams(battle):
     battle.teams = defaultdict(lambda :[])
     for player in battle.player_list:
         battle.teams[player.data["team"]].append(player)
 
-def init(battle):
-    teams(battle)
+def cycl(battle):
+    print("Cycl init")
     battle.cycle = []
     battle.cycletick = 1
