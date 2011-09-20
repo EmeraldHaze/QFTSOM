@@ -68,7 +68,7 @@ class Battle:
         self.rules["player_init"](self)
         self.players = OrderedDict()
         for player in self.player_list:
-            player.status = []
+            player.status = {}
             player.actions = []
             player.act_dict = {}
             for belong in list(player.belongs.values()):

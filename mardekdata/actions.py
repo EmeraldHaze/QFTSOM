@@ -57,7 +57,7 @@ cure = Action("cure", {"exec":attacker}, {"type":"Magical", "element":"Light", "
 
 immolate = Action("immolate", {"exec":attacker}, {"type":"Magical", "element":"Fire"})
 glaciate = Action("glaciate", {"exec":attacker}, {"type":"Magical", "element":"Water"})
-thunderstorm = Action("immolate", {"exec":attacker}, {"type":"Magical", "element":"Fire", "status":{"paralysis":25}}, 2, 10)
+thunderstorm = Action("thunderstorm", {"exec":attacker}, {"type":"Magical", "element":"Fire", "status":{"paralysis":25}, "target":"multi"}, 2, 10)
 
 viperfang = Action("viperfang", {"exec":attacker}, {"type":"Physical", "element":"Earth", "status":{"poison":35}})
 eyegouge = Action("eye gouge", {"exec":attacker}, {"type":"Physical", "element":"Dark", "status":{"blind":35}})

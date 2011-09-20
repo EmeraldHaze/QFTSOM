@@ -15,7 +15,7 @@ def player(self, battle):
     possib_acts = [action for action in self.actions]
     print("Actions:")
     for i in range(len(possib_acts)):
-        print("{i}: {name} MP cost: {mp}".format(i = i, name = possib_acts[i].name, mp = possib_acts[i].metadata["MPcost"]))
+        print("{i}: {name}".format(i = i, name = possib_acts[i].name))
 
     target = int(input('Target? '))
     action = int(input('Action? '))
@@ -24,24 +24,25 @@ def player(self, battle):
     return action
 
 def healer(self, battle):
-    wounded = [ally for ally in self.battle.player_list if ally.data["team"] == self.data["team"] and ally.stats["HP"]/ally.stats["MAXHP"] < 0.7]
+    wounded = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and ally.stats["HP"]/ally.stats["MAXHP"] < 0.7]
     if len(wounded):
         action = self.act_dict["cure"]
         action.complete(self, wounded[0])
     else:
-        action = choice("sheild", "m. shield", "regen")
-        targets = [ally for ally in self.battle.player_list if ally.data["team"] == self.datga["team"] and action not in ally.status]
+        action = choice(["sheild", "m. shield", "regen"])
+        targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.status]
         while not targets:
             print("Remaking choice")
-            action = choice("sheild", "m. shield", "regen")
-            targets = [ally for ally in self.battle.player_list if ally.data["team"] == self.datga["team"] and action not in ally.status]
-        acttion.complete(self, target)
+            action = choice(["sheild", "m. shield", "regen"])
+            targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.status]
+        action = self.act_dict[action]
+        action.complete(self, targets[0])
     return action
 
 def attacker(self, battle):
     action = choice(self.actions)
     if action.metadata["target"] == "norm":
-        action.complete(self, choice(battle.player_list))
+        action.complete(self, choice([enemy for enemy in battle.player_list if enemy.data["team"] != self.data["team"]]))
     else:
         action.complete(self, battle.teams["mar"])
     return action
