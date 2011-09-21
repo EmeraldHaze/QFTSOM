@@ -1,7 +1,7 @@
 from api.belong import Belong
 from data import actions
 
-heartstaff = Belong("Heart Staff", [actions.cure, actions.regen, actions.msheild, actions.sheild], {"POW":10, "CRIT":1, "SPR":1})
+heartstaff = Belong("Heart Staff", [actions.cure, actions.regen, actions.mshield, actions.shield], {"POW":10, "CRIT":1, "SPR":1})
 walkingstick = Belong("Walking Stick", [actions.immolate, actions.glaciate, actions.thunderstorm], {"POW":10, "SPR":1})
 dagger = Belong("Dagger", [actions.attack, actions.viperfang, actions.eyegouge, actions.slumberstab], {"POW":16, "CRIT":10})
 mythrilblade = Belong("Mythril Greatblade", [actions.attack, actions.powerattack, actions.avengance], {"POW":22, "CRIT":4})

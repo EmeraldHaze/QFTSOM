@@ -23,7 +23,6 @@ class Battle:
             self.timeline.next_tick()
 
     def choices(self):
-        print(self.timeline.player)
         for player in self.timeline.players():
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
@@ -68,7 +67,7 @@ class Battle:
         self.rules["player_init"](self)
         self.players = OrderedDict()
         for player in self.player_list:
-            player.status = {}
+            player.statuses = {}
             player.actions = []
             player.act_dict = {}
             for belong in list(player.belongs.values()):

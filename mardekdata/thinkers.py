@@ -24,17 +24,17 @@ def player(self, battle):
     return action
 
 def healer(self, battle):
-    wounded = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and ally.stats["HP"]/ally.stats["MAXHP"] < 0.7]
+    wounded = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and ally.stats["HP"]/ally.stats["MAXHP"] < 0.9]
     if len(wounded):
         action = self.act_dict["cure"]
         action.complete(self, wounded[0])
     else:
-        action = choice(["sheild", "m. shield", "regen"])
-        targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.status]
+        action = choice(["shield", "m. shield", "regen"])
+        targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.statuses]
         while not targets:
             print("Remaking choice")
-            action = choice(["sheild", "m. sheild", "regen"])
-            targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.status]
+            action = choice(["shield", "m. shield", "regen"])
+            targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.statuses]
         action = self.act_dict[action]
         action.complete(self, choice(targets))
     return action

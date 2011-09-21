@@ -5,15 +5,15 @@ from pdb import set_trace
 
 def execer(self):
     for target in self.targets:
-        target.status.update(self.metadata["status"])
+        target.statuses.update(self.metadata["statuses"])
 
-def attacker(self):
-    target = self.targets[0]
+def attacker(self, target = None):
+    if not target: target = self.targets[0]
     actor = self.actor
     dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"] if self.metadata["type"] == "Physical"\
     else actor.stats["SPR"]+actor.stats["POW"]-target.stats["MDEF"]
 
-    dmg *= target.stats[self.metadata["element"]+"Res"]
+    reschange = (100-target.stats[self.metadata["element"]+"Res"])/100
 
     if "miss" in self.metadata:
         if randint(0, 100) < self.metadata["miss"]:
@@ -28,8 +28,12 @@ def attacker(self):
         print("Crit!", end = " ")
         dmg *= 2
 
-    if self.metadata["type"] == "Physical" and "m. sheild" in target.status or self.metadata["type"] == "Magical" and "sheild" in target.status:
-        print("Sheild'd", end = " ")
+    if self.metadata["type"] == "Physical" and "shield" in target.statuses:
+        print("Shield'd!", end = " ")
+        dmg /= 2
+
+    elif self.metadata["type"] == "Magical" and "m. shield" in target.statuses:
+        print("M. Shield'd", end = " ")
         dmg /= 2
 
     if "mod" in self.metadata:
@@ -39,26 +43,30 @@ def attacker(self):
     print(target.name, "has taken", dmg, " damadge!")
     target.stats["HP"]-=dmg
 
-    if "status" in self.metadata:
-        for status, chance in self.metadata["status"].items():
+    if "statuses" in self.metadata:
+        for status, chance in self.metadata["statuses"].items():
             if randint(0, 100) > chance:
                 print(target.name, "was", status+"'d")
-                target.status[status] = 1
+                target.statuses[status] = 1
     return dmg
+
+def attacks(self):
+    for target in self.targets:
+        attacker(self, target)
 
 attack = Action("attack", {"exec":attacker}, {"type":"Physical", "element":"Physical"})
 powerattack = Action("attacker", {"exec":attacker}, {"type":"Physical", "element":"Physical", "mod":2})
-avengance = Action("Avengance!", {"exec":execer}, {"status":{"berserk":1}})
+avengance = Action("Avengance!", {"exec":execer}, {"statuses":{"berserk":1}})
 
-msheild = Action("m. sheild", {"exec":execer}, {"status":{"m. shield":1}, "type":"Magical"})
-sheild = Action("sheild", {"exec":execer}, {"status":{"shield":1}, "type":"Magical"})
-regen = Action("regen", {"exec":execer}, {"status":{"regen":1}, "type":"Magical"})
+mshield = Action("m. shield", {"exec":execer}, {"statuses":{"m. shield":1}, "type":"Magical"})
+shield = Action("shield", {"exec":execer}, {"statuses":{"shield":1}, "type":"Magical"})
+regen = Action("regen", {"exec":execer}, {"statuses":{"regen":1}, "type":"Magical"})
 cure = Action("cure", {"exec":attacker}, {"type":"Magical", "element":"Light", "mod":-1})
 
 immolate = Action("immolate", {"exec":attacker}, {"type":"Magical", "element":"Fire"})
 glaciate = Action("glaciate", {"exec":attacker}, {"type":"Magical", "element":"Water"})
-thunderstorm = Action("thunderstorm", {"exec":attacker}, {"type":"Magical", "element":"Fire", "status":{"paralysis":25}, "target":"multi"}, 2, 10)
+thunderstorm = Action("thunderstorm", {"exec":attacks}, {"type":"Magical", "element":"Fire", "statuses":{"paralysis":25}, "target":"multi"}, 2, 10)
 
-viperfang = Action("viperfang", {"exec":attacker}, {"type":"Physical", "element":"Earth", "status":{"poison":35}})
-eyegouge = Action("eye gouge", {"exec":attacker}, {"type":"Physical", "element":"Dark", "status":{"blind":35}})
-slumberstab = Action("slumberstab", {"exec":attacker}, {"type":"Physical", "element":"Air", "status":{"sleep":35}})
+viperfang = Action("viperfang", {"exec":attacker}, {"type":"Physical", "element":"Earth", "statuses":{"poison":35}})
+eyegouge = Action("eye gouge", {"exec":attacker}, {"type":"Physical", "element":"Dark", "statuses":{"blind":35}})
+slumberstab = Action("slumberstab", {"exec":attacker}, {"type":"Physical", "element":"Air", "statuses":{"sleep":35}})
