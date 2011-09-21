@@ -33,10 +33,10 @@ def healer(self, battle):
         targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.status]
         while not targets:
             print("Remaking choice")
-            action = choice(["sheild", "m. shield", "regen"])
+            action = choice(["sheild", "m. sheild", "regen"])
             targets = [ally for ally in battle.player_list if ally.data["team"] == self.data["team"] and action not in ally.status]
         action = self.act_dict[action]
-        action.complete(self, targets[0])
+        action.complete(self, choice(targets))
     return action
 
 def attacker(self, battle):

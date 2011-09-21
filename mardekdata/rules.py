@@ -16,7 +16,6 @@ def cycel_tick(battle):
         new = battle.timeline.tick % battle.cycel_len == 0
     except ZeroDivisionError:
         new = True
-
     if new:
         print("New cycel!")
         cycel = sorted(battle.player_list, key = lambda player:player.stats["AGL"])
