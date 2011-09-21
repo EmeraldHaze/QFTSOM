@@ -23,7 +23,7 @@ class Battle:
             self.timeline.next_tick()
 
     def choices(self):
-        for player in self.timeline.players():
+        for player in  self.timeline.players():
             action = player.think(self)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
@@ -67,20 +67,10 @@ class Battle:
         self.rules["player_init"](self)
         self.players = OrderedDict()
         for player in self.player_list:
-            player.statuses = {}
-            player.actions = []
-            player.act_dict = {}
-            for belong in list(player.belongs.values()):
-                for action in belong.actions:
-                    act = action.copy(battle = self)
-                    #Copy so that the original doesn't change
-                    player.actions.append(act)
-                    player.act_dict[act.name] = act
-
+            self.rules["wipe_hist"](self, player)
             player.last_act = None
-
             self.rules['schedule'](self, player)
-
+            self.rules["player_actions"](self, player)
             self.players[player.name] = player
         for player in self.player_list:
             player.thinkinit(self)

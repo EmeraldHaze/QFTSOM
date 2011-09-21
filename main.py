@@ -12,6 +12,7 @@ from core import battle, haggle
 from data import rules, glob_acts, beings, exits
 from data.nodemap import nodemap
 
+import pdb
 ###Node actions###
 def do_say(string):
     """do_ node executer print function"""

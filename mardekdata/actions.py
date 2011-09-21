@@ -16,7 +16,7 @@ def attacker(self, target = None):
     reschange = (100-target.stats[self.metadata["element"]+"Res"])/100
 
     if "miss" in self.metadata:
-        if randint(0, 100) < self.metadata["miss"]:
+        if randint(0, 100) > (self.actor.stats["ACC"] - self.metadata["miss"]):
             print("Miss!", end = " ")
             dmg *= 0
 
@@ -56,7 +56,7 @@ def attacks(self):
 
 attack = Action("attack", {"exec":attacker}, {"type":"Physical", "element":"Physical"})
 powerattack = Action("attacker", {"exec":attacker}, {"type":"Physical", "element":"Physical", "mod":2})
-avengance = Action("Avengance!", {"exec":execer}, {"statuses":{"berserk":1}})
+avengance = Action("Avengance!", {"exec":execer}, {"statuses":{"berserk":1}, "type":"Magical"})
 
 mshield = Action("m. shield", {"exec":execer}, {"statuses":{"m. shield":1}, "type":"Magical"})
 shield = Action("shield", {"exec":execer}, {"statuses":{"shield":1}, "type":"Magical"})

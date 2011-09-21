@@ -10,7 +10,6 @@ class Being:
         self.stats = stats
         self.belongs = belongings
         self.data = data
-        self.actions = []
         self.name = name
         rules = getattr(statrules, rules)
         for rule in rules:

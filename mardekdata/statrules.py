@@ -18,4 +18,5 @@ mardek = [("HP", "self.stats['basehp']+self.stats['LVL']*self.stats['hplvl']"),
     ("DevineRes", "0"),
     ("PhysicalRes", "0"),
     ("ThaumaRes", "0"),
-    ("EVE", "0")]
+    ("EVE", "0"),
+    ("ACC", "99")]

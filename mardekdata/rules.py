@@ -1,4 +1,5 @@
 from collections import defaultdict
+from functools import reduce
 
 #####Schedulers#####
 def same(battle, player):
@@ -31,9 +32,18 @@ def cycel_tick(battle):
 def statuses(battle):
     for player in battle.player_list:
         for status in player.statuses:
-            if status == "regen":
-                pass
+            if status == "poison":
+                poison = player.stats["MAXHP"]/50
+                print(player.name, "took", poison, "damadge from poison!")
+                player.stats["HP"]-=poison
 
+            if status == "regen":
+                regen = player.stats["MAXHP"]/10
+                print(player.name, "has regenerated", regen, "HP!")
+                player.stats["HP"]+=regen
+
+            if status == "pralysis":
+                pass
 
 #####Inits#####
 def teams(battle):
@@ -45,4 +55,16 @@ def teams(battle):
 def cycl(battle):
     battle.cycel_len = 0
 
+
+#####Player actions#####
+def act_divide(battle, player):
+    player.act_types = defaultdict(lambda :set())
+    for belong in player.belongs.values():
+        for act in belong.actions:
+            player.act_types[act.metadata["type"]].add(act.copy(battle))
+    player.actionset = reduce(set.union, player.act_types.values())
+
+#####Wipe hists#####
+def wipe(battle, player):
+    player.statuses =  {}
 

@@ -1,6 +1,14 @@
 from api.being import Being
 from data import thinkers, belongs
 
+class SBeing(Being):
+    @property
+    def actions(self):
+        return list(self.actionset)
+
+
+#Being = SBeing
+
 aalia = Being("Aalia", thinkers.healer, {"STR":9, "VIT":10, "SPR":20, "AGL":16 ,
         "LVL":6, "basehp":25, "hplvl":10},
         {"HeartStaff": belongs.heartstaff, "MageRobe": belongs.magerobe,

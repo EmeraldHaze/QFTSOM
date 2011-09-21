@@ -12,9 +12,11 @@ class Action:
 
     def copy(self, battle):
         new = Action(self.name, self.listners, self.metadata, self.mint, self.maxt)
+        for item in dir(self):
+            try:
+                setattr(new, item, getattr(self, item))
+            except AttributeError: pass
         new.battle = battle
-        new.copy_status = self.copy_status + 1
-        new.completed = False
         return new
 
     def complete(self, actor, targets = []):
