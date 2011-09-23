@@ -34,10 +34,10 @@ def statuses(battle):
     for player in battle.player_list:
         for name, value in player.statuses.items():
             status, effect, value = value
-            if statis == -1:
+            if status == -1:
                 #Remove
-                if effect == "stat":
-                    for effect in effect.split(", "):
+                if effect == "sets":
+                    for effect in value.split(", "):
                             sign, *rest = effect
                             if sign == "+":
                                 if rest == "*":
@@ -68,7 +68,7 @@ def statuses(battle):
             elif status == 1:
                 #Add
                 if effect == "sets":
-                    for effect in effect.split(", "):
+                    for effect in value.split(", "):
                         sign, *rest = effect
                         if sign == "-":
                             if rest == "*":

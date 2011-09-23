@@ -33,7 +33,7 @@ def attacker(self, target = None):
         dmg /= 2
 
     elif self.metadata["type"] == "Magical" and "m. shield" in target.statuses:
-        print("M. Shield'd", end = " ")
+        print("M. Shield'd!", end = " ")
         dmg /= 2
 
     if "mod" in self.metadata:
@@ -45,10 +45,10 @@ def attacker(self, target = None):
 
     if "statuses" in self.metadata:
         for status, value in self.metadata["statuses"].items():
-            chance, *rest = value
+            chance, value = value
             if randint(0, 100) > chance:
                 print(target.name, "was", status+"'d")
-                target.statuses[status] = 1
+                target.statuses[status] = value
     return dmg
 
 def attacks(self):
@@ -73,6 +73,6 @@ immolate = Action("immolate", {"exec":attacker}, {"type":"Magical", "element":"F
 glaciate = Action("glaciate", {"exec":attacker}, {"type":"Magical", "element":"Water"})
 thunderstorm = Action("thunderstorm", {"exec":attacks}, {"type":"Magical", "element":"Fire", "statuses":{"paralysis":(25, (2, "special", None))}, "target":"multi"}, 2, 10)
 
-viperfang = Action("viperfang", {"exec":attacker}, {"type":"Physical", "element":"Earth", "statuses":{"poison":(35, hp(-0.02))}})
-eyegouge = Action("eye gouge", {"exec":attacker}, {"type":"Physical", "element":"Dark", "statuses":{"blind":(35, special)}})
-slumberstab = Action("slumberstab", {"exec":attacker}, {"type":"Physical", "element":"Air", "statuses":{"sleep":(35, sets("-*"))}})
+viperfang = Action("viperfang", {"exec":attacker}, {"type":"Physical", "element":"Earth", "statuses":{"poison":(95, hp(-0.02))}})
+eyegouge = Action("eye gouge", {"exec":attacker}, {"type":"Physical", "element":"Dark", "statuses":{"blind":(95, special)}})
+slumberstab = Action("slumberstab", {"exec":attacker}, {"type":"Physical", "element":"Air", "statuses":{"sleep":(95, sets("-*"))}})
