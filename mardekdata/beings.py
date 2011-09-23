@@ -5,9 +5,11 @@ class SBeing(Being):
     @property
     def actions(self):
         return list(self.actionset)
+    @property
+    def act_dict(self):
+        return {action.name:action for action in self.actions}
 
-
-#Being = SBeing
+Being = SBeing
 
 aalia = Being("Aalia", thinkers.healer, {"STR":9, "VIT":10, "SPR":20, "AGL":16 ,
         "LVL":6, "basehp":25, "hplvl":10},

@@ -28,22 +28,79 @@ def cycel_tick(battle):
         battle.cycel_len = len(cycel)
         for tick in range(len(cycel)):
             battle.timeline.addplayer(cycel[tick], tick)
+    statuses(battle)
 
 def statuses(battle):
     for player in battle.player_list:
-        for status in player.statuses:
-            if status == "poison":
-                poison = player.stats["MAXHP"]/50
-                print(player.name, "took", poison, "damadge from poison!")
-                player.stats["HP"]-=poison
+        for name, value in player.statuses.items():
+            status, effect, value = value
+            if statis == -1:
+                #Remove
+                if effect == "stat":
+                    for effect in effect.split(", "):
+                            sign, *rest = effect
+                            if sign == "+":
+                                if rest == "*":
+                                    player.actionset = player.actionset.difference(*player.act_types.values())
+                                else:
+                                    player.actionset -= player.act_types[rest]
+                            else:
+                                if rest == "-":
+                                    player.actionset = player.actionset.union(*player.act_types.values())
+                                else:
+                                    player.actionset |= player.act_types[rest]
+                elif effect == "special":
+                    if name == "paralysis":
+                        player.actionset = player.actionset.union(*player.act_types.values())
 
-            if status == "regen":
-                regen = player.stats["MAXHP"]/10
-                print(player.name, "has regenerated", regen, "HP!")
-                player.stats["HP"]+=regen
+                    elif name == "blind":
+                        player.stats["ACC"] += 50
 
-            if status == "pralysis":
+                    elif name == "berserk":
+                        player.stats["STR"] /= 2
+                        player.stats["random"] = True
+                del player.statuses[status]
+
+            elif status == 0:
+                #Ignore
                 pass
+
+            elif status == 1:
+                #Add
+                if effect == "sets":
+                    for effect in effect.split(", "):
+                        sign, *rest = effect
+                        if sign == "-":
+                            if rest == "*":
+                                player.actionset = player.actionset.difference(*player.act_types.values())
+                            else:
+                                player.actionset -= player.act_types[rest]
+                        else:
+                            if rest == "*":
+                                player.actionset = player.actionset.union(*player.act_types.values())
+                            else:
+                                player.actionset |= player.act_types[rest]
+                elif effect == "special":
+                    if name == "paralysis":
+                        stop = randint(0, 1) > 0
+                        if stop:
+                            print(player.name, "is paralysed")
+                            player.actionset = player.actionset.difference(*player.act_types.values())
+                        else:
+                            player.actionset = player.actionset.union(*player.act_types.values())
+
+                    elif name == "blind":
+                        player.stats["ACC"] -= 50
+
+                    elif name == "Berserk":
+                        player.stats["STR"] *= 2
+                        player.stats["random"] = True
+
+            elif status == 2:
+                #Repeat
+                if effect == "exec":
+                    exec(value)
+
 
 #####Inits#####
 def teams(battle):
