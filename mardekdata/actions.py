@@ -46,6 +46,7 @@ def attacker(self, target = None):
     if "statuses" in self.metadata:
         for status, value in self.metadata["statuses"].items():
             chance, value = value
+            print("chance", chance)
             if randint(0, 100) > chance:
                 print(target.name, "was", status+"'d")
                 target.statuses[status] = value
