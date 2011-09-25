@@ -42,13 +42,13 @@ class Battle:
         changed = []
         for exit in self.exits[dep]:
             for player in list(self.players.keys()):
-                    if exit.condition(self.players[player], self):
-                        exit.effect(self.players[player], self)
-                        changed.extend(exit.changes)
-                        self.remove_player(player)
-                        print(player," exited. Players:", len(self.players))
-                        if not len(self.players):
-                            self.end = True
+                if exit.condition(self.players[player], self):
+                    exit.effect(self.players[player], self)
+                    changed.extend(exit.changes)
+                    self.remove_player(player)
+                    print(player," exited. Players:", len(self.players))
+                    if not len(self.players):
+                        self.end = True
         for change in changed:
             self.check_exits(change)
 
