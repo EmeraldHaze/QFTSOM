@@ -8,10 +8,9 @@ Main
 """
 ###Imports###
 from core import battle, haggle
-import pdb
-import lib
-from game import nodemap, defaults
+import lib, game
 
+import pdb
 
 ###Node actions###
 def do_say(string):
@@ -76,6 +75,6 @@ def travel(nodemap):
         node = nodemap[nodename]
         #Set the node
 
-
-print(travel(nodemap))
-#Travel the root network
+if __name__ == "__main__":
+    print(travel(nodemap))
+    #Travel the root network

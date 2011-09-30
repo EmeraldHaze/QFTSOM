@@ -1,20 +1,13 @@
-###API1 - imports###
-import os
-import importlib
+from lib import _reg, _ugly
 
-files = os.listdir("./lib")
-__all__ = [fi[:-3] for fi in files if not fi.startswith("_") and fi.endswith(".py")]
-
-modules = {}
-for fi in __all__:
-    modules[fi] = importlib.import_module('lib.'+fi)
-
+###API1
+modules = _reg.get_modules(["lib"])
 globals().update(modules)
 
-###API2 - registry###
-from lib import _reg
+###API2
 parts, groups = _reg.build_reg(modules)
 
-###API3 - ugly hacks###
-from lib import _ugly
+###API3
 ugly = _ugly.make(parts, groups)
+
+import base

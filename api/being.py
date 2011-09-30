@@ -1,4 +1,4 @@
-from data import statrules
+#from data import statrules
 from types import MethodType
 from pdb import set_trace
 
