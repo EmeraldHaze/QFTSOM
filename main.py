@@ -7,10 +7,9 @@ Node actions
 Main
 """
 ###Imports###
+import pdb
 from core import battle, haggle
 import lib, game
-
-import pdb
 
 ###Node actions###
 def do_say(string):
@@ -23,21 +22,22 @@ def do_battle(arg):
     player1, player2, etc|exit1, exit2, etc|rule1, rule2, etc"""
     #Make lists of the actual objects named in the arg
     args = map(parsearg, arg.split("|"), game.defaults.battle)
-
-    b = battle.Battle(*arg)
+    args = list(args)
+    b = battle.Battle(*args)
     b.start()
 
 def parsearg(arg, default = {}):
     parsed = {}
     for part in arg.split(", "):
-        if ":" in part:
-            name, part = part.split(":")
-            part = eval(part)
-        else:
-            part = eval(part)
-            name = part.name
-        parsed[name] = parsed
-    default.update = parsed
+        if part:
+            if ":" in part:
+                name, part = part.split(":")
+                part = eval(part)
+            else:
+                part = eval(part)
+                name = part.name
+            parsed[name] = part
+    default.update(parsed)
     return default
 
 ###Main###

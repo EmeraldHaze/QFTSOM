@@ -1,6 +1,5 @@
 from collections import defaultdict
-import os
-import importlib
+import sys, os, functools
 
 def build_reg(modules):
     parts = defaultdict(lambda :{})
@@ -20,5 +19,7 @@ def get_modules(d):
 
     modules = {}
     for fi in names:
-        modules[fi] = importlib.import_module(".".join(d + [fi]))
+        path = ".".join(d + [fi])
+        m = __import__(path)
+        modules[fi] = sys.modules[path]
     return modules

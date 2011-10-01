@@ -1,20 +1,21 @@
-from game.defaults import statrules
 from types import MethodType
 from pdb import set_trace
 
 class Being:
     """Fully descrbes an entity. """
-    def __init__(self, name, thinker, stats, belongings, data = {},  thinkinit = lambda *args:None, rules=statrules):
+    def __init__(self, name, thinker, stats, belongs, data = {},  thinkinit = lambda *args:None, rules=None):
         self.think = MethodType(thinker, self)
         self.thinkinit = MethodType(thinkinit, self)
         self.stats = stats
-        self.belongs = belongings
+        self.belongs = belongs
         self.data = data
         self.name = name
+        if rules == None:
+            from game.defaults import statrules as rules
         for rule in rules:
             self.stats[rule[0]] = eval(rule[1])
 
-        for belong in self.belongs.values():
+        for belong in self.belongs:
             self.addbelong(belong)
 
     def __repr__(self):
