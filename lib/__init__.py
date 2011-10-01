@@ -1,4 +1,4 @@
-from lib import _reg, _ugly
+from lib import _reg, _ugly, base
 
 ###API1
 modules = _reg.get_modules(["lib"])
@@ -9,5 +9,3 @@ parts, groups = _reg.build_reg(modules)
 
 ###API3
 ugly = _ugly.make(parts, groups)
-
-import base

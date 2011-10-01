@@ -22,19 +22,23 @@ def do_battle(arg):
     """Start a battle- arg should be formatted like this:
     player1, player2, etc|exit1, exit2, etc|rule1, rule2, etc"""
     #Make lists of the actual objects named in the arg
-    player_names, exit_names, rule_names = arg.split("|")
-    player_list = [getattr(beings, player)\
-     for player in player_names.split(", ")]
-    exit_list = [getattr(exits, exit) for exit in exit_names.split(", ")]
-    rule_dict = []
-    for pair in rule_names.split(", "):
-        name, rule = pair.split(" = ")
-        rule = getattr(rules, rule)
-        rule_dict.append((name, rule))
+    args = map(parsearg, arg.split("|"), game.defaults.battle)
 
-    b = battle.Battle(player_list, exit_list, rule_dict)
+    b = battle.Battle(*arg)
     b.start()
 
+def parsearg(arg, default = {}):
+    parsed = {}
+    for part in arg.split(", "):
+        if ":" in part:
+            name, part = part.split(":")
+            part = eval(part)
+        else:
+            part = eval(part)
+            name = part.name
+        parsed[name] = parsed
+    default.update = parsed
+    return default
 
 ###Main###
 def travel(nodemap):
@@ -76,5 +80,5 @@ def travel(nodemap):
         #Set the node
 
 if __name__ == "__main__":
-    print(travel(nodemap))
+    print(travel(game.nodemap))
     #Travel the root network

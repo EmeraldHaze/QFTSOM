@@ -27,3 +27,6 @@ thinker = think_maker(mosthp)
 player = think_maker(ptarget)
 
 stick = api.Belong("stick", {}, [lib.base.actions.poke])
+
+man = api.Being("Man", thinker, {"HP":6}, {"stick": stick})
+player = api.Being("Player", player, {"HP":7}, {"stick": stick})

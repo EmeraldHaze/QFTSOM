@@ -21,4 +21,4 @@ def get_modules(d):
     modules = {}
     for fi in names:
         modules[fi] = importlib.import_module(".".join(d + [fi]))
-
+    return modules
