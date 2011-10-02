@@ -1,4 +1,5 @@
 from collections import defaultdict
+seen_targets = []
 class Action:
     def __init__(self, name, listners, metadata = {}, mintargets = 1, maxtargets = 1):
         self.name = name
@@ -21,6 +22,11 @@ class Action:
 
     def complete(self, actor, targets = []):
         self.actor = actor
+        if targets in seen_targets:
+            raise Exception("Target is the same")
+        else:
+            pass
+            #seen_targets.append(targets)
         if type(targets) != list:
             targets = [targets]
 
@@ -38,8 +44,10 @@ class Action:
                 raise Exception(self.actor.name+\
                 "'s thinker passed an invalid amount of targets to action "+self.name)
         else:
-            print("Wierd mint/maxt")
+            raise Exception("Wierd maxt-mint")
         self.listners['init'](self)
         self.completed = True
+        print("TID:", hex(id(self.targets)))
+
     def __repr__(self):
-        return "<"+self.name+">"
+        return "<"+self.name+" #" + hex(id(self))[2:] + " targets " + str(self.targets) + ">"
