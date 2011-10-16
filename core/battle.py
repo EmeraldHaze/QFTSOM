@@ -44,7 +44,7 @@ class Battle:
     def check_exits(self, dep):
         changed = []
         for exit in self.exits[dep]:
-            for player in self.players:
+            for player in list(self.players.keys()):
                 if exit.condition(self.players[player], self):
                     exit.effect(self.players[player], self)
                     changed.extend(exit.changes)

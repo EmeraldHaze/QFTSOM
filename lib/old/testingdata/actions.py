@@ -1,12 +1,6 @@
 from random import randint, choice
 from api.action import Action
-from pdb import set_trace
-def execmaker(dmg):
-    def exec_listner(self):
-        for target in self.targets:
-            target.stats["HP"] -= dmg
-            print(target.name, "lost", dmg, "health!")
-    return exec_listner
+
 
 def exec_from_dict(d):
     def exec_(self):
@@ -77,12 +71,4 @@ def poisoned(self):
         newpoison.dmg = self.dmg-1
         self.battle.timeline.addaction(newpoison, 1)
 
-bolt = Action('bolt', {"exec":simple_exec, "init":simpleinit}, metadata = {"delay":0, "type":"magic", "MPcost":60, 'change':1})
-hack = Action('hack', {"exec":simple_exec, "init":simpleinit}, metadata = {"delay":0, "type":"melee", 'MPcost': 0, 'change':1})
-rest = Action("rest", {"exec":simple_exec, "init":simpleinit}, metadata = {"delay":0, "type":"magic", "MPcost": -40, 'change':0})
-heal = Action("heal", {"exec":special_exec, "init":simpleinit}, metadata = {"delay":1, "type":"magic", "MPcost":20})
-
-boom = Action("explode", {"exec":boom, "init":simpleinit}, -1, 0, metadata = {"delay":1, "type":"melee", "MPcost":0, "change":1})
-poison = Action("poison", {"exec":poisoned})
-stab = Action("stab", {"exec":simple_exec, "init":simpleinit}, metadata = {"delay":0, "type":"melee", "MPcost":0, "change":1, "extra":poison})
 

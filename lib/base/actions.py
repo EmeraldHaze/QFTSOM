@@ -6,6 +6,6 @@ def simplemaker(name, dmg, madeat):
         print(target.name, "has lost", dmg, " health!")
         target.stats["HP"] -= dmg
     return Action(name, {"exec":sexec}, madeat)
-###AT
+
 poke = simplemaker("poke", 1, "lib")
 hit = simplemaker("hit", 2, "lib")

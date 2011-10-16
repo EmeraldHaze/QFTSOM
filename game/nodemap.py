@@ -1,6 +1,6 @@
 from api import Net, Node
 nodemap = Net('head', {
-    'head': Node(['tail', 'a'], ["Go forth along the dire worme's tail!", "A?"], ["say Do kill it!", 'battle lib.simple.man, lib.simple.player||']),
+    'head': Node(['tail', 'a'], ["Go forth along the dire worme's tail!", "A?"], ["say Do kill it!", 'battle lib.simple.man, lib.simple.player, lib.simple.man2, lib.simple.staffo, lib.simple.oddman||']),
     'tail': Node(['head', 'net'], ["Go backth along the dire worme's tail!", "Go INTO the worme!"]),
     'a'   : Node(['head', 'tail'], ["Go backth along the dire worme's tail!", "Go forth along the wormes!"]),
     'net': Net('one', {
