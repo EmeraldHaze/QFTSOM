@@ -79,6 +79,9 @@ def travel(nodemap):
         node = nodemap[nodename]
         #Set the node
 
+def run():
+    print(travel(game.nodemap))
+
 if __name__ == "__main__":
     print(travel(game.nodemap))
     #Travel the root network

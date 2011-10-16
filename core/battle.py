@@ -17,7 +17,6 @@ class Battle:
         self.end = False
         while not self.end:
             self.choices()
-            #print([(act.name, hex(id(act.targets))) for act in self.acts])
             self.actions()
             self.check_exits("main")
             self.rules["tick"](self)
@@ -25,20 +24,17 @@ class Battle:
 
     def choices(self):
         self.acts = []
-        for player in  self.timeline.players():
-            if len(self.acts):
-                print("Old:", hex(id(self.acts[0].targets)))
+        for player in self.timeline.players():
             action = player.think(self)
             self.acts.append(action)
-            print([(act.name, hex(id(act.targets))) for act in self.acts])
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            print(player.name, "has", action.name+"'d ",
-            ', '.join([target.name for target in action.targets])+"!")
-            player.last_act = action
             delay = action.metadata["delay"] if "delay" in action.metadata else 0
             self.timeline.addaction(action, delay)
             self.rules['schedule'](self, player)
+            print(player.name, "has", action.name+"'d ",
+            ', '.join([target.name for target in action.targets])+"!")
+            player.last_act = action
 
 
     def actions(self):
@@ -48,7 +44,7 @@ class Battle:
     def check_exits(self, dep):
         changed = []
         for exit in self.exits[dep]:
-            for player in list(self.players.keys()):
+            for player in self.players:
                 if exit.condition(self.players[player], self):
                     exit.effect(self.players[player], self)
                     changed.extend(exit.changes)

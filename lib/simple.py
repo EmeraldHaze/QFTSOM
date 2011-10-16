@@ -3,8 +3,9 @@ import api, lib
 def think_maker(gettarget):
     def thinker(self, battle):
         target = gettarget(self, battle)
-        action = self.actions[0].copy(battle)
-        action.complete(self, target)
+        action = self.actions[0].copy(battle, at = "Copyed at "+self.name)
+        ###AT
+        action.complete(self, target, at="Pre-return at "+self.name)
         return action
     return thinker
 

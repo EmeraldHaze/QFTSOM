@@ -5,4 +5,4 @@ def actions(battle, player):
     player.actions = []
     for belong in player.belongs:
         for action in belong.actions:
-            player.actions.append(action.copy(battle))
+            player.actions.append(action.copy(battle, "Start at "+player.name))
