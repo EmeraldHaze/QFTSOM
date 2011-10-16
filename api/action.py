@@ -1,9 +1,9 @@
 from collections import defaultdict
 seen_targets = []
 class Action:
-    def __init__(self, name, listners, madeat, metadata = {}, mintargets = 1, maxtargets = 1):
+    def __init__(self, name, listners, madeat = "Not Given", metadata = {}, mintargets = 1, maxtargets = 1):
         """
-        This describes an Action. Args:
+        This describes an action. Args:
         name:str, used for IDing
         listners:dict. listners[event] is called at an event like exec. This is a defaultdict
         madeat:str, used for tracking
@@ -17,7 +17,7 @@ class Action:
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mintargets
         self.maxt = maxtargets
-        self.metadata = {"delay":0, "target":"norm"}
+        self.metadata = {"delay":0, "target":"norm", "MPcost":0}
         self.metadata.update(metadata)
         self.copy_status = 0
         self.completed = False

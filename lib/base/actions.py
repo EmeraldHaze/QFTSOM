@@ -7,5 +7,18 @@ def simplemaker(name, dmg, madeat):
         target.stats["HP"] -= dmg
     return Action(name, {"exec":sexec}, madeat)
 
-poke = simplemaker("poke", 1, "lib")
-hit = simplemaker("hit", 2, "lib")
+def complete_exec(self, rules):
+    if "extra" in self.metadata:
+        extra = self.metadata["extra"].copy(self.battle)
+        extra.complete(self.actor, self.targets)
+        self.battle.timeline.addaction(extra, self.metadata["extra"].metadata['delay'])
+    for target in self.targets:
+        dmg = eval(rules[self.metadata["type"]])
+        target.stats["HP"] -= dmg
+        self.metadata['dmg'][target] = dmg
+        print(target.name, "lost", dmg, "health!")
+
+def manainit(self):
+    self.metadata['dmg'] = {}
+    self.actor.stats['MP'] -= self.metadata["MPcost"]
+

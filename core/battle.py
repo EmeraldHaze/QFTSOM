@@ -73,7 +73,7 @@ class Battle:
             self.rules["wipe_hist"](self, player)
             player.last_act = None
             self.rules['schedule'](self, player)
-            self.rules["player_actions"](self, player)
+            self.rules["get_actions"](self, player)
             self.player_list.append(player)
 
         for player in self.player_list:
