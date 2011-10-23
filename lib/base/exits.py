@@ -1,9 +1,9 @@
 from api.exit import Exit
 
 def reset(player):
-    player.actions = []
+    player.action = []
     player.stats['HP'] = player.stats["MAXHP"]
-    player.stats['MP'] = player.stats["MAXMP"]
+    #player.stats['MP'] = player.stats["MAXMP"]
 
 def die_effect(player, battle):
     print(player.name, 'has become sane!')

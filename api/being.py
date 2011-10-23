@@ -11,7 +11,7 @@ class Being:
         self.data = data
         self.name = name
         if rules == None:
-            from game.defaults import statrules as rules
+            from core.shared import statrules as rules
         for rule in rules:
             self.stats[rule[0]] = eval(rule[1])
 

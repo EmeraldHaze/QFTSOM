@@ -1,7 +1,7 @@
 from collections import defaultdict
 seen_targets = []
 class Action:
-    def __init__(self, name, listners, madeat, metadata = {}, mintargets = 1, maxtargets = 1):
+    def __init__(self, name, listners, metadata = {}, madeat = "Unkown", mintargets = 1, maxtargets = 1):
         """
         This describes an Action. Args:
         name:str, used for IDing
@@ -24,7 +24,7 @@ class Action:
 
     def copy(self, battle, at):
         ###AT
-        new = Action(self.name, self.listners, at, self.metadata, self.mint, self.maxt)
+        new = Action(self.name, self.listners, self.metadata, at, self.mint, self.maxt)
         #for item in dir(self):
         #    if not item.startswith("_") and item != "madeat":
         #        try:

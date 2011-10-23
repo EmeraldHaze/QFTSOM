@@ -1,9 +1,9 @@
 import api
 import lib
 from lib.base import actions, thinkers
-from game import defaults
+from core import shared
 
-defaults.statrules = [("HP", "self.stats['STR']*5+50"),
+shared.statrules = [("HP", "self.stats['STR']*5+50"),
     ("MP", "self.stats['INT']*5+50"),
     ("DEF", "self.stats['STR']"),
     ("MDEF", "self.stats['INT']"),
@@ -27,7 +27,11 @@ def healmaker(name, heal, stat, delay, cost, type = "magic"):
         self.target[0].stats[stat] += heal
         self.metadata['dmg'][self.actor] = (-n)
         print(self.target[0].name, "has gained", heal, stat)
-    return api.Action(name, {"exec":healer, "init":actions.manainit}, metadata = {"type":type, "MPcost":cost, "delay":delay})
+    return api.Action(name, {"exec":healer, "init":completeinit}, metadata = {"type":type, "MPcost":cost, "delay":delay})
+
+def completeinit(self):
+    self.dmgrules = dmg_rules
+    action.manainit(self)
 
 def boom(self):
     print("Boom!")
@@ -59,14 +63,14 @@ def poisoned(self):
         newpoison.dmg = self.dmg-1
         self.battle.timeline.addaction(newpoison, 1)
 
-bolt = api.Action('bolt', {"exec":actions.complete_exec, "init":actions.manainit}, metadata = {"type":"magic", "MPcost":60, 'change':1})
-hack = api.Action('hack', {"exec":actions.complete_exec, "init":actions.manainit}, metadata = {"type":"melee", 'MPcost': 0, 'change':1})
+bolt = api.Action('bolt', {"exec":actions.complete_exec, "init":completeinit}, metadata = {"type":"magic", "MPcost":60, 'change':1})
+hack = api.Action('hack', {"exec":actions.complete_exec, "init":completeinit}, metadata = {"type":"melee", 'MPcost': 0, 'change':1})
 heal = healmaker ("heal", 30, "HP", 1, 30)
 rest = healmaker ("rest", 20, "MP", 0, 0 )
 
-boom   = api.Action("explode", {"exec":boom, "init":actions.manainit}, "Fancy", {"delay":1, "type":"melee", "MPcost":0, "change":1}, -1, 0)
+boom   = api.Action("explode", {"exec":boom, "init":completeinit}, {"delay":1, "type":"melee", "MPcost":0, "change":1}, -1, 0)
 poison = api.Action("poison" , {"exec":poisoned})
-stab   = api.Action("stab"   , {"exec":actions.complete_exec, "init":actions.manainit}, metadata = {"type":"melee", "MPcost":0, "change":1, "extra":poison})
+stab   = api.Action("stab"   , {"exec":actions.complete_exec, "init":completeinit}, metadata = {"type":"melee", "MPcost":0, "change":1, "extra":poison})
 
 staff  = api.Belong('Staff', {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
 axe    = api.Belong("Axe", {"STR":20, "MAXWPNDMG":10}, [hack])

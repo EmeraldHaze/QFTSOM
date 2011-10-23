@@ -16,7 +16,6 @@ def build_reg(modules):
 def get_modules(d):
     files = os.listdir("./" + "/".join(d))
     names = [fi[:-3] for fi in files if not fi.startswith("_") and fi.endswith(".py")]
-
     modules = {}
     for fi in names:
         path = ".".join(d + [fi])

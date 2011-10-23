@@ -39,11 +39,11 @@ class Net:
                 if node.exit_:
                     return node.exit_
                 for i, v in enumerate(node.links):
-                    print("{}: {}").format(i, v)
-                op = int(input(node.q1 + "\n"))
+                    print("{}: {}".format(i, v))
+                op = int(input(node.q + "  "))
                 while not 0 <= op < len(node.links):
                     print("invalid answer")
-                    op = int(input(node.q + "\n"))                    
-                nodename = node.names[op] 
-            node = nodemap[nodename]
+                    op = int(input(node.q + "\n"))
+                nodename = node.names[op]
+            node = self[nodename]
             #Set the node

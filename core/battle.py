@@ -27,21 +27,21 @@ class Battle:
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
             delay = action.metadata["delay"] if "delay" in action.metadata else 0
-            self.timeline= .addaction(action, delay)
+            self.timeline.addaction(action, delay)
             self.rules['schedule'](self, player)
-            print(player.namre, "has", action.name+"'d ",
+            print(player.name, "has", action.name+"'d ",
             ', '.join([target.name for target in action.targets])+"!")
             player.last_act = action
 
 
-    def actions(self s
+    def actions(self):
         for action in self.timeline.actions():
             action.listners['exec'](action)
 
     def check_exits(self, dep):
         changed = []
         for exit in self.exits[dep]:
-            for player in self.players:
+            for player in list(self.players.keys()):
                 if exit.condition(self.players[player], self):
                     exit.effect(self.players[player], self)
                     changed.extend(exit.changes)

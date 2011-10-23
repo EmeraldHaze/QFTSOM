@@ -1,34 +1,23 @@
 import api, lib
+from lib.base import thinkers, actions
+from core import shared
 
-def think_maker(gettarget):
-    def thinker(self, battle):
-        target = gettarget(self, battle)
-        action = self.actions[0].copy(battle, at = "Copyed at "+self.name)
-        ###AT
-        action.complete(self, target, at="Pre-return at "+self.name)
-        return action
-    return thinker
+shared.statrules  = [("MAXHP", "self.stats['HP']")]
 
-def mosthp(self, battle):
-    target = [None, float("inf")]
-    for enemy in battle.player_list:
-        if enemy != self:
-            hp = enemy.stats["HP"]
-            if hp < target[1]:
-                target = [enemy, hp]
-    return target[0]
+manthinker = thinkers.think_maker(thinkers.mosttarget, thinkers.firstact)
+oddthinker = thinkers.think_maker(thinkers.least,      thinkers.firstact)
+pthinker   = thinkers.think_maker(thinkers.ptarget,    thinkers.firstact)
+thinker    = manthinker
 
-def ptarget(self, battle):
-    for num in range(len(battle.player_list)):
-        t = battle.player_list[num]
-        print("{}: {}, HP: {}".format(num, t.name, t.stats["HP"]))
-    target = battle.player_list[int(input("Choice? "))]
-    return target
+poke = actions.simplemaker("poke", 1, "lib")
+hit  = actions.simplemaker("hit" , 2, "lib")
 
-thinker = think_maker(mosthp)
-player = think_maker(ptarget)
+stick = api.Belong("stick", {}, [poke])
+staff = api.Belong("staff", {}, [hit])
 
-stick = api.Belong("stick", {}, [lib.base.actions.poke])
-
-man = api.Being("man", thinker, {"HP":6}, [stick])
-player = api.Being("player", player, {"HP":7}, [stick])
+##                 NAME        THINKER     STATS     BELONGS
+player = api.Being('Player',   pthinker,   {'HP': 6}, [stick])
+man    = api.Being('Man',      manthinker, {'HP': 5}, [stick])
+man2   = api.Being('OtherMan', manthinker, {'HP': 4}, [stick])
+oddman = api.Being('Oddball',  oddthinker, {'HP': 5}, [stick])
+staffo = api.Being('Staffo',   manthinker, {'HP': 5}, [staff])
