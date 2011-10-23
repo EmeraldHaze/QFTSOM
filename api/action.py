@@ -1,9 +1,9 @@
 from collections import defaultdict
-from game import action_defaults
+seen_targets = []
 class Action:
-    def __init__(self, name, listners, madeat = "Not Given", metadata = {}, mintargets = 1, maxtargets = 1):
+    def __init__(self, name, listners, madeat, metadata = {}, mintargets = 1, maxtargets = 1):
         """
-        This describes an action. Args:
+        This describes an Action. Args:
         name:str, used for IDing
         listners:dict. listners[event] is called at an event like exec. This is a defaultdict
         madeat:str, used for tracking
@@ -17,9 +17,8 @@ class Action:
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mintargets
         self.maxt = maxtargets
-        self.metadata = action_defaults
+        self.metadata = {"delay":0, "target":"norm"}
         self.metadata.update(metadata)
-
         self.copy_status = 0
         self.completed = False
 
@@ -40,6 +39,11 @@ class Action:
             targets = []
         self.actor = actor
         self.completer = at
+        if targets in seen_targets:
+            raise Exception("Target is the same")
+        else:
+            pass
+            #seen_targets.append(targets)
         if type(targets) != list:
             targets = [targets]
 

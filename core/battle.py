@@ -7,13 +7,13 @@ class Battle:
         self.players = players
         self.named_exits = exits
         self.rules = defaultdict(lambda :lambda *args:None, rules)
+        self.end = False
 
     def start(self):
         self.timeline = Clock('player', 'action')
         self.player_startup()
         self.exit_startup()
         self.rules['init'](self)
-        self.end = False
         while not self.end:
             self.choices()
             self.actions()
@@ -22,27 +22,26 @@ class Battle:
             self.timeline.next_tick()
 
     def choices(self):
-        self.acts = []
         for player in self.timeline.players():
             action = player.think(self)
-            self.acts.append(action)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            delay = action.metadata["delay"] if 'delay' in action.metadata else 0
-            self.timeline.addaction(action, delay)
+            delay = action.metadata["delay"] if "delay" in action.metadata else 0
+            self.timeline= .addaction(action, delay)
             self.rules['schedule'](self, player)
-            print(player.name, "has", action.name+"'d ",
+            print(player.namre, "has", action.name+"'d ",
             ', '.join([target.name for target in action.targets])+"!")
             player.last_act = action
 
-    def actions(self):
+
+    def actions(self s
         for action in self.timeline.actions():
             action.listners['exec'](action)
 
     def check_exits(self, dep):
         changed = []
         for exit in self.exits[dep]:
-            for player in list(self.players.keys()):
+            for player in self.players:
                 if exit.condition(self.players[player], self):
                     exit.effect(self.players[player], self)
                     changed.extend(exit.changes)
@@ -70,8 +69,8 @@ class Battle:
         for player in self.players.values():
             self.rules["wipe_hist"](self, player)
             player.last_act = None
+            self.rules["player_actions"](self, player)
             self.rules['schedule'](self, player)
-            self.rules["get_actions"](self, player)
             self.player_list.append(player)
 
         for player in self.player_list:
