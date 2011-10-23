@@ -1,6 +1,6 @@
 import api
 import lib
-from lib.base import actions
+from lib.base import actions, thinkers
 from game import defaults
 
 defaults.statrules = [("HP", "self.stats['STR']*5+50"),
@@ -21,13 +21,13 @@ dmg_rules = {\
         randint(self.actor.stats['MINWPNDMG'], self.actor.stats['MAXWPNDMG'])-\
         target.stats['MDEF'])*self.metadata['change']"}
 
-def healmaker(heal, stat, delay, cost, type = "magic"):
+def healmaker(name, heal, stat, delay, cost, type = "magic"):
     healvalue = 30
     def healer(self):
         self.target[0].stats[stat] += heal
         self.metadata['dmg'][self.actor] = (-n)
         print(self.target[0].name, "has gained", heal, stat)
-    return api.Action("heal", {"exec":healer, "init":actions.manainit}, metadata = {"type":type, "MPcost":cost, "delay":delay})
+    return api.Action(name, {"exec":healer, "init":actions.manainit}, metadata = {"type":type, "MPcost":cost, "delay":delay})
 
 def boom(self):
     print("Boom!")
@@ -61,8 +61,8 @@ def poisoned(self):
 
 bolt = api.Action('bolt', {"exec":actions.complete_exec, "init":actions.manainit}, metadata = {"type":"magic", "MPcost":60, 'change':1})
 hack = api.Action('hack', {"exec":actions.complete_exec, "init":actions.manainit}, metadata = {"type":"melee", 'MPcost': 0, 'change':1})
-heal = healmaker(30, "HP", 1, 30)
-rest = healmaker(20, "MP", 0, 0)
+heal = healmaker ("heal", 30, "HP", 1, 30)
+rest = healmaker ("rest", 20, "MP", 0, 0 )
 
 boom   = api.Action("explode", {"exec":boom, "init":actions.manainit}, "Fancy", {"delay":1, "type":"melee", "MPcost":0, "change":1}, -1, 0)
 poison = api.Action("poison" , {"exec":poisoned})
@@ -76,7 +76,9 @@ dagger = api.Belong("dagger", {"INT":10, "STR":5}, [stab])
 shoes  = api.Belong("shoes", {"Dodge": 600, "INT":5})
 bomb   = api.Belong("bomb", {}, [boom])
 
+pthinker = thinkers.think_maker(thinkers.ptarget, thinkers.paction)
+
 dwarf  = api.Being('Dwarf' , lib.simple.thinker, {'STR':13,'INT':7}  ,[axe, helm])
 dwarf2 = api.Being('Dwarf2', lib.simple.thinker, {'STR':13,'INT':7}  ,[axe, helm])
-rouge  = api.Being("Rouge" , lib.simple.pthinker , {"STR":10, "INT":12},[dagger, bomb, shoes])
-player = api.Being('Player', lib.simple.pthinker  , {'STR':10, 'INT':10}, [staff])
+rouge  = api.Being("Rouge" , pthinker, {"STR":10, "INT":12},[dagger, bomb, shoes])
+mage   = api.Being('Player', pthinker, {'STR':10, 'INT':10}, [staff])

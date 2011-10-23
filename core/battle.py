@@ -1,7 +1,6 @@
 from collections import defaultdict
 from core.clock import Clock
 
-import pdb
 
 class Battle:
     def __init__(self, players, exits, rules):
@@ -29,13 +28,12 @@ class Battle:
             self.acts.append(action)
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
-            delay = action.metadata["delay"] if "delay" in action.metadata else 0
+            delay = action.metadata["delay"] if 'delay' in action.metadata else 0
             self.timeline.addaction(action, delay)
             self.rules['schedule'](self, player)
             print(player.name, "has", action.name+"'d ",
             ', '.join([target.name for target in action.targets])+"!")
             player.last_act = action
-
 
     def actions(self):
         for action in self.timeline.actions():

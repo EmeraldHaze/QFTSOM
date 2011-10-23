@@ -1,5 +1,5 @@
 from collections import defaultdict
-seen_targets = []
+from game import action_defaults
 class Action:
     def __init__(self, name, listners, madeat = "Not Given", metadata = {}, mintargets = 1, maxtargets = 1):
         """
@@ -17,8 +17,9 @@ class Action:
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mintargets
         self.maxt = maxtargets
-        self.metadata = {"delay":0, "target":"norm", "MPcost":0}
+        self.metadata = action_defaults
         self.metadata.update(metadata)
+
         self.copy_status = 0
         self.completed = False
 
@@ -39,11 +40,6 @@ class Action:
             targets = []
         self.actor = actor
         self.completer = at
-        if targets in seen_targets:
-            raise Exception("Target is the same")
-        else:
-            pass
-            #seen_targets.append(targets)
         if type(targets) != list:
             targets = [targets]
 
