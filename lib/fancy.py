@@ -23,10 +23,10 @@ dmg_rules = {\
 
 def healmaker(name, heal, stat, delay, cost, type = "magic"):
     healvalue = 30
-    def healer(self):
-        self.target[0].stats[stat] += heal
-        self.metadata['dmg'][self.actor] = (-n)
-        print(self.target[0].name, "has gained", heal, stat)
+    def healer(actor, self, targets):
+        targets[0].stats[stat] += heal
+        self.metadata['dmg'][actor] = (-n)
+        print(targets[0].name, "has gained", heal, stat)
     return api.Action(name, {"exec":healer, "init":completeinit}, metadata = {"type":type, "MPcost":cost, "delay":delay})
 
 def completeinit(self):

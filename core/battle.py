@@ -15,6 +15,7 @@ class Battle:
         self.player_startup()
         self.exit_startup()
         self.rules['init'](self)
+        pdb.set_trace()
         while not self.end:
             self.choices()
             self.actions()
@@ -24,20 +25,22 @@ class Battle:
 
     def choices(self):
         for player in self.timeline.players():
-            action = player.think(self)
+            detailed_action = player.think(self)
+            action = detailed_action[1]
             #If he is honest, he will only take as much as he should have.
             #He can store info in the player 'til the next time he is called
             delay = action.metadata["delay"] if "delay" in action.metadata else 0
-            self.timeline.addaction(action, delay)
+            self.timeline.addaction(detailed_action, delay)
             self.rules['schedule'](self, player)
             print(player.name, "has", action.name+"'d ",
-            ', '.join([target.name for target in action.targets])+"!")
+            ', '.join([target.name for target in detailed_action[2]])+"!")
             player.last_act = action
 
 
     def actions(self):
         for action in self.timeline.actions():
-            action.listners['exec'](action)
+            actor, action, targets = action
+            action.listners['exec'](actor, action, targets, battle = self)
 
     def check_exits(self, dep):
         changed = []
@@ -70,7 +73,7 @@ class Battle:
         for player in self.players.values():
             self.rules["wipe_hist"](self, player)
             player.last_act = None
-            self.rules["player_actions"](self, player)
+            self.rules["get_actions"](self, player)
             self.rules['schedule'](self, player)
             self.player_list.append(player)
 

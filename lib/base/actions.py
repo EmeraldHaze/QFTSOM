@@ -1,20 +1,19 @@
 from api import Action
 
 def simplemaker(name, dmg, madeat = 'Unknown with simplemaker'):
-    def sexec(self):
-        target = self.targets[0]
+    def sexec(actor, self, targets, battle):
+        target = targets[0]
         print(target.name, "has lost", dmg, " health!")
         target.stats["HP"] -= dmg
     return Action(name, {"exec":sexec}, madeat = madeat)
 
-def complete_exec(self):
+def complete_exec(actor, self, targets, battle):
     rules = self.dmgrules
     if "extra" in self.metadata:
-        extra = self.metadata["extra"].copy(self.battle)
-        extra.complete(self.actor, self.targets)
-        self.battle.timeline.addaction(extra,
+        extra = self.metadata["extra"]
+        battle.timeline.addaction(extra.format(actor, targets, battle),
             self.metadata["extra"].metadata['delay'])
-    for target in self.targets:
+    for target in targets:
         dmg = eval(rules[self.metadata["type"]])
         target.stats["HP"] -= dmg
         self.metadata['dmg'][target] = dmg

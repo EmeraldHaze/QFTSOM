@@ -1,10 +1,8 @@
 def think_maker(gettarget, getaction):
     def thinker(self, battle):
         target = gettarget(self, battle)
-        action = getaction(self, battle).copy(battle, at = "Copyed at "+self.name)
-        ###AT
-        action.complete(self, target, at="Pre-return at "+self.name)
-        return action
+        action = getaction(self, battle)
+        return action.format(battle, self, target)
     return thinker
 
 def mosttarget(self, battle, cmp = int.__lt__):
