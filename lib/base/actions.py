@@ -1,6 +1,6 @@
 from api import Action
 
-def simplemaker(name, dmg, madeat):
+def simplemaker(name, dmg, madeat = 'Unknown with simplemaker'):
     def sexec(self):
         target = self.targets[0]
         print(target.name, "has lost", dmg, " health!")

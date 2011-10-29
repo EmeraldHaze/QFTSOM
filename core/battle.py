@@ -1,6 +1,7 @@
 from collections import defaultdict
 from core.clock import Clock
 
+import pdb
 
 class Battle:
     def __init__(self, players, exits, rules):

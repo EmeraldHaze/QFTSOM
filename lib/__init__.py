@@ -1,8 +1,7 @@
 from lib import _reg, _ugly, base
 
 ###API1
-__all___ = ["simple", "fancy", "mardek", "base"]
-from lib import simple, fancy, mardek
+from lib import simple, fancy
 #modules = _reg.get_modules(["lib"])
 #globals().update(modules)
 

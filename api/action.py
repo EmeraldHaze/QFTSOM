@@ -1,7 +1,7 @@
 from collections import defaultdict
 seen_targets = []
 class Action:
-    def __init__(self, name, listners, metadata = {}, madeat = "Unkown", mintargets = 1, maxtargets = 1):
+    def __init__(self, name, listners, metadata = {}, mintargets = 1, maxtargets = 1, madeat = "Not Given", ):
         """
         This describes an Action. Args:
         name:str, used for IDing
@@ -17,14 +17,14 @@ class Action:
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mintargets
         self.maxt = maxtargets
-        self.metadata = {"delay":0, "target":"norm"}
+        self.metadata = {"delay":0, "target":"norm", "MPcost":0}
         self.metadata.update(metadata)
         self.copy_status = 0
         self.completed = False
 
-    def copy(self, battle, at):
+    def copy(self, battle, at = 'Unkown'):
         ###AT
-        new = Action(self.name, self.listners, self.metadata, at, self.mint, self.maxt)
+        new = Action(self.name, self.listners, self.metadata, self.mint, self.maxt, madeat = at)
         #for item in dir(self):
         #    if not item.startswith("_") and item != "madeat":
         #        try:

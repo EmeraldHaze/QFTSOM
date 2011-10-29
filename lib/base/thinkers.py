@@ -21,7 +21,6 @@ least = lambda self, battle: mosttarget(self, battle, int.__gt__)
 firstact = lambda self, battle: self.actions[0]
 
 def ptarget(self, battle):
-    print("Go", self.name + "!")
     for num in range(len(battle.player_list)):
         t = battle.player_list[num]
         print("{}: {}, HP: {}".format(num, t.name, t.stats["HP"]))
@@ -31,6 +30,6 @@ def ptarget(self, battle):
 def paction(self, battle):
     for num in range(len(self.actions)):
         a = self.actions[num]
-        print("{}: {}, MP: {}".format(num, a.name, a.metadata["MPcost"]))
-    action = self.actions[int(input("Action? "))]
-    return action
+        print("{}: {}, HP: {}".format(num, a.name))
+    target = battle.player_list[int(input("Action? "))]
+    return target
