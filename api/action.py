@@ -22,7 +22,7 @@ class Action:
         self.metadata = {"delay":0, "target":"norm", "MPcost":0}
         self.metadata.update(metadata)
 
-    def format(self, battle, actor, targets = None):
+    def format(self, actor, targets, battle):
         """
         This formats the action details correctly. It also:
         checks targets against maxt/mint"""

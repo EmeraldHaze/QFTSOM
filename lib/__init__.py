@@ -1,7 +1,7 @@
 from lib import _reg, _ugly, base
 
 ###API1
-from lib import simple, fancy
+from lib import simple, fancy, mardek, limb
 #modules = _reg.get_modules(["lib"])
 #globals().update(modules)
 

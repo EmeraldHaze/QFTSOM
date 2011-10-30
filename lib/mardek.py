@@ -1,78 +1,76 @@
-#from random import randint, choice
-#from api.action import Action
+from random import randint, choice, shuffle
+from collections import defaultdict
+from lib import base
+import api
 
-#def statuser(self):
-    #for target in self.targets:
-        #target.statuses.update(self.metadata["statuses"])
+def basicattack(self, battle, targets):
+    act = (action for action in self.actions if action.name == "attack").next()
+    target = choice(targets)
+    return act.format(battle, self, target)
 
-#def attacker(self, target = None):
-    #if not target:
-        #target = self.targets[0]
-    #actor = self.actor
-    #dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"] if self.metadata["type"] == "Physical"\
-    #else actor.stats["SPR"]+actor.stats["POW"]-target.stats["MDEF"]
+def teams(battle, you = None):
+    t = defaultdict(lambda :[])
+    [t[player.data["team"]].append(player) for player in battle.players]
+    if you:
+        return (team for name, team in t.items() if name != you).next() , t[you]
+    else:
+        return t
 
-    #reschange = (100-target.stats[self.metadata["element"]+"Res"])/100
+def healer(self, battle):
+    targets, allies = teams(battle, self.data["team"])
+    wounded = [ally for ally in allies if ally.stats["HP"]/ally.stats["MAXHP"] < 0.9]
+    if len(wounded):
+        action = self.act_dict["cure"]
+        target = wounded[0]
+    else:
+        buffs = ["shield", "m. shield", "regen"]
+        shuffle(buffs)
+        shuffle(allies)
+        action = None
+        for buff in buffs:
+            for ally in allies:
+                if buff not in ally.status_list:
+                    action =  self.act_dict[buff]
+                    target = ally
+                    break
+    if not action:
+        return basicattack(battle, targets)
+    else:
+        return action.format(self, target)
 
-    #if "miss" in self.metadata:
-        #if randint(0, 100) > (self.actor.stats["ACC"] - self.metadata["miss"]):
-            #print("Miss!", end = " ")
-            #dmg *= 0
+#heartstaff = Belong("Heart Staff", {"POW":10, "CRIT":1, "SPR":1}, [actions.cure, actions.regen, actions.mshield, actions.shield])
+#walkingstick = Belong("Walking Stick", {"POW":10, "SPR":1}, [actions.immolate, actions.glaciate, actions.thunderstorm])
+#dagger = Belong("Dagger", {"POW":16, "CRIT":10}, [actions.attack, actions.viperfang, actions.eyegouge, actions.slumberstab])
+#mythrilblade = Belong("Mythril Greatblade", {"POW":22, "CRIT":4}, [actions.attack, actions.powerattack, actions.avengance])
 
-    #if randint(0, 100) < target.stats["EVE"]:
-        #print("Evade!", end = " ")
-        #dmg *= 0
+#magerobe = Belong("Mage Robe", {"MDEF":2})
+#hemprobe = Belong("Hemp Robe", {"MDEF":4, "SPR":1, "MP":10})
+#leathers = Belong("Bandit leather",{"DEF":2, "MDEF":2, "AGL":2, "AirRes":25})
+#bronzearmor = Belong("Bronze Armor", {"DEF":6})
 
-    #if randint(0, 100)<=self.actor.stats["CRIT"]:
-        #print("Crit!", end = " ")
-        #dmg *= 2
+#silverring = Belong("Silver Ring", {"DEF":2})
+#aglring = Belong("Ring of AGL", {"AGL":1})
+#gauntlet = Belong("Gauntlet", {"DEF":1, "STR":2})
 
-    #if self.metadata["type"] == "Physical" and "shield" in target.statuses:
-        #print("Shield'd!", end = " ")
-        #dmg /= 2
+#waterpendant = Belong("Water Pendant", {"MDEF":2, "WaterRes":50, "EarthRes":-50})
+#firependant = Belong("Fire Pendant", {"MDEF":2, "FireRes":50, "WaterRes":-50})
+#airpendant = Belong("Air Pendant", {"MDEF":2, "AirRes":50, "FireRes":-50})
+#greenbeads = Belong("Green Beads", {"MDEF":4, "VIT":1, "EarthRes":20})
 
-    #elif self.metadata["type"] == "Magical" and "m. shield" in target.statuses:
-        #print("M. Shield'd!", end = " ")
-        #dmg /= 2
+#aalia = api.Being("Aalia", healer, {"STR":9, "VIT":10, "SPR":20, "AGL":16, "LVL":6,
+        #"basehp":25, "hplvl":10}, [heartstaff, magerobe, silverring, waterpendant], {"team":"sav"})
 
-    #if "mod" in self.metadata:
-        #dmg *= self.metadata["mod"]
+#bernard = Being("Bernard", thinkers.attacker, {"STR":12, "VIT":8, "SPR":27, "AGL":13,
+    #"EVA":0, "LVL":11, "basehp":20, "hplvl":8},
+    #{"Walking Stick":belongs.walkingstick, "Hempen Robe":belongs.hemprobe,
+    #"Silver Ring":belongs.silverring, "FirePendant": belongs.firependant}, {"team":"sav"})
 
+#vennie = Being("Vennie", thinkers.player, {"STR":12, "VIT":14, "SPR":10, "AGL": 22,
+    #"EVA":0, "LVL":7, "basehp":35, "hplvl":14},
+    #{"Dagger":belongs.dagger, "Bandit Leather":belongs.leathers,
+    #"Ring of AGL":belongs.aglring, "AirPendant":belongs.airpendant}, {"team":"mar"})
 
-    #print(target.name, "has taken", dmg, " damadge!")
-    #target.stats["HP"]-=dmg
-
-    #if "statuses" in self.metadata:
-        #for status, value in self.metadata["statuses"].items():
-            #chance, value = value
-            #print("chance", chance)
-            #if randint(0, 100) > chance:
-                #print(target.name, "was", status+"'d")
-                #target.statuses[status] = value
-    #return dmg
-
-#def attacks(self):
-    #for target in self.targets:
-        #attacker(self, target)
-
-#special = (1, 'special', None)
-#shi = (0, "shi", None)
-#hp = lambda mod:(1, 'exec', "change = player.stat['MAXHP']*"+str(mod)+"\nprint(player.name, '\'s HP has changed by', change)\nplayer.stat['HP'] += change")
-#sets = lambda mod:(1, 'sets', mod)
-
-#attack = Action("attack", {"exec":attacker}, {"type":"Physical", "element":"Physical"})
-#powerattack = Action("attacker", {"exec":attacker}, {"type":"Physical", "element":"Physical", "mod":2})
-#avengance = Action("Avengance!", {"exec":statuser}, {"statuses":{"berserk":special}, "type":"Magical"})
-
-#mshield = Action("m. shield", {"exec":statuser}, {"statuses": {"m. shield":shi}, "type":"Magical"})
-#shield = Action("shield", {"exec":statuser}, {"statuses": {"shield":shi}, "type":"Magical"})
-#regen = Action("regen", {"exec":statuser}, {"statuses": {"regen":hp(0.1)}, "type":"Magical"})
-#cure = Action("cure", {"exec":attacker}, {"type":"Magical", "element":"Light", "mod":-1})
-
-#immolate = Action("immolate", {"exec":attacker}, {"type":"Magical", "element":"Fire"})
-#glaciate = Action("glaciate", {"exec":attacker}, {"type":"Magical", "element":"Water"})
-#thunderstorm = Action("thunderstorm", {"exec":attacks}, {"type":"Magical", "element":"Fire", "statuses":{"paralysis":(25, (2, "special", None))}, "target":"multi"}, 2, 10)
-
-#viperfang = Action("viperfang", {"exec":attacker}, {"type":"Physical", "element":"Earth", "statuses":{"poison":(95, hp(-0.02))}})
-#eyegouge = Action("eye gouge", {"exec":attacker}, {"type":"Physical", "element":"Dark", "statuses":{"blind":(95, special)}})
-#slumberstab = Action("slumberstab", {"exec":attacker}, {"type":"Physical", "element":"Air", "statuses":{"sleep":(95, sets("-*"))}})
+#bartholio = Being("Bartholio", thinkers.bart, {"STR":22, "VIT":19, "SPR":8, "AGL":11,
+    #"EVA":0, "basehp":45, "hplvl":18, "LVL":7},
+    #{"Mythril Greatblade":belongs.mythrilblade, "Bronze Armor":belongs.bronzearmor,
+    #"Gauntlet":belongs.gauntlet, "Green Beads":belongs.greenbeads}, {"team":"mar"})

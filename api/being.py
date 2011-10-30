@@ -16,8 +16,10 @@ class Being:
             self.stats[rule[0]] = eval(rule[1])
 
         self.belongs = []
+        self.belong_dict = {}
         for belong in belongs:
             self.addbelong(belong)
+            self.belong_dict[belong.name] = belong
 
     def __repr__(self):
         return '<' + self.name + '>'
@@ -31,13 +33,11 @@ class Being:
     def rmbelong(self, belong):
         """Removes a belonging from this being"""
         if type(belong) == str:
-            name = belong
-            for belong in self.belongs:
-                if belong.name == name:
-                    break#this leaves belong at the right value
+            belong = self.belongs_dict[belong]
         for stat in list(belong.stats.items()):
             self.stats[stat[0]] -= stat[1]
         self.belongs.remove(belong)
+        del self.belongs[belong.name]
 
     def changestats(self, stat, change, actor):
         self.stats[stat] += change

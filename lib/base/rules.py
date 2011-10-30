@@ -15,6 +15,8 @@ def next(battle, player):
 
 def get_actions(battle, player):
     player.actions = []
+    player.act_dict = {}
     for belong in player.belongs:
         for action in belong.actions:
             player.actions.append(action)
+            player.act_dict[action.name] = action

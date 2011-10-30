@@ -1,19 +1,19 @@
 from random import randint, choice
 from api.action import Action
 
-from pdb import set_trace
-
 def execer(self):
     for target in self.targets:
         target.statuses.update(self.metadata["statuses"])
 
-def attacker(self, target = None):
-    if not target: target = self.targets[0]
-    actor = self.actor
-    dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"] if self.metadata["type"] == "Physical"\
-    else actor.stats["SPR"]+actor.stats["POW"]-target.stats["MDEF"]
+def attacker(actor, self, targets):
+    target = targets[0]
 
-    reschange = (100-target.stats[self.metadata["element"]+"Res"])/100
+    if self.metadata["type"] == "Physical":
+        dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"]
+    else:
+        actor.stats["SPR"]+actor.stats["POW"]-target.stats["MDEF"]
+
+    resistchange = (100-target.stats[self.metadata["element"]+"Res"])/100
 
     if "miss" in self.metadata:
         if randint(0, 100) > (self.actor.stats["ACC"] - self.metadata["miss"]):
@@ -28,16 +28,13 @@ def attacker(self, target = None):
         print("Crit!", end = " ")
         dmg *= 2
 
-    if self.metadata["type"] == "Physical" and "shield" in target.statuses:
+    if self.metadata["type"] == "Physical" and "shield" in target.status_list:
         print("Shield'd!", end = " ")
         dmg /= 2
 
-    elif self.metadata["type"] == "Magical" and "m. shield" in target.statuses:
+    elif self.metadata["type"] == "Magical" and "m. shield" in target.status_list:
         print("M. Shield'd!", end = " ")
         dmg /= 2
-
-    if "mod" in self.metadata:
-        dmg *= self.metadata["mod"]
 
     dmg = int(dmg)
     print(target.name, "has taken", dmg, " damadge!")
@@ -46,7 +43,6 @@ def attacker(self, target = None):
     if "statuses" in self.metadata:
         for status, value in self.metadata["statuses"].items():
             chance, value = value
-            print("chance", chance)
             if randint(0, 100) > chance:
                 print(target.name, "was", status+"'d")
                 target.statuses[status] = value
