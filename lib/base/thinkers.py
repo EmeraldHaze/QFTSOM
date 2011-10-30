@@ -1,7 +1,7 @@
 def think_maker(gettarget, getaction):
     def thinker(self, battle):
-        target = gettarget(self, battle)
         action = getaction(self, battle)
+        target = gettarget(self, battle)
         return action.format(battle, self, target)
     return thinker
 
@@ -19,15 +19,13 @@ least = lambda self, battle: mosttarget(self, battle, int.__gt__)
 firstact = lambda self, battle: self.actions[0]
 
 def ptarget(self, battle):
-    for num in range(len(battle.player_list)):
-        t = battle.player_list[num]
+    for num, t in enumerate(battle.player_list):
         print("{}: {}, HP: {}".format(num, t.name, t.stats["HP"]))
     target = battle.player_list[int(input("Target? "))]
     return target
 
 def paction(self, battle):
-    for num in range(len(self.actions)):
-        a = self.actions[num]
-        print("{}: {}, HP: {}".format(num, a.name))
-    target = battle.player_list[int(input("Action? "))]
+    for num, a in enumerate(self.actions):
+        print("{}: {}, MP: {}".format(num, a.name, a.metadata['MPcost']))
+    target = self.actions[int(input("Action? "))]
     return target

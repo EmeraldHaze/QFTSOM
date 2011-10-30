@@ -35,20 +35,20 @@ class Action:
             #If both boundries are positive
             if not (self.mint <= len(targets) <= self.maxt):
                 #If the targets are not within the boundrys
-                raise Exception(self.actor.name+\
+                raise Exception(actor.name+\
                 "'s thinker passed an invalid amount of targets to action "+self.name)
         elif self.mint <= 0 and self.maxt <= 0:
             #If both boundrys are negative or 0
             if abs(self.mint + 1) <= len(targets) <= abs(self.maxt + 1):
                 #Accept this as a dogmatic condition which works magically
-                targets = [player for player in self.battle.players.values()\
+                targets = [player for player in battle.players.values()\
                 if player not in targets]
             else:
-                raise Exception(self.actor.name+\
+                raise Exception(actor.name+\
                 "'s thinker passed an invalid amount of targets to action "+self.name)
         else:
             raise Exception("Wierd maxt-mint")
-        self.listners['init'](self)
+        self.listners['init'](actor, self, targets)
         return actor, self, targets
 
     def __repr__(self):

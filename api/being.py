@@ -7,15 +7,16 @@ class Being:
         self.think = MethodType(thinker, self)
         self.thinkinit = MethodType(thinkinit, self)
         self.stats = stats
-        self.belongs = belongs
         self.data = data
+        self.status_list = []
         self.name = name
         if rules == None:
             from core.shared import statrules as rules
         for rule in rules:
             self.stats[rule[0]] = eval(rule[1])
 
-        for belong in self.belongs:
+        self.belongs = []
+        for belong in belongs:
             self.addbelong(belong)
 
     def __repr__(self):
@@ -23,18 +24,21 @@ class Being:
 
     def addbelong(self, belong):
         """Adds a belonging to this being"""
-        if type(belong) == str:
-            belong = self.belongs[belong]
         for stat in list(belong.stats.items()):
             self.stats[stat[0]] += stat[1]
-
-    def changestats(self, stat, change, actor):
-        self.stats[stat] += change
-        self.happenings.append([stat, change, actor])
+        self.belongs.append(belong)
 
     def rmbelong(self, belong):
         """Removes a belonging from this being"""
         if type(belong) == str:
-            belong = self.belongs[belong]
+            name = belong
+            for belong in self.belongs:
+                if belong.name == name:
+                    break#this leaves belong at the right value
         for stat in list(belong.stats.items()):
             self.stats[stat[0]] -= stat[1]
+        self.belongs.remove(belong)
+
+    def changestats(self, stat, change, actor):
+        self.stats[stat] += change
+        self.happenings.append([stat, change, actor])

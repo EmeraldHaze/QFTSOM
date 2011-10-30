@@ -2,6 +2,7 @@ from api.exit import Exit
 
 def reset(player):
     player.action = []
+    player.statuslist = []
     player.stats['HP'] = player.stats["MAXHP"]
     #player.stats['MP'] = player.stats["MAXMP"]
 

@@ -15,10 +15,10 @@ class Battle:
         self.player_startup()
         self.exit_startup()
         self.rules['init'](self)
-        pdb.set_trace()
         while not self.end:
             self.choices()
             self.actions()
+            self.statuses()
             self.check_exits("main")
             self.rules["tick"](self)
             self.timeline.next_tick()
@@ -41,6 +41,11 @@ class Battle:
         for action in self.timeline.actions():
             actor, action, targets = action
             action.listners['exec'](actor, action, targets, battle = self)
+
+    def statuses(self):
+        for player in self.player_list:
+            for status in player.status_list:
+                status(player, self)
 
     def check_exits(self, dep):
         changed = []

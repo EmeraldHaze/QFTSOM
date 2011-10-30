@@ -31,9 +31,9 @@ class Clock:
         #This accounts for the current tick
         if l < tick + 1:
             #If the target tick is beyond our scope...
-            for i in range(tick - l + 1):
-                split.extend([[]])
-            #Extend just enough for it to be within our scope + 1
+            for i in range(tick - l + 2):
+                split.append([])
+            #Extend just enough for it to be within our scope + 2
             #The incremnt is so that we don't crash when people stop scedualing
         split[tick].append(item)
 

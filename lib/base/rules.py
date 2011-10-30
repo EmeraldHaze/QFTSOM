@@ -4,7 +4,11 @@ def same(battle, player):
 def next(battle, player):
     split = battle.timeline.player
     for tick in range(len(split)):
-        if split[tick] == []:
+        try:
+            go = split[tick] == [] and split[tick+1] == []
+        except:
+            go = split[tick] == []
+        if go:
             break
             #This leaves tick at the first tick when there's a nobody
     battle.timeline.addplayer(player, tick - battle.timeline.tick)

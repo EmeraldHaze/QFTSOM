@@ -1,5 +1,5 @@
 from api import Action
-
+from random import randint
 def simplemaker(name, dmg, madeat = 'Unknown with simplemaker'):
     def sexec(actor, self, targets, battle):
         target = targets[0]
@@ -9,17 +9,17 @@ def simplemaker(name, dmg, madeat = 'Unknown with simplemaker'):
 
 def complete_exec(actor, self, targets, battle):
     rules = self.dmgrules
-    if "extra" in self.metadata:
-        extra = self.metadata["extra"]
-        battle.timeline.addaction(extra.format(actor, targets, battle),
-            self.metadata["extra"].metadata['delay'])
+    if "status" in self.metadata:
+        status = self.metadata["status"]
+        targets[0].status_list.append(status)
+    if "data" in self.metadata:
+        name, value = self.metadata["data"]
+        targets[0].data[name] = value
     for target in targets:
         dmg = eval(rules[self.metadata["type"]])
         target.stats["HP"] -= dmg
-        self.metadata['dmg'][target] = dmg
         print(target.name, "lost", dmg, "health!")
 
-def manainit(self):
-    self.metadata['dmg'] = {}
-    self.actor.stats['MP'] -= self.metadata["MPcost"]
+def manainit(actor, self, targets):
+    actor.stats['MP'] -= self.metadata["MPcost"]
 
