@@ -1,1 +1,2 @@
-statrules = [("MAXHP", "self.stats['HP']")]
+statrules = []
+belongdata = []

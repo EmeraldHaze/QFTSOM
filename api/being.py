@@ -3,7 +3,7 @@ from pdb import set_trace
 
 class Being:
     """Fully descrbes an entity. """
-    def __init__(self, name, thinker, stats, belongs, data = {},  thinkinit = lambda *args:None, rules=None):
+    def __init__(self, name, thinker, stats, belongs, data = {}, thinkinit = lambda *args:None, rules=None):
         self.think = MethodType(thinker, self)
         self.thinkinit = MethodType(thinkinit, self)
         self.stats = stats
@@ -37,7 +37,7 @@ class Being:
         for stat in list(belong.stats.items()):
             self.stats[stat[0]] -= stat[1]
         self.belongs.remove(belong)
-        del self.belongs[belong.name]
+        del self.belong_dict[belong.name]
 
     def changestats(self, stat, change, actor):
         self.stats[stat] += change

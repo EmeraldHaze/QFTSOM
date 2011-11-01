@@ -31,11 +31,10 @@ class Battle:
             #He can store info in the player 'til the next time he is called
             delay = action.metadata["delay"] if "delay" in action.metadata else 0
             self.timeline.addaction(detailed_action, delay)
-            self.rules['schedule'](self, player)
+            player.last_act = action
             print(player.name, "has", action.name+"'d ",
             ', '.join([target.name for target in detailed_action[2]])+"!")
-            player.last_act = action
-
+            self.rules['schedule'](self, player)
 
     def actions(self):
         for action in self.timeline.actions():

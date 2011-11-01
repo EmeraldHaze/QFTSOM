@@ -30,18 +30,20 @@ class Clock:
         l = len(split) - 1
         #This accounts for the current tick
         if l < tick + 1:
-            #If the target tick is beyond our scope...
-            for i in range(tick - l + 2):
-                split.append([])
-            #Extend just enough for it to be within our scope + 2
-            #The incremnt is so that we don't crash when people stop scedualing
+            self.pad(split, tick)
         split[tick].append(item)
 
     def get(self, split):
         return self.splits[split][self.tick]
 
+    def pad(self, split, newlength):
+        for i in range(newlength - self.tick + 1):
+            split.append([])
+
     def next_tick(self):
         self.tick += 1
+        for split in self.splits.values():
+            self.pad(split, self.tick)
 
     def __repr__(self):
         return "<Clock instance tick {tick} splits {splits}".format(tick = self.tick, splits = list(self.splits.keys()))
