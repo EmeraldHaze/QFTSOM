@@ -4,11 +4,11 @@ The Action api
 from collections import defaultdict
 
 class Action:
-    def __init__(self, name, listners, metadata={}, mint=1, maxt=1, madeat="Uknown"):
+    def __init__(self, name, listners, metadata={}, mint=1, maxt=1):
         """
         This describes an Action. Args:
         name:str, used for IDing
-        listners:dict. listners[event] is called at an event like exec. This is a defaultdict
+        listners:dict, listners[event] is called at event (e.g, exec)
         madeat:str, used for tracking
         metadata = {}, arbitrary data
         mint = 1, minimum targets
@@ -22,10 +22,10 @@ class Action:
         self.metadata = {"delay":0, "target":"norm", "MPcost":0}
         self.metadata.update(metadata)
 
-    def format(self, actor, targets, battle):
+    def instance(self, actor, targets, battle):
         """
-        This formats the action details correctly. It also:
-        checks targets against maxt/mint"""
+        Creates an instance of this action
+        """
         if targets == None:
             targets = []
         if type(targets) != list:
@@ -48,10 +48,22 @@ class Action:
                 "'s thinker passed an invalid amount of targets to action "+self.name)
         else:
             raise Exception("Wierd maxt-mint")
-        self.listners['init'](actor, self, targets)
-        return actor, self, targets
+        new = ActionInstance(self.name, self.listners, self.metadata, actor, targets, battle)
+        new.listners["init"](new)
+        return new
 
     def __repr__(self):
         return "<{} #{}, made at {}>".format(self.name,
             hex(id(self))[2:],
             self.madeat)
+
+class ActionInstance:
+    def __init__(self, name, listners, metadata, actor, targets, battle):
+        self.name = name
+        self.listners
+        self.metadata = metadata
+        self.actor = actor
+        self.targets = targets
+
+    def __repr__(self):
+        return "<{}>".format(self.name)

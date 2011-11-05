@@ -2,8 +2,6 @@
 """
 Starts the game.
 """
-from sys import stdout, stdin, stderr
-
 class Wrap:
     def __init__(self, f):
         self.f = f
@@ -13,9 +11,8 @@ class Wrap:
     def __getattr__(self, item):
         return getattr(self.f, item)
 
-stdout = Wrap(stdout)
-stdin = Wrap(stdin)
-stderr = open("/home/glycan/LOG", 'w', 2)
+import sys
+sys.stdout = Wrap(sys.stdout)
 
 PRELOAD_IMPORTS = False
 import pdb

@@ -2,7 +2,7 @@ def think_maker(gettarget, getaction):
     def thinker(self, battle):
         action = getaction(self, battle)
         target = gettarget(self, battle)
-        return action.format(self, target, battle)
+        return action.instance(self, target, battle)
     return thinker
 
 def mosttarget(self, battle, cmp = int.__lt__):

@@ -21,3 +21,5 @@ man    = api.Being('Man',      manthinker, {'HP': 5}, [stick])
 man2   = api.Being('OtherMan', manthinker, {'HP': 4}, [stick])
 oddman = api.Being('Oddball',  oddthinker, {'HP': 5}, [stick])
 staffo = api.Being('Staffo',   manthinker, {'HP': 5}, [staff])
+
+fight = {"battle": [man, player, man2, staffo, oddman]}

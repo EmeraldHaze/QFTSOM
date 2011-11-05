@@ -1,12 +1,11 @@
 class Node:
-    def __init__(self, names, links, does=[], q="Where do you want to go?", exit_=False):
-        self.links = links
+    def __init__(self, names, links, does={}, q="Where do you want to go?", exit_=False):
         self.names = names
+        self.links = links
         self.does = does
         self.exit_ = exit_
         self.q = q
         self.net = False
-
 
 class Net:
     def __init__(self, start, nodes, does=[]):
@@ -27,9 +26,8 @@ class Net:
         name = startname = self.start
         node = startnode = self[startname]
         while 1:
-            for do in node.does:
-                cmd, args = do.split(" ", 1) #That's one split
-                getattr(does, cmd)(args)
+            for do, args in node.does.items():
+                getattr(does, do)(args)
                 #Get the do function from the does module
             if node.net:
                 #If it is a net

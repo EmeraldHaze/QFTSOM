@@ -1,5 +1,5 @@
 import api
-from lib.base import thinkers, statuses, exits
+from lib.base import thinkers, statuses, exits, rules
 from random import choice, randint
 
 def ldie_check(player, battle):
@@ -89,3 +89,5 @@ torso = api.Belong("Torso", {}, [], {"HP":60, "vital":True})
 leg = api.Belong("Leg", {}, [kick], {"HP":30, "evade":20})
 
 man = api.Being("MAN", pthinker, {}, [head, arm, knife, arm, torso, leg, leg], {'speed':5})
+
+fight = {"say":"Limbic rage awaits ye!", "battle":[[python, man], [limbdie], [rules.speed]]}

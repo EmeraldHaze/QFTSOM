@@ -1,6 +1,10 @@
+from api import rule, Rule
+
+@rule('schedule')
 def same(battle, player):
     battle.timeline.addplayer(player, 1)
 
+@rule('schedule')
 def next(battle, player):
     split = battle.timeline.player
     for tick in range(len(split)):
@@ -13,6 +17,7 @@ def next(battle, player):
             #This leaves tick at the first tick when there's a nobody
     battle.timeline.addplayer(player, tick - battle.timeline.tick)
 
+@rule('schedule')
 def speed(battle, player):
     speed = player.data["speed"]
     if player.last_act is not None:
@@ -20,6 +25,7 @@ def speed(battle, player):
         print("{}'s {} has {} speed".format(player.name, player.last_act.name, speed))
     battle.timeline.addplayer(player, speed)
 
+@rule('get_actions')
 def get_actions(battle, player):
     player.actions = []
     player.act_dict = {}

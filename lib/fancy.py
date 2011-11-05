@@ -72,3 +72,5 @@ dwarf  = api.Being('Dwarf' , lib.simple.thinker, {'STR':13,'INT':7}, [axe, helm]
 dwarf2 = api.Being('Dwarf2', lib.simple.thinker, {'STR':13,'INT':7}, [axe, helm])
 rouge  = api.Being("Rouge" , pthinker, {"STR":10, "INT":12},[dagger, bomb, shoes])
 mage   = api.Being('Player', pthinker, {'STR':10, 'INT':10},[staff])
+
+fight = {'battle': [mage, rouge, dwarf, dwarf2]}
