@@ -1,6 +1,13 @@
+"""
+The Thinker class
+"""
 from types import MethodType
 
 class Thinker:
+    """
+    Represents something that makes discions as to the actions of a being
+    Normally one function, think
+    """
     def __init__(self, func, init = lambda *a:None):
         self.name = func.__name__
         self.func = func
@@ -10,6 +17,9 @@ class Thinker:
         return LimbInst(self, player)
 
 class ThinkerInst:
+    """
+    Represents a specific thinker of a specific player
+    """
     def __init__(self, parent, player):
         self.name = parent.name
         self.func = MethodType(parent.func, self)

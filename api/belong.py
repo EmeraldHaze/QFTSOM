@@ -1,4 +1,10 @@
+"""
+The Belong class
+"""
 class Belong:
+    """
+    Represents something that can be possesed (e.g, a sword, a spell)
+    """
     def __init__(self, name, equip, stats={}, actions=[], data ={}, datarules = None):
         self.name = name
         self.equip = equip
@@ -21,6 +27,9 @@ class Belong:
     __repr__ = __str__
 
 class BelongInst:
+    """
+    Represents an specific belonging of a specific person
+    """
     def __init__(self, parent):
         self.name    = parent.name
         self.equip   = parent.equip

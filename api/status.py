@@ -1,4 +1,10 @@
+"""
+The Status class
+"""
 class Status:
+    """
+    Represents a possible status of a person
+    """
     def __init__(self, func):
         self.func = func
         self.name = func.__name__
@@ -7,6 +13,9 @@ class Status:
         return StatusInst(self, affected)
 
 class StatusInst:
+    """
+    Represents a status of a specific person
+    """
     def __init__(self, parent, affected, battle):
         self.func = parent.func
         self.name = parent.name

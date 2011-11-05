@@ -2,7 +2,10 @@ from core.utils import copy
 from types import MethodType
 
 class Being:
-    """Fully descrbes an entity. """
+    """
+    Represents a possible entity in the game world
+    Has a thinker, limbs, stats, belongs, data
+    """
     def __init__(self, name, limbs, thinker, stats, belongs, data={}, rules=None):
         self.name = name
         self.limbs = limbs
@@ -15,9 +18,16 @@ class Being:
         for rule in rules:
             self.stats[rule[0]] = eval(rule[1])
 
+    def instance(self, name):
+        return BeingInst(self, name)
+
 class BeingInst:
-    def __init__(self, parent):
-        copy(self, parent, 'name', 'stats', 'data')
+    """
+    Represents a specific entity in the game world
+    """
+    def __init__(self, parent, name):
+        copy(self, parent, 'stats', 'data')
+        self.name = name
         self.limbs = []
         self.limb_dict = {}
         for limb in parent.limbs:

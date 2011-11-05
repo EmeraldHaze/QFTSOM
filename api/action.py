@@ -2,20 +2,19 @@
 The Action api
 """
 from collections import defaultdict
+from core.utils import copy
 
 class Action:
     def __init__(self, name, listners, metadata={}, mint=1, maxt=1):
         """
-        This describes an Action. Args:
-        name:str, used for IDing
+        Represents a possible actions. Args:
+        name:str
         listners:dict, listners[event] is called at event (e.g, exec)
-        madeat:str, used for tracking
         metadata = {}, arbitrary data
         mint = 1, minimum targets
         maxt = 1, -1 = all, -2 = all but one, etc
         """
         self.name = name
-        self.madeat = madeat
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mint
         self.maxt = maxt
@@ -48,7 +47,7 @@ class Action:
                 "'s thinker passed an invalid amount of targets to action "+self.name)
         else:
             raise Exception("Wierd maxt-mint")
-        new = ActionInstance(self.name, self.listners, self.metadata, actor, targets, battle)
+        new = ActionInstance(self, actor, targets, battle)
         new.listners["init"](new)
         return new
 
@@ -58,12 +57,11 @@ class Action:
             self.madeat)
 
 class ActionInstance:
-    def __init__(self, name, listners, metadata, actor, targets, battle):
-        self.name = name
-        self.listners
-        self.metadata = metadata
+    def __init__(self, parent, actor, targets, battle):
+        copy(self, parent, "name", "listners", "metadata"
         self.actor = actor
         self.targets = targets
+        self.battle = battle
 
     def __repr__(self):
         return "<{}>".format(self.name)
