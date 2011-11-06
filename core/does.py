@@ -23,4 +23,3 @@ def parsearg(args, default):
         arg_dict[arg.name] = arg
     base.update(arg_dict)
     return base
-

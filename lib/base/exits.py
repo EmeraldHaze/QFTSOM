@@ -1,21 +1,4 @@
 from api.exit import Exit
 
-def reset(player):
-    player.action = []
-    player.statuslist = []
-    #player.stats['HP'] = player.stats["MAXHP"]
-    #player.stats['MP'] = player.stats["MAXMP"]
-
-def die_effect(player, battle):
-    print(player.name, 'has become sane!')
-    reset(player)
-
-def win_effect(player, battle):
-    print(player.name, "has attained insanity!")
-    reset(player)
-def win_check(player, battle):
-    return len(battle.players) == 1 and list(battle.players.values())[0] == player
-
-
-die = Exit('die', lambda player, battle: player.stats['HP'] <= 0, die_effect, ["main", "HP"], ["players"])
-win = Exit('win', win_check, win_effect, ['players'], ["players"])
+die = Exit('die', (lambda p, b: p.stats['HP'] <= 0),  (lambda p, b: print(p.name, 'has become sane!')), ["main", "HP"], ["players"])
+win = Exit('win', (lambda p, b: b.player_list == [p]),(lambda p, b: print(p.name, "has attained insanity!")), ['players'], ["players"])

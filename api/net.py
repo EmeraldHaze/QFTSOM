@@ -26,7 +26,9 @@ class Net:
         name = startname = self.start
         node = startnode = self[startname]
         while 1:
-            for do, args in node.does.items():
+            if type(node.does) is dict:
+                node.does = node.does.items()
+            for do, args in node.does:
                 getattr(does, do)(args)
                 #Get the do function from the does module
             if node.net:

@@ -7,19 +7,17 @@ manthinker = thinkers.think_maker(thinkers.mosttarget, thinkers.firstact)
 oddthinker = thinkers.think_maker(thinkers.least,      thinkers.firstact)
 pthinker   = thinkers.think_maker(thinkers.ptarget,    thinkers.firstact)
 
-poke = actions.simplemaker("poke", 1, "lib")
-hit  = actions.simplemaker("hit" , 2, "lib")
+poke = actions.simplemaker("poke", 1)
+hit  = actions.simplemaker("hit" , 2)
 
-stick = api.Belong("stick", {}, [poke])
-staff = api.Belong("staff", {}, [hit])
+finger = api.Limb("finger", [poke])
+arm    = api.Limb("arm", [hit])
 
-baseman = api.Being('Model', manthinker, {"HP":5}, [stick])
-
-##                 NAME        THINKER     STATS     BELONGS
-player = api.Being('Player',   pthinker,   {'HP': 6}, [stick]).instance("")
-man    = baseman.instnace("Man")
-man2   = api.Being('OtherMan', manthinker, {'HP': 4}, [stick])
-oddman = api.Being('Oddball',  oddthinker, {'HP': 5}, [stick])
-staffo = api.Being('Staffo',   manthinker, {'HP': 5}, [staff])
+baseman = api.Being([finger], manthinker, {"HP":5})
+player = baseman.instance("Player", pthinker, {"HP":1})
+oddman = baseman.instance("Oddball", oddthinker)
+man    = baseman.instance("Man")
+man2   = baseman.instance("OtherMan", manthinker, {'HP':-1})
+staffo = baseman.instance("Staffo", limbs=[arm])
 
 fight = {"battle": [man, player, man2, staffo, oddman]}

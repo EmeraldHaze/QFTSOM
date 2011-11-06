@@ -1,16 +1,16 @@
 from api import Action
 from random import randint
-def simplemaker(name, dmg, madeat = 'Unknown with simplemaker'):
-    def sexec(actor, self, targets, battle):
-        target = targets[0]
+def simplemaker(name, dmg):
+    def sexec(self, battle):
+        target = self.targets[0]
         print(target.name, "has lost", dmg, " health!")
         target.stats["HP"] -= dmg
-    return Action(name, {"exec":sexec}, madeat = madeat)
+    return Action(name, {"exec":sexec})
 
-def complete_exec(actor, self, targets, battle):
+def complete_exec(self):
     rules = self.dmgrules
     if "status" in self.metadata:
-        status = self.metadata["status"]
+        status = self.metadata["status"].instance(targets[0])
         targets[0].status_list.append(status)
     if "data" in self.metadata:
         name, value = self.metadata["data"]
@@ -22,4 +22,3 @@ def complete_exec(actor, self, targets, battle):
 
 def manainit(actor, self, targets):
     actor.stats['MP'] -= self.metadata["MPcost"]
-

@@ -1,8 +1,5 @@
 """
-Thinkers files
-Thinkers are functions that are given a player, players, and timeline.
-Honest thinkers should not abuse this, and only use what info their player has
-Returns an action with complete() called on it
+Old thinkers files
 """
 from random import randint, choice
 
@@ -11,12 +8,10 @@ def player(self, battle):
     print("Targets:")
     for i in range(len(people)):
         print("{i}: {name}, HP:{hp}".format(i = i, name = people[i].name, hp = people[i].stats["HP"]))
-
     possib_acts = [action for action in self.actions]
     print("Actions:")
     for i in range(len(possib_acts)):
         print("{i}: {name}".format(i = i, name = possib_acts[i].name))
-
     target = int(input('Target? '))
     action = int(input('Action? '))
     action = possib_acts[action].copy(battle)
@@ -53,7 +48,3 @@ def bart(self, battle):
         action.complete(self, self)
     else:
         return attacker(self, battle)
-
-
-
-

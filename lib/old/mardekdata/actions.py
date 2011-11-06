@@ -7,39 +7,30 @@ def execer(self):
 
 def attacker(actor, self, targets):
     target = targets[0]
-
     if self.metadata["type"] == "Physical":
         dmg = actor.stats["STR"]+actor.stats["POW"]-target.stats["DEF"]
     else:
         actor.stats["SPR"]+actor.stats["POW"]-target.stats["MDEF"]
-
     resistchange = (100-target.stats[self.metadata["element"]+"Res"])/100
-
     if "miss" in self.metadata:
         if randint(0, 100) > (self.actor.stats["ACC"] - self.metadata["miss"]):
             print("Miss!", end = " ")
             dmg *= 0
-
     if randint(0, 100) < target.stats["EVE"]:
         print("Evade!", end = " ")
         dmg *= 0
-
     if randint(0, 100)<=self.actor.stats["CRIT"]:
         print("Crit!", end = " ")
         dmg *= 2
-
     if self.metadata["type"] == "Physical" and "shield" in target.status_list:
         print("Shield'd!", end = " ")
         dmg /= 2
-
     elif self.metadata["type"] == "Magical" and "m. shield" in target.status_list:
         print("M. Shield'd!", end = " ")
         dmg /= 2
-
     dmg = int(dmg)
     print(target.name, "has taken", dmg, " damadge!")
     target.stats["HP"]-=dmg
-
     if "statuses" in self.metadata:
         for status, value in self.metadata["statuses"].items():
             chance, value = value

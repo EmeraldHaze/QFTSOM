@@ -1,24 +1,9 @@
 from collections import defaultdict
 from functools import reduce
 
-#####Schedulers#####
-def same(battle, player):
-    battle.timeline.addplayer(player, 1)
-
-def next(battle, player):
-    split = battle.timeline.player
-    for tick in range(len(split)):
-        if split[tick] == []:
-            break
-    battle.timeline.addplayer(player, tick - battle.timeline.tick)
-
-def null(battle, player):
-    pass
-
 ####Tickers
 def cycel_tick(battle):
     try:
-        #print("len:", battle.cycel_len, "tick", battle.timeline.tick, "mod:", battle.timeline.tick % battle.cycel_len)
         new = battle.timeline.tick % battle.cycel_len == 0
     except ZeroDivisionError:
         new = True
@@ -60,11 +45,9 @@ def statuses(battle):
                         player.stats["STR"] /= 2
                         player.stats["random"] = True
                 del player.statuses[status]
-
             elif status == 0:
                 #Ignore
                 pass
-
             elif status == 1:
                 #Add
                 if effect == "sets":
@@ -101,17 +84,12 @@ def statuses(battle):
                 if effect == "exec":
                     exec(value)
 
-
 #####Inits#####
 def teams(battle):
     battle.teams = defaultdict(lambda :[])
     for player in battle.player_list:
         battle.teams[player.data["team"]].append(player)
     cycl(battle)
-
-def cycl(battle):
-    battle.cycel_len = 0
-
 
 #####Player actions#####
 def act_divide(battle, player):
@@ -120,8 +98,3 @@ def act_divide(battle, player):
         for act in belong.actions:
             player.act_types[act.metadata["type"]].add(act.copy(battle))
     player.actionset = reduce(set.union, player.act_types.values())
-
-#####Wipe hists#####
-def wipe(battle, player):
-    player.statuses =  {}
-

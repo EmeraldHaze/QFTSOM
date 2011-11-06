@@ -18,7 +18,7 @@ class Action:
         self.listners = defaultdict(lambda :lambda *args:None, listners)
         self.mint = mint
         self.maxt = maxt
-        self.metadata = {"delay":0, "target":"norm", "MPcost":0}
+        self.metadata = {"delay":0, "target":"norm", "MPC":0}
         self.metadata.update(metadata)
 
     def instance(self, actor, targets, battle):
@@ -58,7 +58,7 @@ class Action:
 
 class ActionInstance:
     def __init__(self, parent, actor, targets, battle):
-        copy(self, parent, "name", "listners", "metadata"
+        copy(self, parent, "name", "listners", "metadata")
         self.actor = actor
         self.targets = targets
         self.battle = battle

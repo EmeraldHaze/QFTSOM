@@ -9,17 +9,17 @@ class Status:
         self.func = func
         self.name = func.__name__
 
-    def instance(self, affected):
-        return StatusInst(self, affected)
+    def instance(self, player, battle):
+        return StatusInst(self, player, battle)
 
 class StatusInst:
     """
     Represents a status of a specific person
     """
-    def __init__(self, parent, affected, battle):
+    def __init__(self, parent, player, battle):
         self.func = parent.func
         self.name = parent.name
-        self.affected = affected
+        self.player = player
 
     def __call__(self):
         self.func(self)

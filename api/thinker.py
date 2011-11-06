@@ -1,6 +1,7 @@
 """
 The Thinker class
 """
+from core.utils import copy
 from types import MethodType
 
 class Thinker:
@@ -8,13 +9,13 @@ class Thinker:
     Represents something that makes discions as to the actions of a being
     Normally one function, think
     """
-    def __init__(self, func, init = lambda *a:None):
+    def __init__(self, func, funcinit = lambda self:None):
         self.name = func.__name__
         self.func = func
-        self.funcinit = init
+        self.funcinit = funcinit
 
     def instance(self, player):
-        return LimbInst(self, player)
+        return ThinkerInst(self, player)
 
 class ThinkerInst:
     """
@@ -23,7 +24,7 @@ class ThinkerInst:
     def __init__(self, parent, player):
         self.name = parent.name
         self.func = MethodType(parent.func, self)
-        self.init = parent.init
+        self.funcinit = MethodType(parent.funcinit, self)
         self.player = player
 
     def init(self, battle):
@@ -31,4 +32,4 @@ class ThinkerInst:
         self.funcinit()
 
     def __call__(self):
-        self.func()
+        return self.func()

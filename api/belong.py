@@ -1,6 +1,8 @@
 """
 The Belong class
 """
+from core.utils import copy
+
 class Belong:
     """
     Represents something that can be possesed (e.g, a sword, a spell)
@@ -18,8 +20,8 @@ class Belong:
             self.data[name] = eval(value)
         self.data.update(data)
 
-    def instance(self):
-        return BelongInst(self)
+    def instance(self, owner):
+        return BelongInst(self, owner)
 
     def __str__(self):
         return "<" + self.name + ">"
@@ -30,13 +32,10 @@ class BelongInst:
     """
     Represents an specific belonging of a specific person
     """
-    def __init__(self, parent):
-        self.name    = parent.name
-        self.equip   = parent.equip
-        self.stats   = parent.stats
-        self.actions = parent.actions
-        self.data    = parent.data
-        self.belong  = None
+    def __init__(self, parent, owner):
+        copy(self, parent, 'name', 'equip', 'stats', 'actions', 'data')
+        self.owner = owner
+        self.limb  = None
 
     def applystats(self):
         for stat, value in self.stats:

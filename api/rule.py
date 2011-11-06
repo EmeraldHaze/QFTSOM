@@ -1,5 +1,5 @@
 class Rule:
-    def __init__(self, func, type_ = None):
+    def __init__(self, func, type_=None):
         self.func = func
         if type_ is None:
             type_ = func.__name__

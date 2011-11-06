@@ -1,5 +1,8 @@
 import lib
-players = {}
-exits = {"win":lib.base.exits.win, "die":lib.base.exits.die}
-rules = {"schedule":lib.base.rules.next, "get_actions":lib.base.rules.get_actions}
+from lib.base import rules, exits
+players = {"Player":lib.limb.player}
+exits = {"win":exits.win, "die":lib.limb.limbdie}
+rules = {"schedule":rules.speed,
+        "get_actions":lib.base.rules.get_actions,
+        "wipe_hist":rules.reset}
 battle = [players, exits, rules]
