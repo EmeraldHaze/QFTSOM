@@ -1,4 +1,5 @@
 import api
+from api.limb import sym
 from lib.base import thinkers, statuses, exits, rules
 from random import choice, randint
 from core import shared
@@ -26,11 +27,11 @@ def lthinkmaker(actchoice, targetchoice):
     def limbthinker(self):
         target = next(target for target in self.battle.player_list if target != self.player)
         targetlimb = targetchoice(target.limbs)
-        act = actchoice(self.player.actions)
+        act = actchoice(self.player.act_dict)
         return act.instance(self.player, targetlimb, self.battle)
     return limbthinker
 
-loony = lthinkmaker(lambda acts:choice(acts), lambda limbs:choice(limbs))
+loony = lthinkmaker(lambda acts:choice(list(acts.values())), lambda limbs:choice(limbs))
 pthinker = lthinkmaker(thinkers.pchoice, lambda choices:thinkers.pchoice(choices, extra = ("HP", "choice.data['HP']")))
 
 ###ACTION###
@@ -70,12 +71,12 @@ sting = api.Action('sting', {'exec':limbexec}, {'dmg':2, 'poison':20, 'speed':2}
 fang = api.Limb("Fang", [bite],  data={"HP":5, 'evade':60})
 barb = api.Limb("Barb", [sting], data={"HP":10, 'evade':40})
 tail = api.Limb("Tail", [whip],  data={"HP":40, 'evade':10}, stats={'speed':1})
-head = api.Limb("Head", attached=[fang], data={"HP":30, "vital":True, "evade":30}, stats={'speed':1})
+head = api.Limb("Head", data={"HP":30, "vital":True, "evade":30}, stats={'speed':1})
 
-snake  = api.Being([head, tail], loony)
+snake  = api.Being(((head, fang), tail), loony)
 python = snake.instance('Python')
 monty  = snake.instance('Montey')
-flylord = api.Being([head, barb], pthinker).instance("Beezulbub")
+flylord = api.Being((head, barb), pthinker).instance("Beezulbub")
 
 stab  = api.Action('stab',  {'exec':limbexec}, {'dmg':5 , 'speed':1, 'poison':5})
 punch = api.Action('punch', {'exec':limbexec}, {'dmg':15, 'speed':2})
@@ -87,7 +88,7 @@ arm   = api.Limb("Arm", [punch], 'Arm', {"HP":30, "evade":20}, {'speed':0.5})
 torso = api.Limb("Torso",       data={"HP":60, "vital":True}, stats={"speed":1})
 leg   = api.Limb("Leg", [kick], data={"HP":30, "evade":20}, stats={"speed":1})
 
-man = api.Being([head, arm, arm, torso, leg, leg], pthinker, {"speed": -3}, [knife])
+man = api.Being((torso, (head, sym(fang)), sym(arm), sym(leg)), pthinker, {"speed": -3}, [knife])
 player = man.instance("Player")
 player.equip("knife", "Arm")
 mad = man.instance("Maquis Von Madmann", loony, {"speed":1})

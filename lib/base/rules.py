@@ -31,8 +31,12 @@ def get_actions(battle, player):
     player.act_dict = {}
     for actgiver in set(player.equiped) | set(player.limbs):
         for action in actgiver.actions:
+            try:
+                name = actgiver.prefix + action.name
+            except AttributeError:
+                name = action.name
             player.actions.append(action)
-            player.act_dict[action.name] = action
+            player.act_dict[name] = action
 
 @rule('wipe_hist')
 def reset(battle, player):

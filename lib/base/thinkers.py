@@ -21,15 +21,21 @@ least = lambda player, battle: mosttarget(player, battle, int.__gt__)
 firstact = lambda player, battle: player.actions[0]
 
 def pchoice(choices, extra = None, query = "Choice? "):
+    d = type(choices) == dict
+    #if d:
+    #    choices = list(choices.keys())
     for num, choice in enumerate(choices):
+        name = choice if d else choice.name
         if not extra:
-            print("{}: {}".format(num, choice.name))
+            print("{}: {}".format(num, name))
         else:
-            name, code = extra
-            print("{}: {}, {}: {}".format(num, choice.name, name, eval(code)))
+            extraname, code = extra
+            print("{}: {}, {}: {}".format(num, name, extraname, eval(code)))
     choice_ = None
     while not choice_:
         try:
+            if d:
+                choices  = list(choices.values())
             choice_ = choices[int(input(query))]
         except (ValueError, IndexError):
             print("Bad choice! Bad!")

@@ -6,11 +6,11 @@ class Being:
     Represents a possible entity in the game world
     Has a thinker, limbs, stats, belongs, data
     """
-    def __init__(self, limbs, thinker, stats=None, belongs=None, data=None, rules=None):
+    def __init__(self, body, thinker, stats=None, belongs=None, data=None, rules=None):
         if stats is None:   stats = {"speed":0}
         if belongs is None: belongs = []
         if data is None:    data = {}
-        self.limbs = limbs
+        self.body = body
         self.thinker = thinker
         self.stats = stats
         self.belongs = belongs
@@ -39,10 +39,7 @@ class BeingInst:
 
         self.limbs = []
         self.limb_dict = {}
-        for limb in parent.limbs:
-            limb = limb.instance(self)
-            self.limbs.append(limb)
-            self.limb_dict[limb.name] = limb
+        self.buildbody(parent.body)
 
         self.equiped = []
         self.belongs = []
@@ -57,6 +54,26 @@ class BeingInst:
             else:
                 value = value.instance(self)
             setattr(self, name, value)
+
+    def buildbody(self, limbs, uplimb=None):
+        newlimbs = []
+        for item in limbs:
+            try:
+                root, *limbs = item
+                root = root.instance(self, uplimb)
+                newlimbs.append(root)
+                self.buildbody(limbs, root)
+                #If it's not a sequance, this will error
+            except TypeError:
+                if item.sym:
+                    newlimbs.append(item.instance(self, uplimb, 'Left '))
+                    newlimbs.append(item.instance(self, uplimb, 'Right '))
+                else:
+                    newlimbs.append(item.instance(self, uplimb))
+
+        for limb in newlimbs:
+            self.limbs.append(limb)
+            self.limb_dict[limb.name] = limb
 
     def equip(self, belong, limb):
         if belong in self.belong_dict:
