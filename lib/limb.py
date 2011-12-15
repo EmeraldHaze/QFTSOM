@@ -91,6 +91,6 @@ leg   = api.Limb("Leg", [kick], data={"HP":30, "evade":20}, stats={"speed":1})
 man = api.Being((torso, (head, sym(fang)), sym(arm), sym(leg)), pthinker, {"speed": -3}, [knife])
 player = man.instance("Player")
 player.equip("knife", "Arm")
-mad = man.instance("Maquis Von Madmann", loony, {"speed":1})
+mad = man.instance("Huminoid Taco", loony, {"speed":1})
 mad.equip("knife", "Arm")
 fight = [("say","Limbic rage awaits ye!"), ("battle",[[player, mad], [limbdie], [rules.speed]])]

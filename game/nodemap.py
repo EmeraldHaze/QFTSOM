@@ -12,8 +12,9 @@ from lib import simple, limb#, fancy
         #})
     #})
 nodemap = Net(0, {\
-    0:Node([1], ["Advance!"], [('say',"You must fight some weird stuff! (Hint: choose a limb to attack, then an attack)"), ("battle", [limb.mad]), ('say',"You must go on to fight wirder stuff!")]),
+    0:Node([1], ["Advance!"], [('say',"You must fight a weird taco! (Hint: choose a limb to attack, then an attack)"), ("battle", [limb.mad]), ('say',"You must go on to fight wierder stuff!")]),
     1:Node([2], ["Procced!"], [('battle', [limb.python])]),
     2:Node([3], ["Procced!"], [('battle', [limb.monty])]),
-    3:Node([4], ["Procced!"], [('battle', [limb.flylord])])
+    3:Node([4], ["Procced!"], [('battle', [limb.flylord])]),
+    4:Node([1], ["Return"], [("say", "That's all the battles to be had")])
     })
