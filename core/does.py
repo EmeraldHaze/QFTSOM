@@ -23,3 +23,12 @@ def parsearg(args, default):
         arg_dict[arg.name] = arg
     base.update(arg_dict)
     return base
+
+def tofile(arg):
+    from core.shared import name as username
+    if type(arg) == str:
+        arg = "a", username + (arg,)
+    elif len(arg) == 2:
+        arg = ("a",) + arg
+    name, mode, s = arg
+    open(name, mode).write(s)

@@ -28,12 +28,18 @@ class Net:
         while 1:
             if type(node.does) is dict:
                 node.does = node.does.items()
+            sendto = None
             for do, args in node.does:
-                getattr(does, do)(args)
-                #Get the do function from the does module
+                if type(do) is str:
+                    do = getattr(does, do)
+                result = do(args)
+                if result:
+                    sendto = result
             if node.net:
                 #If it is a net
                 nodename = node.travel()
+            elif sendto:
+                nodename = sendto
             else:
                 #If this node is an exit, return where it wants to exit too.
                 if node.exit_:

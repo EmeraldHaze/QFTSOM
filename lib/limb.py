@@ -4,6 +4,7 @@ from lib.base import thinkers, statuses, exits, rules
 from random import choice, randint
 from core import shared
 shared.statrules = []#("speed", "0")]
+shared.limb_datarules = [("MAXHP", "self.data['HP']"), ("DEF", "0"), ("evade", "0")]
 
 def ldie_check(player, battle):
     total = 0
@@ -37,6 +38,7 @@ pthinker = lthinkmaker(thinkers.pchoice, lambda choices:thinkers.pchoice(choices
 ###ACTION###
 @api.Status
 def limbpoison(self):
+    self.limb.status_list.append(self)
     player = self.player
     self.limb.data["HP"] -= self.poison
     print("{}'s {} took {} DMG from poison, it now has {}".format(player.name, self.limb.name, self.poison, self.limb.data["HP"]))
@@ -47,11 +49,10 @@ def limbpoison(self):
 def limbexec(self):
     targetlimb = self.targets[0]
     target = targetlimb.player
-    if "evade" not in targetlimb.data:
-        targetlimb.data["evade"] = 0
     if randint(0, 100) > targetlimb.data["evade"]:
         #Hit
-        targetlimb.data["HP"] -= self.metadata['dmg']
+        dmg = self.metadata['dmg'] - targetlimb.data["DEF"]
+        targetlimb.data["HP"] -= dmg
         print("{}'s {} took {} DMG, it now has {}".format(target.name, targetlimb.name, self.metadata['dmg'], targetlimb.data["HP"]))
         if 'poison' in self.metadata:
             poison = limbpoison.instance(target, self.battle)
@@ -62,6 +63,8 @@ def limbexec(self):
     else:
         print("{}'s {} missed!".format(self.actor.name, self.name))
 
+def enchant(self):
+    self.targets[0].data['PWR'] *= 2
 ###REAL###
 
 bite = api.Action('bite', {"exec":limbexec}, {"dmg":5, "poison":10, 'speed':2})
@@ -76,7 +79,7 @@ head = api.Limb("Head", data={"HP":30, "vital":True, "evade":30}, stats={'speed'
 snake  = api.Being(((head, fang), tail), loony)
 python = snake.instance('Python')
 monty  = snake.instance('Montey')
-flylord = api.Being((head, barb), pthinker).instance("Beezulbub")
+flylord = api.Being((head, barb), loony).instance("Beezulbub")
 
 stab  = api.Action('stab',  {'exec':limbexec}, {'dmg':5 , 'speed':1, 'poison':5})
 punch = api.Action('punch', {'exec':limbexec}, {'dmg':15, 'speed':2})

@@ -15,7 +15,7 @@ class Being:
         self.stats = stats
         self.belongs = belongs
         self.data = data
-        if rules == None:
+        if rules is None:
             from core.shared import statrules as rules
         self.rules = rules
 

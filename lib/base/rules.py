@@ -44,3 +44,10 @@ def reset(battle, player):
        player.stats["HP"] = player.stats["MAXHP"]
     player.actions = []
     player.status_list = []
+
+@rule("wipe_hist")
+def wipe_limbs(battle, player):
+    for limb in player.limbs:
+        limb.data["HP"] = limb.data["MAXHP"]
+    player.actions = []
+    player.status_list = []
