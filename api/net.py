@@ -46,10 +46,11 @@ class Net:
                     return node.exit_
                 for i, v in enumerate(node.links):
                     print("{}: {}".format(i, v))
-                op = int(input(node.q + "  "))
-                while not 0 <= op < len(node.links):
-                    print("invalid answer")
-                    op = int(input(node.q + "\n"))
-                nodename = node.names[op]
+                while 1:
+                    try:
+                        nodename = node.names[int(input(node.q + "  "))]
+                        break
+                    except (ValueError, IndexError):
+                        print("Bad answer! User a number in range")
             node = self[nodename]
             #Set the node

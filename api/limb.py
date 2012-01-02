@@ -63,6 +63,7 @@ class LimbInst:
         for status in self.status_list:
             if status in self.player.status_list:
                 self.player.status_list.remove(status)
+        self.uplimb.attached.remove(self)
 
     def applyrules(self):
         for name, value in self.rules:

@@ -30,7 +30,7 @@ class Battle:
             delay = action.metadata["delay"] if "delay" in action.metadata else 0
             self.timeline.addaction(action, delay)
             player.last_act = action
-            print(player.name, "has", action.name+"'d ",
+            print(player.name, "has", action.name+"'d",
             ', '.join([target.name for target in action.targets])+"!")
             self.rules['schedule'](self, player)
 

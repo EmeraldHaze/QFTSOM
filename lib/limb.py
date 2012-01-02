@@ -20,7 +20,7 @@ def ldie_check(player, battle):
         dead = True
     return dead
 
-limbdie = api.Exit('die', ldie_check, lambda p,b:print(p.name, "died!"), ["main", "HP"], ["players"])
+limbdie = api.Exit('limbdie', ldie_check, lambda p,b:print(p.name, "died!"), ["main", "HP"], ["players"])
 #####BEING#####
 ###THINKER###
 def lthinkmaker(actchoice, targetchoice):
@@ -87,7 +87,7 @@ kick  = api.Action('kick',  {'exec':limbexec}, {'dmg':20, 'speed':2})
 
 knife = api.Belong("knife", 'Arm', {}, [stab])
 arm   = api.Limb("Arm", [punch], 'Arm', {"HP":30, "evade":20}, {'speed':0.5})
-#head  = api.Limb("Head", [],   data={"HP":20, "vital":True, "evade":40})
+head  = api.Limb("Head", [],   data={"HP":20, "vital":True, "evade":40})
 torso = api.Limb("Torso",       data={"HP":60, "vital":True}, stats={"speed":1})
 leg   = api.Limb("Leg", [kick], data={"HP":30, "evade":20}, stats={"speed":1})
 

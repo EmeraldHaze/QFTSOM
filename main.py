@@ -19,11 +19,19 @@ import sys, struct
 sys.stdout = Wrap(sys.stdout)
 
 PRELOAD_IMPORTS = False
+
+print("This is QFTSOM 0.2. In lieu of a proper interface, use the numbers. Failure to do so can cause crashs.")
+
 import pdb
 if PRELOAD_IMPORTS:
     import core, lib
+
+from core import shared
+shared.name = input()
+
 import game
-print("This is QFTSOM 0.2")
+
+
 def run():
     print(game.nodemap.travel())
 if __name__ == "__main__":

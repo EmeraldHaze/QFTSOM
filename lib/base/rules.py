@@ -26,7 +26,7 @@ def speed(battle, player):
     battle.timeline.addplayer(player, int(speed))
 
 @rule('get_actions')
-def get_actions(battle, player):
+def get_all(battle, player):
     player.actions = []
     player.act_dict = {}
     for actgiver in set(player.equiped) | set(player.limbs):

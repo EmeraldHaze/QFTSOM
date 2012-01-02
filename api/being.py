@@ -1,4 +1,5 @@
 from core.utils import copy
+from core import shared
 from types import MethodType
 
 class Being:
@@ -27,6 +28,7 @@ class BeingInst:
     Represents a specific entity in the game world
     """
     def __init__(self, parent, name, thinker, statchanges, changes):
+        shared.registry["players"][name] = self
         copy(self, parent, 'stats', 'data', 'rules')
         self.name = name
         if not thinker:

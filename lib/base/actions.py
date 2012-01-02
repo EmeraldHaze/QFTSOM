@@ -1,5 +1,6 @@
 from api import Action
 from random import randint
+
 def simplemaker(name, dmg):
     def sexec(self, battle):
         target = self.targets[0]
@@ -22,3 +23,5 @@ def complete_exec(self):
 
 def manainit(actor, self, targets):
     actor.stats['MP'] -= self.metadata["MPcost"]
+
+null = Action("pass", {"exec":lambda self:print("%s does nothing.")}, {"speed": 0}, mint=0, maxt=0)

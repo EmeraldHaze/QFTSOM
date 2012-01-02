@@ -20,26 +20,41 @@ def mosttarget(player, battle, cmp = int.__lt__):
 least = lambda player, battle: mosttarget(player, battle, int.__gt__)
 firstact = lambda player, battle: player.actions[0]
 
-def pchoice(choices, extra = None, query = "Choice? "):
-    d = type(choices) == dict
-    #if d:
-    #    choices = list(choices.keys())
-    for num, choice in enumerate(choices):
-        name = choice if d else choice.name
+def pchoice(choices, extra=None, query="Choice? "):
+    """
+    This function gets a choice from the user.
+    choices should be {name:value}, where value is returned if name is choosen
+    It can also be a iterable of values with name attributes
+    extra, if set, prints out some extra information. It should be (name: expr),
+    and name: eval(expr) is printed as part of the name
+    """
+    if type(choices) == dict:
+        namelist = list(choices.keys())
+    else:
+        try:
+            namelist, choices, choicelist = [], {}, choices
+            for choice in choicelist:
+                namelist.append(choice.name)
+                choices[choice.name] = choice
+
+        except AttributeError:
+            namelist = choicelist
+            choices = dict(zip(namelist, choicelist))
+
+    for num, name in enumerate(namelist):
         if not extra:
             print("{}: {}".format(num, name))
         else:
             extraname, code = extra
+            choice = choices[name]
             print("{}: {}, {}: {}".format(num, name, extraname, eval(code)))
-    choice_ = None
-    while not choice_:
+    choicename = None
+    while not choicename:
         try:
-            if d:
-                choices  = list(choices.values())
-            choice_ = choices[int(input(query))]
+            choicename = namelist[int(input(query))]
         except (ValueError, IndexError):
             print("Bad choice! Bad!")
-    return choice_
+    return choices[choicename]
 
 ptarget = lambda player, battle: pchoice(battle.player_list, ("HP", "choice.stats['HP']"), "Target? ")
 paction = lambda player, battle: pchoice(player.battle_list, ("MP", "choice.metadata['MPC']"), "Actions? ")

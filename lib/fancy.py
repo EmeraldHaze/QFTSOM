@@ -57,19 +57,21 @@ rest = healmaker ("rest", 20, "MP", 0,  0)
 boom = api.Action("explode", {"exec":boom, "init":completeinit}, {"delay":1, "type":"melee", "MPcost":0, "change":1}, -1, 0)
 stab = api.Action("stab"   , {"exec":actions.complete_exec, "init":completeinit}, metadata = {"type":"melee", "MPcost":0, "change":1, "status":statuses.poison, "data":('poison', 30)})
 
-staff  = api.Belong('Staff', {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
-axe    = api.Belong("Axe", {"STR":20, "MAXWPNDMG":10}, [hack])
-helm   = api.Belong("Helm", {"DEF":10, "MDEF":5, "MAXWPNDMG":5})
+staff = api.Belong('Staff', "Arm", {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
+axe   = api.Belong("Axe",   "Arm", {"STR":20, "MAXWPNDMG":10}, [hack])
+helm  = api.Belong("Helm",  "Head", ""{"DEF":10, "MDEF":5, "MAXWPNDMG":5})
 
-dagger = api.Belong("dagger", {"INT":10, "STR":5}, [stab])
-shoes  = api.Belong("shoes", {"Dodge": 600, "INT":5})
-bomb   = api.Belong("bomb", {}, [boom])
+knife = api.Belong("knife", "Arm", {"INT":10, "STR":5}, [stab])
+shoes = api.Belong("shoes", "Arm", {"Dodge": 600, "INT":5})
+bomb  = api.Belong("bomb",  "Arm", {}, [boom])
 
-pthinker = thinkers.think_maker(thinkers.ptarget, thinkers.paction)
+head = api.Limb("Head")
+arm  = api.Limb("Arm")
 
-dwarf  = api.Being('Dwarf' , lib.simple.thinker, {'STR':13,'INT':7}, [axe, helm])
+Humanoid = api.Being((head, arm), thinkers.loony, {'STR':13,'INT':7})
+dwarf  = Dwarf.instance()
 dwarf2 = api.Being('Dwarf2', lib.simple.thinker, {'STR':13,'INT':7}, [axe, helm])
 rouge  = api.Being("Rouge" , pthinker, {"STR":10, "INT":12},[dagger, bomb, shoes])
-mage   = api.Being('Player', pthinker, {'STR':10, 'INT':10},[staff])
+mage   = api.Being('Player', pthinker, {'STR':10, 'INT':12},[staff])
 
 fight = {'battle': [mage, rouge, dwarf, dwarf2]}

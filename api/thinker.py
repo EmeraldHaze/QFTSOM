@@ -32,4 +32,8 @@ class ThinkerInst:
         self.funcinit()
 
     def __call__(self):
-        return self.func()
+        if len(self.player.actions):
+            return self.func()
+        else:
+            from lib.base.actions import null
+            return null.instance(self.player, [], self.battle)
