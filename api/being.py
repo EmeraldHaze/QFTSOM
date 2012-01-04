@@ -24,9 +24,7 @@ class Being:
         return BeingInst(self, name, thinker, belongs, statchanges, changes)
 
 class BeingInst:
-    """
-    Represents a specific entity in the game world
-    """
+    "Represents a specific entity in the game world"
     plural = "players"
     def __init__(self, parent, name, thinker, belongs, statchanges, changes):
         copy(self, parent, 'stats', 'data', 'rules')
@@ -36,7 +34,6 @@ class BeingInst:
         self.thinker = thinker.instance(self)
 
         #for name, value in shared.statrules:
-         #   print(self.name+"'s", name, "set to", value)
           #  self.stats[name] = eval(value)
         for stat, value in statchanges.items():
             self.stats[stat] += value

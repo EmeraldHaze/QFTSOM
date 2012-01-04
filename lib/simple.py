@@ -23,5 +23,3 @@ oddman = baseman.instance("Oddball", oddthinker)
 man    = baseman.instance("Man")
 man2   = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})
 staffo = baseman.instance("Staffo", limbs=[arm])
-
-fight = {"battle": [man, player, man2, staffo, oddman]}

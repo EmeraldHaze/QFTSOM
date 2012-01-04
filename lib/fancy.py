@@ -77,5 +77,3 @@ dwarf  = Humanoid.instance("Dwarf", belongs=[axe, helm])
 dwarf2 = Humanoid.instance("Dwarf2", belongs=[axe, helm])
 rouge  = Humanoid.instance("Rouge", pthinker, [dagger, bomb, shoes], {"STR":-3, "INT":+5})
 mage   = Humenoid.instance('Magus', pthinker, [staff], {'STR':-3, 'INT':+5})
-
-fight = {'battle': [mage, rouge, dwarf, dwarf2]}
