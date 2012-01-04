@@ -1,8 +1,11 @@
 import api, lib
+from api.limb import sym
 from lib.base import actions, thinkers, statuses
+from lib.simple import manthinker as simplethink
 from core import shared
 from random import randint
 
+shared.blank()
 shared.statrules = [("HP", "self.stats['STR']*5+50"),
     ("MP", "self.stats['INT']*5+50"),
     ("DEF", "self.stats['STR']"),
@@ -59,7 +62,7 @@ stab = api.Action("stab"   , {"exec":actions.complete_exec, "init":completeinit}
 
 staff = api.Belong('Staff', "Arm", {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
 axe   = api.Belong("Axe",   "Arm", {"STR":20, "MAXWPNDMG":10}, [hack])
-helm  = api.Belong("Helm",  "Head", ""{"DEF":10, "MDEF":5, "MAXWPNDMG":5})
+helm  = api.Belong("Helm",  "Head", {"DEF":10, "MDEF":5, "MAXWPNDMG":5})
 
 knife = api.Belong("knife", "Arm", {"INT":10, "STR":5}, [stab])
 shoes = api.Belong("shoes", "Arm", {"Dodge": 600, "INT":5})
@@ -67,11 +70,12 @@ bomb  = api.Belong("bomb",  "Arm", {}, [boom])
 
 head = api.Limb("Head")
 arm  = api.Limb("Arm")
+leg  = api.Limb("Leg")
 
-Humanoid = api.Being((head, arm), thinkers.loony, {'STR':13,'INT':7})
-dwarf  = Dwarf.instance()
-dwarf2 = api.Being('Dwarf2', lib.simple.thinker, {'STR':13,'INT':7}, [axe, helm])
-rouge  = api.Being("Rouge" , pthinker, {"STR":10, "INT":12},[dagger, bomb, shoes])
-mage   = api.Being('Player', pthinker, {'STR':10, 'INT':12},[staff])
+Humanoid = api.Being((head, sym(arm), sym(leg)), simplethink, {'STR':13,'INT':7})
+dwarf  = Humanoid.instance("Dwarf", belongs=[axe, helm])
+dwarf2 = Humanoid.instance("Dwarf2", belongs=[axe, helm])
+rouge  = Humanoid.instance("Rouge", pthinker, [dagger, bomb, shoes], {"STR":-3, "INT":+5})
+mage   = Humenoid.instance('Magus', pthinker, [staff], {'STR':-3, 'INT':+5})
 
 fight = {'battle': [mage, rouge, dwarf, dwarf2]}

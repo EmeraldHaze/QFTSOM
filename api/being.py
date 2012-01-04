@@ -20,21 +20,24 @@ class Being:
             from core.shared import statrules as rules
         self.rules = rules
 
-    def instance(self, name, thinker=None, statchanges={}, **changes):
-        return BeingInst(self, name, thinker, statchanges, changes)
+    def instance(self, name, thinker=None, belongs=[], statchanges={}, **changes):
+        return BeingInst(self, name, thinker, belongs, statchanges, changes)
 
 class BeingInst:
     """
     Represents a specific entity in the game world
     """
-    def __init__(self, parent, name, thinker, statchanges, changes):
-        shared.registry["players"][name] = self
+    plural = "players"
+    def __init__(self, parent, name, thinker, belongs, statchanges, changes):
         copy(self, parent, 'stats', 'data', 'rules')
         self.name = name
         if not thinker:
             thinker = parent.thinker
         self.thinker = thinker.instance(self)
 
+        #for name, value in shared.statrules:
+         #   print(self.name+"'s", name, "set to", value)
+          #  self.stats[name] = eval(value)
         for stat, value in statchanges.items():
             self.stats[stat] += value
         self.applyrules()
@@ -46,16 +49,18 @@ class BeingInst:
         self.equiped = []
         self.belongs = []
         self.belong_dict = {}
-        for belong in parent.belongs:
+        for belong in parent.belongs + belongs:
             belong = belong.instance(self)
             self.addbelong(belong)
 
         for name, value in changes.items():
             if type(value) in (str, int, dict, list):
                 value = type(value)(value)
+                #Makes a copy of the value, so we don't change the original
             else:
                 value = value.instance(self)
             setattr(self, name, value)
+        shared.register(self)
 
     def buildbody(self, limbs, uplimb=None):
         newlimbs = []
@@ -128,5 +133,5 @@ class BeingInst:
         del self.belong_dict[belong.name]
 
     def __str__(self):
-        return "<" + self.name + ">"
+        return self.name
     __repr__ = __str__

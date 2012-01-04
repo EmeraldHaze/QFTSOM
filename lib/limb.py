@@ -3,8 +3,11 @@ from api.limb import sym
 from lib.base import thinkers, statuses, exits, rules
 from random import choice, randint
 from core import shared
-shared.statrules = []#("speed", "0")]
+
+shared.blank()
 shared.limb_datarules = [("MAXHP", "self.data['HP']"), ("DEF", "0"), ("evade", "0")]
+shared.current_module = "limb"
+shared.modules["limb"] = "This module allows you to attack limbs. It requires limbs that have HP, limbdie exit (for killing limbs). and "
 
 def ldie_check(player, battle):
     total = 0
@@ -87,13 +90,13 @@ kick  = api.Action('kick',  {'exec':limbexec}, {'dmg':20, 'speed':2})
 
 knife = api.Belong("knife", 'Arm', {}, [stab])
 arm   = api.Limb("Arm", [punch], 'Arm', {"HP":30, "evade":20}, {'speed':0.5})
-head  = api.Limb("Head", [],   data={"HP":20, "vital":True, "evade":40})
-torso = api.Limb("Torso",       data={"HP":60, "vital":True}, stats={"speed":1})
+head  = api.Limb("Head", [], data={"HP":20, "vital":True, "evade":40})
+torso = api.Limb("Torso", data={"HP":60, "vital":True}, stats={"speed":1})
 leg   = api.Limb("Leg", [kick], data={"HP":30, "evade":20}, stats={"speed":1})
 
 man = api.Being((torso, (head, sym(fang)), sym(arm), sym(leg)), pthinker, {"speed": -3}, [knife])
 player = man.instance("Player")
-player.equip("knife", "Arm")
-mad = man.instance("Huminoid Taco", loony, {"speed":1})
-mad.equip("knife", "Arm")
+player.equip("knife", "Right Arm")
+mad = man.instance("Huminoid Taco", loony, statchanges={"speed":1})
+mad.equip("knife", "Left Arm")
 fight = [("say","Limbic rage awaits ye!"), ("battle",[[player, mad], [limbdie], [rules.speed]])]

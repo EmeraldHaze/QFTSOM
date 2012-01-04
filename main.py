@@ -27,7 +27,7 @@ if PRELOAD_IMPORTS:
     import core, lib
 
 from core import shared
-shared.name = input()
+#shared.name = input()
 
 import game
 

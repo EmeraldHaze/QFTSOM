@@ -51,9 +51,13 @@ def pchoice(choices, extra=None, query="Choice? "):
     choicename = None
     while not choicename:
         try:
-            choicename = namelist[int(input(query))]
+            q = input(query)
+            choicename = namelist[int(q)]
         except (ValueError, IndexError):
-            print("Bad choice! Bad!")
+            if q == "break":
+                raise Exception
+            else:
+                print("Bad choice! Bad!")
     return choices[choicename]
 
 ptarget = lambda player, battle: pchoice(battle.player_list, ("HP", "choice.stats['HP']"), "Target? ")

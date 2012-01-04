@@ -2,9 +2,9 @@ from api import Action
 from random import randint
 
 def simplemaker(name, dmg):
-    def sexec(self, battle):
+    def sexec(self):
         target = self.targets[0]
-        print(target.name, "has lost", dmg, " health!")
+        print(target.name, "has lost", dmg, "health!")
         target.stats["HP"] -= dmg
     return Action(name, {"exec":sexec})
 

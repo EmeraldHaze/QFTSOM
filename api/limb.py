@@ -63,7 +63,9 @@ class LimbInst:
         for status in self.status_list:
             if status in self.player.status_list:
                 self.player.status_list.remove(status)
-        self.uplimb.attached.remove(self)
+        if self.uplimb:
+            self.uplimb.attached.remove(self)
+
 
     def applyrules(self):
         for name, value in self.rules:
@@ -76,3 +78,6 @@ class LimbInst:
     def removestats(self):
         for stat, value in self.stats:
             self.player.stats[stat] -= value
+
+    def __str__(self):
+        return self.player.name + "'s " + self.name

@@ -52,7 +52,7 @@ class Battle:
                     exit.effect(player, self)
                     changed.extend(exit.changes)
                     self.remove_player(player)
-                    print(player.name," exited. Players:", len(self.players))
+                    print(player.name, "exited. Players:", len(self.players))
                     if not len(self.players):
                         self.end = True
         for change in changed:
