@@ -11,17 +11,17 @@ def simplemaker(name, dmg):
 def complete_exec(self):
     rules = self.dmgrules
     if "status" in self.metadata:
-        status = self.metadata["status"].instance(targets[0])
-        targets[0].status_list.append(status)
+        status = self.metadata["status"].instance(self.targets[0], self.battle)
+        self.targets[0].status_list.append(status)
     if "data" in self.metadata:
         name, value = self.metadata["data"]
-        targets[0].data[name] = value
-    for target in targets:
+        self.targets[0].data[name] = value
+    for target in self.targets:
         dmg = eval(rules[self.metadata["type"]])
         target.stats["HP"] -= dmg
         print(target.name, "lost", dmg, "health!")
 
-def manainit(actor, self, targets):
-    actor.stats['MP'] -= self.metadata["MPcost"]
+def manainit(self):
+    self.actor.stats['MP'] -= self.metadata["MPC"]
 
 null = Action("pass", {"exec":lambda self:print("%s does nothing.")}, {"speed": 0}, mint=0, maxt=0)

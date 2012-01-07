@@ -55,6 +55,11 @@ def limbexec(self):
     if randint(0, 100) > targetlimb.data["evade"]:
         #Hit
         dmg = self.metadata['dmg'] - targetlimb.data["DEF"]
+
+        #if randint(0, 100) < self.actor.stats["crit"] + self.metadata["crit"]  - targetlimb.data["vuln"]:
+         #   #Crit
+          #  dmg *= 2
+           # print("Critical!")
         targetlimb.data["HP"] -= dmg
         print("{}'s {} took {} DMG, it now has {}".format(target.name, targetlimb.name, self.metadata['dmg'], targetlimb.data["HP"]))
         if 'poison' in self.metadata:
@@ -96,7 +101,12 @@ leg   = api.Limb("Leg", [kick], data={"HP":30, "evade":20}, stats={"speed":1})
 
 man = api.Being((torso, (head, sym(fang)), sym(arm), sym(leg)), pthinker, {"speed": -3}, [knife])
 player = man.instance("Player")
-player.equip("knife", "Right Arm")
 mad = man.instance("Huminoid Taco", loony, statchanges={"speed":1})
-mad.equip("knife", "Left Arm")
-fight = [("say","Limbic rage awaits ye!"), ("battle",[[player, mad], [limbdie], [rules.speed]])]
+
+game = api.Net(0, {\
+    0:api.Node([1], ["Advance!"], [('say', "You must fight a weird taco! (Hint: choose a limb to attack, then an attack)"), ("battle", [player, mad]), ('say',"You must go on to fight wierder stuff!")]),
+    1:api.Node([2], ["Procced!"], {'battle': [player, python]}),
+    2:api.Node([3], ["Procced!"], {'battle': [player, monty]}),
+    3:api.Node([4], ["Procced!"], {'battle': [player, flylord]}),
+    4:api.Node([], [], {"say": "That's all the battles to be had"}, exit_='hub')
+    })

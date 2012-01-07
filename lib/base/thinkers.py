@@ -3,8 +3,8 @@ from api import Thinker
 def think_maker(gettarget, getaction):
     @Thinker
     def thinker(self):
-        action = getaction(self.player, self.battle)
         target = gettarget(self.player, self.battle)
+        action = getaction(self.player, self.battle)
         return action.instance(self.player, target, self.battle)
     return thinker
 
@@ -61,4 +61,5 @@ def pchoice(choices, extra=None, query="Choice? "):
     return choices[choicename]
 
 ptarget = lambda player, battle: pchoice(battle.player_list, ("HP", "choice.stats['HP']"), "Target? ")
-paction = lambda player, battle: pchoice(player.battle_list, ("MP", "choice.metadata['MPC']"), "Actions? ")
+paction = lambda player, battle: pchoice(player.actions, ("MP", "choice.metadata['MPC']"), "Actions? ")
+pthinker = think_maker(ptarget, paction)

@@ -24,6 +24,7 @@ def register(obj):
         registry[obj.plural][obj.name] = obj
 
 def blank():
+    global limb_datarules, statrules, belongdata
     limb_datarules = []
     statrules = []
     belongdata = []

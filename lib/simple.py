@@ -1,5 +1,5 @@
 import api, lib
-from lib.base import thinkers, actions
+from lib.base import thinkers, actions, exits, rules
 from core import shared
 
 shared.blank()
@@ -23,3 +23,8 @@ oddman = baseman.instance("Oddball", oddthinker)
 man    = baseman.instance("Man")
 man2   = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})
 staffo = baseman.instance("Staffo", limbs=[arm])
+
+game = api.Net(0, {\
+    0: api.Node([], [], {"say":"The folks you're to fight are simple: they attack he who has the least HP. The town fool, Oddball, does the reverse, while the puissant Staffo hits twice as hard as you stick-possesing fools.","send":1}),
+    1: api.Node([], [], {'battle': [[man, player, man2, staffo, oddman], [exits.die], [rules.next, rules.reset]]}, exit_="hub")
+    })

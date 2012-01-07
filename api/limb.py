@@ -19,7 +19,10 @@ class Limb:
         if data is None:    data = {}
         if stats is None:   stats = {}
         self.name = name
-        self.equip = equip
+        if equip:
+            self.equip = equip
+        else:
+            self.equip = name
         self.actions = actions
         self.data = data
         self.stats = stats

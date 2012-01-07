@@ -33,8 +33,8 @@ class BeingInst:
             thinker = parent.thinker
         self.thinker = thinker.instance(self)
 
-        #for name, value in shared.statrules:
-          #  self.stats[name] = eval(value)
+        for name, value in shared.statrules:
+            self.stats[name] = eval(value)
         for stat, value in statchanges.items():
             self.stats[stat] += value
         self.applyrules()
@@ -49,6 +49,7 @@ class BeingInst:
         for belong in parent.belongs + belongs:
             belong = belong.instance(self)
             self.addbelong(belong)
+        self.equipall()
 
         for name, value in changes.items():
             if type(value) in (str, int, dict, list):
@@ -57,6 +58,7 @@ class BeingInst:
             else:
                 value = value.instance(self)
             setattr(self, name, value)
+
         shared.register(self)
 
     def buildbody(self, limbs, uplimb=None):
@@ -92,24 +94,38 @@ class BeingInst:
                         belong.limb = limb
                         belong.applystats()
                         self.equiped.append(belong)
-                        return "{} equiped to {}".format(belong.name, limb.name)
+                        return True, "{} equiped to {}".format(belong.name, limb.name)
                     else:
-                        return "E: Belong already equiped"
+                        return False, "E: %s already equiped" % belong.name
                 else:
-                    return "E: Belong can not be equiped to this limb"
+                    return False, "E: %s can not be equiped to this limb, %s" % (belong.name, limb.name)
             else:
-                return "E: No such limb"
+                return False, "E: No such limb, " + limb
         else:
-            return "E: No such belong"
+            return False, "E: No such belong, " + belong
+
+    def equipall(self):
+        for belong in self.belongs:
+            #print(belong.name, belong.equip)
+            if not self.equip(belong.name, belong.equip)[0]:
+                if not self.equip(belong.name, "Right " + belong.equip)[0]:
+                    R = self.equip(belong.name, "Left " + belong.equip)
+                    if not R[0]:
+                        print(R[1])
+
+            #Trys to equip everything to everything
 
     def unequip(self, belong):
         if belong in self.belong_dict:
             belong = self.belong_dict[belong]
-            limb = belong.limb
-            limb.belong = None
-            belong.limb = None
-            belong.removestats()
-            self.equiped.remove(belong)
+            if belong.limb:
+                limb = belong.limb
+                limb.belong = None
+                belong.limb = None
+                belong.removestats()
+                self.equiped.remove(belong)
+            else:
+                return "Not equipped"
         else:
             return "No such belong"
 
@@ -125,7 +141,8 @@ class BeingInst:
     def rmbelong(self, belong):
         """Removes a belonging from this being"""
         if type(belong) == str:
-            belong = self.belongs_dict[belong]
+            belong = self.belong_dict[belong]
+        self.unequip(belong.name)
         self.belongs.remove(belong)
         del self.belong_dict[belong.name]
 

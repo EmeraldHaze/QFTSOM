@@ -45,10 +45,10 @@ class Net:
                 if node.exit_:
                     return node.exit_
                 for i, v in enumerate(node.links):
-                    print("{}: {}".format(i, v))
+                    print("{}: {}".format(i + 1, v))
                 while 1:
                     try:
-                        nodename = node.names[int(input(node.q + "  "))]
+                        nodename = node.names[int(input(node.q + "  ")) - 1]
                         break
                     except (ValueError, IndexError):
                         print("Bad answer! User a number in range")

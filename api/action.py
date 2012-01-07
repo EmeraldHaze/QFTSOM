@@ -52,7 +52,7 @@ class Action:
         return new
 
     def __repr__(self):
-        return "<{} #{}>".format(self.name, hex(id(self))[2:])
+        return "<{}>".format(self.name)
 
 class ActionInstance:
     def __init__(self, parent, actor, targets, battle):

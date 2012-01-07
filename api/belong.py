@@ -38,9 +38,9 @@ class BelongInst:
         self.limb  = None
 
     def applystats(self):
-        for stat, value in self.stats:
-            self.player.stats[stat] += value
+        for stat, value in self.stats.items():
+            self.owner.stats[stat] += value
 
     def removestats(self):
-        for stat, value in self.stats:
-            self.player.stats[stat] -= value
+        for stat, value in self.stats.items():
+            self.owner.stats[stat] -= value

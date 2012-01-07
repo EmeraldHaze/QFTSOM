@@ -33,7 +33,6 @@ def get_all(battle, player):
     "Gets actions from both equipment and limbs. Should always work."
     player.actions = []
     player.act_dict = {}
-    print("E", player.equiped)
     for actgiver in player.limbs + player.equiped:
         for action in actgiver.actions:
             try:
