@@ -1,23 +1,34 @@
-def say(string):
-    """do_ node executer print function"""
-    print(string)
+"""
+This module contains those functions for those does that can be used in
+node commands. To add a command, simply add a function with the command's name.
+"""
+
+
+def say(arg):
+    print(arg)
+
 
 def battle(arg):
     """
-    Starts a battle. Full form: [[]]"""
+    Starts a battle. Arg should be of the form [[beings], [exits], [rules]].
+    Any element except the former can be ommited. If both are ommited, the
+    second pair of braces is unncerry
+    """
     import game, core
-    #Make lists of the actual objects named in the arg
     if type(arg[0]) is not list:
+        #If it's not a nested list
         arg = [arg]
-    for i in range(3-len(arg)):
-        arg.append([])#Pads the arg too 3 elements
-    args = map(parsearg, arg, game.defaults.battle)
+    while len(arg) < 2:
+        arg.append([])
+        #Pads the arg too 3 elements
+    args = map(_parsearg, arg, game.defaults.battle)
     b = core.Battle(*args)
     b.start()
 
-def parsearg(args, default):
+
+def _parsearg(args, default):
     """
-    Makes a complete sect from
+    Makes a complete sect from args and default. About:
     args: [obj1, obj2], objects to be in this sect
     default: {name:obj}, to there if not overriden
     returns: {name:obj} with all of objects from args and those of defaults
@@ -29,6 +40,7 @@ def parsearg(args, default):
         arg_dict[arg.name] = arg
     base.update(arg_dict)
     return base
+
 
 def send(arg):
     return arg

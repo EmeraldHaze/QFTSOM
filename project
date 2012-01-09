@@ -1,0 +1,44 @@
+
+[indentation]
+indent_width=4
+indent_type=0
+indent_hard_tab_width=8
+detect_indent=false
+indent_mode=2
+
+[project]
+name=QFTSOM
+base_path=/home/glycan/QFTSOM/
+description=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=80
+
+[files]
+current_page=16
+FILE_NAME_0=172;Python;0;16;0;1;0;/home/glycan/QFTSOM/main.py;0;4
+FILE_NAME_1=325;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/clock.py;0;4
+FILE_NAME_2=803;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/_reg.py;0;4
+FILE_NAME_3=2862;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/battle.py;0;4
+FILE_NAME_4=260;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/utils.py;0;4
+FILE_NAME_5=1047;Python;0;16;0;1;0;/home/glycan/QFTSOM/game/nodemap.py;0;4
+FILE_NAME_6=1289;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/limb.py;0;4
+FILE_NAME_7=876;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/belong.py;0;4
+FILE_NAME_8=5137;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/being.py;0;4
+FILE_NAME_9=293;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/rule.py;0;4
+FILE_NAME_10=509;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/exit.py;0;4
+FILE_NAME_11=990;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/base/rules.py;0;4
+FILE_NAME_12=2945;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/fancy.py;0;4
+FILE_NAME_13=426;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/base/actions.py;0;4
+FILE_NAME_14=0;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/simple.py;0;4
+FILE_NAME_15=2741;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/limb.py;0;4
+FILE_NAME_16=153;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/base/thinkers.py;0;4
+
+[build-menu]
+EX_00_LB=Run
+EX_00_CM=python3 -i  /home/glycan/QFTSOM/main.py
+EX_00_WD=/home/glycan/QFTSOM
+EX_01_LB=Run
+EX_01_CM=python3 -i "%f"
+EX_01_WD=

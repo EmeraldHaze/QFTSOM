@@ -2,42 +2,55 @@ from core.utils import copy
 from core import shared
 from types import MethodType
 
+
 class Being:
     """
     Represents a possible entity in the game world
     Has a thinker, limbs, stats, belongs, data
     """
-    def __init__(self, body, thinker, stats=None, belongs=None, data=None, rules=None):
-        if stats is None:   stats = {"speed":0}
-        if belongs is None: belongs = []
-        if data is None:    data = {}
+    def __init__(self, body, thinker,
+            stats=None, belongs=None, data=None, rules=None):
+
+        if stats is None:
+            from game.defaults import stats
+        if belongs is None:
+            belongs = []
+        if data is None:
+            from game.defaults import data
+
         self.body = body
         self.thinker = thinker
         self.stats = stats
         self.belongs = belongs
         self.data = data
+
         if rules is None:
             from core.shared import statrules as rules
         self.rules = rules
 
-    def instance(self, name, thinker=None, belongs=[], statchanges={}, **changes):
+    def instance(self, name, thinker=None, belongs=[], statchanges={},
+                    **changes):
         return BeingInst(self, name, thinker, belongs, statchanges, changes)
+
 
 class BeingInst:
     "Represents a specific entity in the game world"
-    plural = "players"
+    plural = "beings"
+
     def __init__(self, parent, name, thinker, belongs, statchanges, changes):
-        copy(self, parent, 'stats', 'data', 'rules')
+        copy(self, parent, 'stats', 'data')
         self.name = name
+
         if not thinker:
             thinker = parent.thinker
         self.thinker = thinker.instance(self)
 
-        for name, value in shared.statrules:
+        for stat, value in shared.statrules:
             self.stats[name] = eval(value)
         for stat, value in statchanges.items():
             self.stats[stat] += value
-        self.applyrules()
+        for stat, value in self.rules:
+            self.stats[name] = eval(value)
 
         self.limbs = []
         self.limb_dict = {}
@@ -62,6 +75,10 @@ class BeingInst:
         shared.register(self)
 
     def buildbody(self, limbs, uplimb=None):
+        """
+        Recursivly builds a body.
+        A body looks roughly like this: (limb, (rootlimb, *attached_limbs))
+        """
         newlimbs = []
         for item in limbs:
             try:
@@ -72,6 +89,7 @@ class BeingInst:
                 #If it's not a sequance, this will error
             except TypeError:
                 if item.sym:
+                    #If it's symetric
                     newlimbs.append(item.instance(self, uplimb, 'Left '))
                     newlimbs.append(item.instance(self, uplimb, 'Right '))
                 else:
@@ -82,6 +100,7 @@ class BeingInst:
             self.limb_dict[limb.name] = limb
 
     def equip(self, belong, limb):
+        "Equips a belong to a limb, by names (so that you can't spoof)"
         if belong in self.belong_dict:
             belong = self.belong_dict[belong]
             if limb in self.limb_dict:
@@ -94,28 +113,30 @@ class BeingInst:
                         belong.limb = limb
                         belong.applystats()
                         self.equiped.append(belong)
-                        return True, "{} equiped to {}".format(belong.name, limb.name)
+                        return True, "%s equiped to %s" % (belong.name,
+                            limb.name)
                     else:
                         return False, "E: %s already equiped" % belong.name
                 else:
-                    return False, "E: %s can not be equiped to this limb, %s" % (belong.name, limb.name)
+                    return False, "E: %s can't be equiped to this limb, %s" % (
+                        belong.name, limb.name)
             else:
                 return False, "E: No such limb, " + limb
         else:
             return False, "E: No such belong, " + belong
 
     def equipall(self):
+        "Attempts to equip everything."
         for belong in self.belongs:
-            #print(belong.name, belong.equip)
             if not self.equip(belong.name, belong.equip)[0]:
                 if not self.equip(belong.name, "Right " + belong.equip)[0]:
                     R = self.equip(belong.name, "Left " + belong.equip)
                     if not R[0]:
+                        #If it didn't sucessfully equip, print the error msg.
                         print(R[1])
 
-            #Trys to equip everything to everything
-
     def unequip(self, belong):
+        "Removes an equiped belong, by name"
         if belong in self.belong_dict:
             belong = self.belong_dict[belong]
             if belong.limb:
@@ -129,17 +150,13 @@ class BeingInst:
         else:
             return "No such belong"
 
-    def applyrules(self):
-        for name, value in self.rules:
-            self.stats[name] = eval(value)
-
     def addbelong(self, belong):
-        """Adds a belonging to this being"""
+        "Adds a belong to this being (this function does it right)"
         self.belongs.append(belong)
         self.belong_dict[belong.name] = belong
 
     def rmbelong(self, belong):
-        """Removes a belonging from this being"""
+        "Removes a belonging from this being"
         if type(belong) == str:
             belong = self.belong_dict[belong]
         self.unequip(belong.name)
@@ -148,4 +165,5 @@ class BeingInst:
 
     def __str__(self):
         return self.name
+
     __repr__ = __str__

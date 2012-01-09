@@ -53,5 +53,5 @@ class Clock:
     def __repr__(self):
         return "<Clock instance tick {tick} splits {splits}".format(
             tick=self.tick,
-            splits = list(self.splits.keys())
+            splits=list(self.splits.keys())
             )

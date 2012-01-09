@@ -1,5 +1,14 @@
 class Node:
-    def __init__(self, names, links, does={}, q="Where do you want to go?", exit_=False):
+    """
+    args: names, links, does, q, exit_
+    links: names of nodes the user can go to from here.
+    names: Display names of said links. links[0]'s name should be names[0].
+    does:  commands to be done on this node; see does.py for more info.
+    q: Query when asking for choice
+    exit_: If set, exits the player to a higher network as named.
+    """
+    def __init__(self, names, links,
+            does={}, q="Where do you want to go?", exit_=False):
         self.names = names
         self.links = links
         self.does = does
@@ -7,11 +16,14 @@ class Node:
         self.q = q
         self.net = False
 
+
 class Net:
     def __init__(self, start, nodes, does=[]):
-        """Nodes are a dict of all nodes in this network.
-           Start is the starting possision upon arival.
-           Do is node commands"""
+        """
+        Start is the starting possision upon arival.
+        Nodes are a dict of all nodes in this network.
+        Do is node commands
+        """
         self.nodes = nodes
         self.start = start
         self.does = does
@@ -21,11 +33,12 @@ class Net:
         return self.nodes[item]
 
     def travel(self):
-        """Travles the nodemap. Is recursive and calls itself on any submaps"""
+        "Travles the nodemap. Is recursive and calls itself on any submaps"
         from core import does
         name = startname = self.start
         node = startnode = self[startname]
         while 1:
+            ###Does###
             if type(node.does) is dict:
                 node.does = node.does.items()
             sendto = None
@@ -35,6 +48,7 @@ class Net:
                 result = do(args)
                 if result:
                     sendto = result
+            ###nodename selection###
             if node.net:
                 #If it is a net
                 nodename = node.travel()

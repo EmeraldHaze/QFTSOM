@@ -1,4 +1,5 @@
 from api import Status
+
 @Status
 def poison(self):
     player = self.player

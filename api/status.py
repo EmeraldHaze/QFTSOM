@@ -1,10 +1,5 @@
-"""
-The Status class
-"""
 class Status:
-    """
-    Represents a possible status of a person
-    """
+    "Represents a possible status of a being (e.g, poison)"
     def __init__(self, func):
         self.func = func
         self.name = func.__name__
@@ -12,10 +7,9 @@ class Status:
     def instance(self, player, battle):
         return StatusInst(self, player, battle)
 
+
 class StatusInst:
-    """
-    Represents a status of a specific person
-    """
+    "Represents a status of a specific person"
     def __init__(self, parent, player, battle):
         self.func = parent.func
         self.name = parent.name
