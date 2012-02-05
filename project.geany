@@ -1,0 +1,32 @@
+
+[indentation]
+indent_width=4
+indent_type=0
+indent_hard_tab_width=8
+detect_indent=false
+indent_mode=2
+
+[project]
+name=QFTSOM
+base_path=/home/glycan/QFTSOM/
+description=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=80
+
+[files]
+current_page=3
+FILE_NAME_0=505;Python;0;16;0;1;0;/home/glycan/QFTSOM/main.py;0;4
+FILE_NAME_1=316;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/does.py;0;4
+FILE_NAME_2=2263;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/limb.py;0;4
+FILE_NAME_3=222;Python;0;16;0;1;0;/home/glycan/Python/Tests/send.py;0;4
+FILE_NAME_4=319;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/battle.py;0;4
+
+[build-menu]
+EX_00_LB=Run
+EX_00_CM=python3 -i  /home/glycan/QFTSOM/main.py
+EX_00_WD=/home/glycan/QFTSOM
+EX_01_LB=Run
+EX_01_CM=python3 -i "%f"
+EX_01_WD=

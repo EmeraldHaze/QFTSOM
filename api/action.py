@@ -15,7 +15,7 @@ class Action:
         self.name = name
         self.listners = defaultdict(lambda : lambda *args: None, listners)
         self.mint = mint
-        self.maxt = maxt
+        self.m axt = maxt
         self.data = data
 
     def instance(self, actor, targets, battle):
