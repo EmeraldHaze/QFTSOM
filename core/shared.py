@@ -12,7 +12,7 @@ belongdata = []
 name = "no-name"
 #The player's name, used for logs and suchlike
 
-battle_order = ("players", "exits", "rules")
+battle_order = ("beings", "exits", "rules")
 #The order in which battle arguments are across the project
 
 #The following items are used for the registry. So that your module's objects

@@ -90,4 +90,12 @@ dwarf2 = Humanoid.instance("Dwarf II", belongs=[axe, helm])
 rouge  = Humanoid.instance("Rouge", thinkers.pthinker, [knife, bomb, shoes], {"STR":-3, "INT":+5})
 mage   = Humanoid.instance('Magus', thinkers.pthinker, [staff], {'STR':-3, 'INT':+5})
 
-game = api.Node([], [], [("battle", [[dwarf, dwarf2, mage, rouge], [exits.die], [rules.next, rules.reset]]), ("send", "hub")])
+game = api.Node([], [], [
+    ("battle",
+        [
+            [dwarf, dwarf2, mage, rouge],
+            [exits.die],
+            [rules.next, rules.wipe_normal]
+        ]
+    ), ("send", "hub")
+    ])

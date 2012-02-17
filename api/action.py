@@ -1,5 +1,6 @@
 from collections import defaultdict
 from core.utils import copy
+from game import defaults
 
 
 class Action:
@@ -15,8 +16,9 @@ class Action:
         self.name = name
         self.listners = defaultdict(lambda : lambda *args: None, listners)
         self.mint = mint
-        self.m axt = maxt
-        self.data = data
+        self.maxt = maxt
+        self.data = defaults.actions.data
+        self.data.update(data)
 
     def instance(self, actor, targets, battle):
         """
@@ -39,8 +41,8 @@ class Action:
             #If both boundrys are negative or 0
             if abs(self.mint + 1) <= len(targets) <= abs(self.maxt + 1):
                 #Accept this as a dogmatic condition which works magically
-                targets = [player for player in battle.players.values()\
-                if player not in targets]
+                targets = [being for being in battle.beings.values()\
+                            if being not in targets]
             else:
                 raise invalid
         else:

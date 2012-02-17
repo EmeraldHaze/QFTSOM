@@ -21,7 +21,7 @@ def battle(arg):
     while len(arg) < 2:
         arg.append([])
         #Pads the arg too 3 elements
-    args = map(_parsearg, arg, game.defaults.battle)
+    args = map(_parsearg, arg, game.defaults.battle.args)
     b = core.Battle(*args)
     b.start()
 
@@ -37,7 +37,7 @@ def _parsearg(args, default):
     base = default.copy()
     arg_dict = {}
     for arg in args:
-        arg_dict[arg.name] = arg
+        arg_dict[arg.type_ if "type_" in dir(arg) else arg.name] = arg
     base.update(arg_dict)
     return base
 

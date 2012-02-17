@@ -43,7 +43,7 @@ def get_all(battle, player):
             player.act_dict[name] = action
 
 @rule('wipe_hist')
-def reset(battle, player):
+def wipe_normal(battle, player):
     "resets HP to MAXHP if such exists, and some internals. Should always work."
     if "MAXHP" in player.stats:
        player.stats["HP"] = player.stats["MAXHP"]

@@ -9,10 +9,10 @@ shared.limb_datarules = [("MAXHP", "self.data['HP']"), ("DEF", "0"), ("evade", "
 shared.current_module = "limb"
 shared.modules["limb"] = "This module allows you to attack limbs. It requires limbs that have HP, limbdie exit (for killing limbs). and "
 
-def ldie_check(player, battle):
+def ldie_check(being, battle):
     total = 0
     dead = False
-    for limb in player.limbs:
+    for limb in being.limbs:
         total += limb.data["HP"]
         if limb.data["HP"] < 1:
             limb.kill()
@@ -23,7 +23,10 @@ def ldie_check(player, battle):
         dead = True
     return dead
 
-limbdie = api.Exit('limbdie', ldie_check, lambda p,b:print(p.name, "died!"), ["main", "HP"], ["players"])
+limbdie = api.Exit('limbdie',
+    ldie_check,
+    lambda being, battle: print(being.name, "died!"),
+    ["main", "HP"], ["beings"])
 #####BEING#####
 ###THINKER###
 def lthinkmaker(actchoice, targetchoice):

@@ -1,4 +1,10 @@
 from api.exit import Exit
 
-die = Exit('die', (lambda p, b: p.stats['HP'] <= 0),  (lambda p, b: print(p.name, 'is woefully unlifelike!')), ["main", "HP"], ["players"])
-win = Exit('win', (lambda p, b: b.player_list == [p]),(lambda p, b: print(p.name, "has vanquished his foes!")), ['players'], ["players"])
+die = Exit('die',
+    (lambda being, battle: being.stats['HP'] <= 0),
+    (lambda being, battle: print(being.name, 'is woefully unlifelike!')),
+    ["main", "HP"], ["beings"])
+
+win = Exit('win',
+    (lambda being, battle: battle.being_list == [being]),
+    (lambda being, battle: print(being.name, "has vanquished his foes!")), ["beings"], ["beings"])

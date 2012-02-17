@@ -1,6 +1,7 @@
-from core.utils import copy
-from core import shared
 from types import MethodType
+from game import defaults
+from core import shared
+from core.utils import copy
 
 
 class Being:
@@ -8,15 +9,13 @@ class Being:
     Represents a possible entity in the game world
     Has a thinker, limbs, stats, belongs, data
     """
-    def __init__(self, body, thinker,
-            stats=None, belongs=None, data=None, rules=None):
-
+    def __init__(self, body, thinker, stats=None, belongs=None, data=None, rules=None):
         if stats is None:
-            from game.defaults import stats
+            stats = defaults.beings.stats
         if belongs is None:
             belongs = []
         if data is None:
-            from game.defaults import data
+            data = defaults.beings.data
 
         self.body = body
         self.thinker = thinker
@@ -45,12 +44,13 @@ class BeingInst:
             thinker = parent.thinker
         self.thinker = thinker.instance(self)
 
-        for stat, value in shared.statrules:
-            self.stats[name] = eval(value)
+        for stat, value in parent.rules:
+            self.stats[stat] = eval(value)
+            #Personal rules for stat definition that default to global rules
         for stat, value in statchanges.items():
             self.stats[stat] += value
-        for stat, value in self.rules:
-            self.stats[name] = eval(value)
+            #Local rules for stat modificiations
+
 
         self.limbs = []
         self.limb_dict = {}
