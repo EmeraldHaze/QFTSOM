@@ -17,7 +17,7 @@ hit  = actions.simplemaker("hit" , 2)
 finger = api.Limb("finger", [poke])
 arm    = api.Limb("arm", [hit])
 
-baseman = api.Being([finger], manthinker, {"HP": 5})
+baseman = api.Being([finger], manthinker, {"HP":5})
 player = baseman.instance("Player", pthinker, statchanges={"HP":1})
 oddman = baseman.instance("Oddball", oddthinker)
 man    = baseman.instance("Man")

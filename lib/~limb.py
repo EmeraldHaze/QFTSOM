@@ -57,20 +57,20 @@ def limbexec(self):
     target = targetlimb.being
     if randint(0, 100) > targetlimb.data["evade"]:
         #Hit
-        dmg = self.data['dmg'] - targetlimb.data["DEF"]
+        dmg = self.metadata['dmg'] - targetlimb.data["DEF"]
 
-        #if randint(0, 100) < self.actor.stats["crit"] + self.data["crit"]  - targetlimb.data["vuln"]:
+        #if randint(0, 100) < self.actor.stats["crit"] + self.metadata["crit"]  - targetlimb.data["vuln"]:
          #   #Crit
           #  dmg *= 2
            # print("Critical!")
         targetlimb.data["HP"] -= dmg
-        print("{}'s {} took {} DMG, it now has {}".format(target.name, targetlimb.name, self.data['dmg'], targetlimb.data["HP"]))
-        if 'poison' in self.data:
+        print("{}'s {} took {} DMG, it now has {}".format(target.name, targetlimb.name, self.metadata['dmg'], targetlimb.data["HP"]))
+        if 'poison' in self.metadata:
             poison = limbpoison.instance(target, self.battle)
             poison.limb = targetlimb
-            poison.poison = self.data['poison']
+            poison.poison = self.metadata['poison']
             target.status_list.append(poison)
-            print("{}'s {} has been poisoned for {}".format(target.name, targetlimb.name, self.data['poison']))
+            print("{}'s {} has been poisoned for {}".format(target.name, targetlimb.name, self.metadata['poison']))
     else:
         print("{}'s {} missed!".format(self.actor.name, self.name))
 

@@ -39,18 +39,18 @@ class BeingInst:
     def __init__(self, parent, name, thinker, belongs, statchanges, changes):
         copy(self, parent, 'stats', 'data')
         self.name = name
-        print(name)
+
         if not thinker:
             thinker = parent.thinker
         self.thinker = thinker.instance(self)
 
+        for stat, value in parent.rules:
+            self.stats[stat] = eval(value)
+            #Personal rules for stat definition that default to global rules
         for stat, value in statchanges.items():
             self.stats[stat] += value
             #Local rules for stat modificiations
 
-        for stat, value in parent.rules:
-            self.stats[stat] = eval(value)
-            #Personal rules for stat definition that default to global rules
 
         self.limbs = []
         self.limb_dict = {}

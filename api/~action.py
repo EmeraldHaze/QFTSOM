@@ -24,6 +24,7 @@ class Action:
         """
         Creates an instance of this action
         """
+        print("Instancing action,", self.name)
         if type(targets) != list:
             targets = [targets]
 
@@ -47,8 +48,10 @@ class Action:
                 raise invalid
         else:
             raise Exception("Wierd maxt-mint")
+        print("Almost done")
         new = ActionInstance(self, actor, targets, battle)
         new.listners["init"](new)
+        print("Action instanced")
         return new
 
     def __repr__(self):

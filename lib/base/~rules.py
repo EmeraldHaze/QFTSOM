@@ -24,7 +24,7 @@ def speed(battle, being):
     "Players go their speed stat + last action's speed turns from now, these turns may overlap. Will error when speed is not defined."
     speed = being.stats["speed"]
     if being.last_act is not None:
-        speed += being.last_act.data["speed"]
+        speed += being.last_act.metadata["speed"]
         print("{}'s {} has {} speed".format(being.name, being.last_act.name, speed))
     battle.timeline.addbeing(being, int(speed))
 

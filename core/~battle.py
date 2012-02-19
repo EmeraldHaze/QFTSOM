@@ -40,7 +40,7 @@ class Battle:
         for being in self.timeline.beings():
             action = being.thinker()
             #Thinkers should return ActionInsts
-            delay = action.data["delay"] if "delay" in action.data else 0
+            delay = action.data["delay"] if "delay" in action.metadata else 0
             self.timeline.addaction(action, delay)
             print(being.name, "has", action.name + "'d",
             ', '.join([target.name for target in action.targets]) + "!")

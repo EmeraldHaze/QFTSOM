@@ -3,9 +3,13 @@ from api import Thinker
 def think_maker(gettarget, getaction):
     @Thinker
     def thinker(self):
+        print("Targeting")
         target = gettarget(self.being, self.battle)
+        print("Actioning")
         action = getaction(self.being, self.battle)
+        print("Instnacing")
         act = action.instance(self.being, target, self.battle)
+        print(act.name, "instanced!")
         return act
     return thinker
 
@@ -62,5 +66,5 @@ def pchoice(choices, extra=None, query="Choice? "):
     return choices[choicename]
 
 ptarget = lambda being, battle: pchoice(battle.being_list, ("HP", "choice.stats['HP']"), "Target? ")
-paction = lambda being, battle: pchoice(being.actions, ("MP", "choice.data['MPC']"), "Actions? ")
+paction = lambda being, battle: pchoice(being.actions, ("MP", "choice.metadata['MPC']"), "Actions? ")
 pthinker = think_maker(ptarget, paction)
