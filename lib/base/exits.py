@@ -7,4 +7,5 @@ die = Exit('die',
 
 win = Exit('win',
     (lambda being, battle: battle.being_list == [being]),
-    (lambda being, battle: print(being.name, "has vanquished his foes!")), ["beings"], ["beings"])
+    (lambda being, battle: print(being.name, "has vanquished his foes!")),
+    ["main", "beings"], ["beings"])

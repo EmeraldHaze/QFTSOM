@@ -29,8 +29,10 @@ class Wrap:
 
 
 if __name__ == "__main__":
-
+    sys.setrecursionlimit(50)
+    #prevents infinite recursive loops from wiping out original context
     sys.stdout = Wrap(sys.stdout)
+    #ensures that output gets past wraping
 
     print("This is QFTSOM 0.3. In lieu of a proper interface, use the numbers. "
           " Failure to do so can cause crashs.")

@@ -64,7 +64,7 @@ def limbexec(self):
           #  dmg *= 2
            # print("Critical!")
         targetlimb.data["HP"] -= dmg
-        print("{}'s {} took {} DMG, it now has {}".format(target.name, targetlimb.name, self.data['dmg'], targetlimb.data["HP"]))
+        print("{}'s {} took {} DMG, it now has {} HP".format(target.name, targetlimb.name, self.data['dmg'], targetlimb.data["HP"]))
         if 'poison' in self.data:
             poison = limbpoison.instance(target, self.battle)
             poison.limb = targetlimb

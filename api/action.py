@@ -17,7 +17,7 @@ class Action:
         self.listners = defaultdict(lambda : lambda *args: None, listners)
         self.mint = mint
         self.maxt = maxt
-        self.data = dict(defaults.actions.data)
+        self.data = defaults.actions.data.copy()
         #Prevents the defaults from being changed
         self.data.update(data)
 

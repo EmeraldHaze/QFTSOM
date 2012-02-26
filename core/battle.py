@@ -74,22 +74,27 @@ class Battle:
                 status()
 
     def check_exits(self, dep):
-        at("check_exits")
         """
         Checks if any of the exits dependant on dep trigger, and cleans up
         after him (remove, recursivly call deps)
         """
+        at("check_exits")
         for exit in self.exits[dep]:
             #Loops through all the exits dependant on this change
             for being in self.being_list:
                 if exit.condition(being, self):
+                    info(exit.name, "triggered, changes:", exit.changes)
                     exit.effect(being, self)
-                    for change in exit.changes:
-                        self.check_exits(change)
                     self.remove_being(being)
-                    print(being.name, "exited. beings:", len(self.beings))
-                    if self.beings is []:
+                    for change in exit.changes:
+                        info("checking", change)
+                        self.check_exits(change)
+                    if not len(self.beings):
+                        #If the length has a False value (e.g, 0)
                         self.end = True
+                    else:
+                        print(len(self.beings), "beings left")
+
 
     def remove_being(self, being):
         at("remove_being")

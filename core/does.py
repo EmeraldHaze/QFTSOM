@@ -2,7 +2,7 @@
 This module contains those functions for those does that can be used in
 node commands. To add a command, simply add a function with the command's name.
 """
-
+from core.config import debug, at, info
 
 def say(arg):
     print(arg)
@@ -15,12 +15,14 @@ def battle(arg):
     second pair of braces is unncerry
     """
     import game, core
+    at("does.battle")
     if type(arg[0]) is not list:
         #If it's not a nested list
         arg = [arg]
-    while len(arg) < 2:
+    while len(arg) < 3:
         arg.append([])
         #Pads the arg too 3 elements
+    debug(arg)
     args = map(_parsearg, arg, game.defaults.battle.args)
     b = core.Battle(*args)
     b.start()
