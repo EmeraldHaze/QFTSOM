@@ -1,6 +1,6 @@
 from collections import defaultdict
 from core.clock import Clock
-
+from main import DEBUG
 
 class Battle:
     """
@@ -26,6 +26,8 @@ class Battle:
         self.exit_startup()
         self.rules['init'](self)
         while not self.end:
+            if DEBUG:
+                print("#now tick", self.timeline.tick)
             self.choices()
             self.actions()
             self.statuses()
@@ -33,10 +35,13 @@ class Battle:
             self.rules["tick"](self)
             self.timeline.next_tick()
 
+
     def choices(self):
         """
         Queries every being for an action, and schedules it, with some cleanup
         """
+        if DEBUG:
+            print("#choises")
         for being in self.timeline.beings():
             action = being.thinker()
             #Thinkers should return ActionInsts
@@ -52,6 +57,8 @@ class Battle:
         """
         Executes every action
         """
+        if DEBUG:
+            print("#actions")
         for action in self.timeline.actions():
             action.listners['exec'](action)
 
@@ -59,11 +66,14 @@ class Battle:
         """
         Executes every status
         """
+        if DEBUG:
+            print("#statuses")
         for being in self.being_list:
             for status in being.status_list:
                 status()
 
     def check_exits(self, dep):
+        print("#check_exits")
         """
         Checks if any of the exits dependant on dep trigger, and cleans up
         after him (remove, recursivly call deps)

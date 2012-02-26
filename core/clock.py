@@ -1,5 +1,5 @@
 from collections import deque
-
+from main import DEBUG
 
 class Clock:
     """A timeline with a number of types of slot (splits) for each tick, and a
@@ -26,6 +26,8 @@ class Clock:
             return self.splits[attr]
 
     def _add(self, split, item, tick):
+        if DEBUG == 2:
+            print("#{} added to split {} at tick {}".format(item, split, tick))
         tick += self.tick
         s = split
         split = self.splits[split]

@@ -39,7 +39,7 @@ class BeingInst:
     def __init__(self, parent, name, thinker, belongs, statchanges, changes):
         copy(self, parent, 'stats', 'data')
         self.name = name
-        print(name)
+
         if not thinker:
             thinker = parent.thinker
         self.thinker = thinker.instance(self)
