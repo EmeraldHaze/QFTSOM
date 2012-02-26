@@ -6,7 +6,7 @@ def simplemaker(name, dmg):
         target = self.targets[0]
         print(target.name, "has lost", dmg, "health!")
         target.stats["HP"] -= dmg
-    return Action(name, {"exec":sexec})
+    return Action(name, {"exec": sexec, "delay": 0})
 
 def complete_exec(self):
     rules = self.dmgrules

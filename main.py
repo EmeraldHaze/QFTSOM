@@ -3,21 +3,12 @@
 Starts the game.
 """
 
-NAME = False
-DEBUG = 2
-{
-    0: "no debug",
-    1: "show parts",
-    2: "heavy debug",
-    3: "pdb"
-}
-
 import sys, struct, pdb
 import game
 
-from core import shared
+from core import shared, config
 
-if DEBUG == 3:
+if config.DEBUG >= 3:
     pdb.set_trace()
 
 class Wrap:
@@ -44,7 +35,7 @@ if __name__ == "__main__":
     print("This is QFTSOM 0.3. In lieu of a proper interface, use the numbers. "
           " Failure to do so can cause crashs.")
 
-    if NAME:
+    if config.GET_NAME:
         shared.name = input()
         #Sets player name, which is the first input if run by Socket'd
 

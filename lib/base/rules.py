@@ -8,12 +8,12 @@ def same(battle, being):
 @rule('schedule')
 def next(battle, being):
     "Players go one after the other in a pre-determined order, with there actions having consequances immideatly."
-    split = battle.timeline.being
-    for tick in range(len(split)):
+    line = battle.timeline.being
+    for tick in range(len(line)):
         try:
-            go = (split[tick] == [] and split[tick+1] == [])
+            go = (line[tick] == [] and line[tick+1] == [])
         except IndexError:
-            go = (split[tick] == [])
+            go = (line[tick] == [])
         if go:
             break
             #This leaves tick at the first tick when there's a nobody

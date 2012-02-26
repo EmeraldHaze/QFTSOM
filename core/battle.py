@@ -1,6 +1,6 @@
 from collections import defaultdict
-from core.clock import Clock
-from main import DEBUG
+from core.timeline import Timeline
+from core.config import info, at, debug
 
 class Battle:
     """
@@ -21,13 +21,13 @@ class Battle:
         #take any arguments and retunrs None
 
     def start(self):
-        self.timeline = Clock('being', 'action')
+        at("start")
+        self.timeline = Timeline('being', 'action')
         self.being_startup()
         self.exit_startup()
         self.rules['init'](self)
         while not self.end:
-            if DEBUG:
-                print("#now tick", self.timeline.tick)
+            at("tick " + str(self.timeline.tick))
             self.choices()
             self.actions()
             self.statuses()
@@ -40,15 +40,17 @@ class Battle:
         """
         Queries every being for an action, and schedules it, with some cleanup
         """
-        if DEBUG:
-            print("#choises")
+        at("choises")
         for being in self.timeline.beings():
             action = being.thinker()
             #Thinkers should return ActionInsts
-            delay = action.data["delay"] if "delay" in action.data else 0
+            try:
+                delay = action.data["delay"]
+            except KeyError:
+                delay = 0
             self.timeline.addaction(action, delay)
             print(being.name, "has", action.name + "'d",
-            ', '.join([target.name for target in action.targets]) + "!")
+                ', '.join([target.name for target in action.targets]) + "!")
 
             being.last_act = action
             self.rules['schedule'](self, being)
@@ -57,23 +59,22 @@ class Battle:
         """
         Executes every action
         """
-        if DEBUG:
-            print("#actions")
+        at("actions")
         for action in self.timeline.actions():
+            info(action)
             action.listners['exec'](action)
 
     def statuses(self):
         """
         Executes every status
         """
-        if DEBUG:
-            print("#statuses")
+        at("statuses")
         for being in self.being_list:
             for status in being.status_list:
                 status()
 
     def check_exits(self, dep):
-        print("#check_exits")
+        at("check_exits")
         """
         Checks if any of the exits dependant on dep trigger, and cleans up
         after him (remove, recursivly call deps)
@@ -91,9 +92,11 @@ class Battle:
                         self.end = True
 
     def remove_being(self, being):
-        for index, tick in enumerate(self.timeline.being[self.timeline.tick:]):
+        at("remove_being")
+        line = self.timeline.being
+        for index, tick in enumerate(line):
             #Loops over all turns in the future
-            split[i] = [item for item in split[i] if item != being]
+            line[index] = [item for item in tick if item != being]
             #Removes the departed being from this tick
         del self.beings[being.name]
         self.being_list.remove(being)

@@ -17,7 +17,8 @@ class Action:
         self.listners = defaultdict(lambda : lambda *args: None, listners)
         self.mint = mint
         self.maxt = maxt
-        self.data = defaults.actions.data
+        self.data = dict(defaults.actions.data)
+        #Prevents the defaults from being changed
         self.data.update(data)
 
     def instance(self, actor, targets, battle):
