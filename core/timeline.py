@@ -24,12 +24,11 @@ class Timeline:
             return self.lines[attr]
 
     def _add(self, linename, item, offset):
-        debug("_add:", item, offset, self.tick)
         target_tick = self.tick + offset
         line = self.lines[linename]
         self.pad(line, target_tick)
         line[target_tick].append(item)
-        debug("#{} added to line {} at tick {}".format(item, linename, target_tick))
+        debug("_add:", linename, target_tick, item)
 
     def _get(self, line):
         return self.lines[line][self.tick]

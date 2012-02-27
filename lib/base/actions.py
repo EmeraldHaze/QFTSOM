@@ -24,4 +24,14 @@ def complete_exec(self):
 def manainit(self):
     self.actor.stats['MP'] -= self.data["MPC"]
 
+def basic_choosen(action):
+    print("{} has {}'d {}!".format(
+                        action.actor.name,
+                        action.name,
+                        ', '.join([target.name for target in action.targets])
+                    )
+                )
+
 null = Action("pass", {"exec":lambda self:print("%s does nothing.")}, {"speed": 0}, mint=0, maxt=0)
+
+

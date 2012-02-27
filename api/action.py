@@ -4,17 +4,18 @@ from game import defaults
 
 
 class Action:
-    def __init__(self, name, listners, data={}, mint=1, maxt=1):
+    def __init__(self, name, listeners, data={}, mint=1, maxt=1):
         """
         Represents a possible action. Args:
         name:str
-        listners:dict, listners[event] is called at event (e.g, exec)
+        listeners:dict, listeners[event] is called at event (e.g, exec)
         data = {}, arbitrary data
         mint = 1, minimum targets
         maxt = 1, -1 = all, -2 = all but one, etc
         """
         self.name = name
-        self.listners = defaultdict(lambda : lambda *args: None, listners)
+        self.listeners = defaultdict(lambda : lambda *args: None, listeners)
+        self.listeners.update(defaults.actions.listeners)
         self.mint = mint
         self.maxt = maxt
         self.data = defaults.actions.data.copy()
@@ -49,7 +50,7 @@ class Action:
         else:
             raise Exception("Wierd maxt-mint")
         new = ActionInstance(self, actor, targets, battle)
-        new.listners["init"](new)
+        new.listeners["init"](new)
         return new
 
     def __repr__(self):
@@ -59,7 +60,7 @@ class Action:
 class ActionInstance:
     "Represents a concrete action done by a being to another being(s)"
     def __init__(self, parent, actor, targets, battle):
-        copy(self, parent, "name", "listners", "data")
+        copy(self, parent, "name", "listeners", "data")
         self.actor = actor
         self.targets = targets
         self.battle = battle

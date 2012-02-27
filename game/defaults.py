@@ -3,57 +3,77 @@ This module defines the Defaults class which is used to provide defaults
 for several classes (Beings, etc) and objects (Battles, eventually Haggles)
 """
 
+from importlib import import_module
+
 class Defaults:
     """
-    This is a class used for various defaults
-    It supports lazy values, so that values based on objects with default
-    vaules of their own work
+    This is a class used for various defaults. It supports lazy values, so
+    that values based on objects with default vaules of their own work.
     """
-    def __init__(self, **kwargs):
-        self.defaults = kwargs
+    def __init__(self, req, defaults):
+        self.defaults = defaults
+        self.req = req
+        self._module = False
         self.made = {}
         #As not to calculate things twice
+
+    @property
+    def module(self):
+        """
+        The module(s) from which this collection of defaults draws it's values
+        '"""
+        if self._module is not False:
+            return self._module
+        else:
+            if type(self.req) is list:
+                self._module = {}
+                for mod in self.req:
+                    self._module[mod.split(".")[-1]] = import_module(mod)
+            elif type(self.req) is str:
+                self._module = import_module(self.req)
+            else:
+                self._module = None
+            return self._module
 
     def __getattr__(self, attr):
         if attr in self.made:
             return self.made[attr]
         else:
-            if attr in self.defaults:
-                value = self.defaults[attr]
-                try:
-                    #This works if it's lazy
-                    value = value(self)
-                    self.made[attr] = value
-                    return value
-                except TypeError:
-                    #If it's not callable, e.g., not lazy
-                    return self.defaults[attr]
+            value = self.defaults[attr]
+            try:
+                value = value(self.module)
+                #If it's lazy
+                self.made[attr] = value
+                return value
+            except TypeError:
+                #If it's not not lazy
+                self.made[attr] = value
+                return value
 
+##Classes
+beings = Defaults(None, {"stats": {"speed": 0}, "data": {}})
 
-beings = lambda self: {}
+actions = Defaults("lib.base.actions", {
+    "data": {"delay": 0, "target": "norm", "MPC": 0},
+    "listeners": lambda m: {"choosen": m.basic_choosen},
+    })
 
-def exits(self):
-    import lib
-    return {
-        "win": lib.base.exits.win,
-        "die": lib.limb.limbdie
-        }
+##Other
 
-def rules(self):
-    from lib.base import rules
-    return {
-        "schedule": rules.speed,
-        "get_actions": rules.get_all,
-        "wipe_hist": rules.wipe_limbs
-        }
-
-battle = Defaults(
-    beings=beings,
-    exits=exits,
-    rules=rules,
-    args=lambda self: [self.beings, self.exits, self.rules]
-    )
-
-beings = Defaults(stats={"speed": 0}, data={})
-
-actions = Defaults(data={"delay": 0, "target": "norm", "MPC": 0})
+battle = Defaults(["lib.base.rules", "lib.base.exits", "lib.limb"], {
+    "args": [
+        #beings
+        {},
+        #exits
+        lambda m: {
+                "win": m["exits"].win,
+                "die": m["limb"].limbdie
+            },
+        #rules
+        lambda m: {
+                "schedule":     m["rules"].speed,
+                "get_actions":  m["rules"].get_all,
+                "wipe_hist":    m["rules"].wipe_limbs
+            }
+    ]
+})

@@ -3,9 +3,10 @@
 Starts the game.
 """
 
-import sys, struct, pdb
-import game
+from pdb import pm
+import sys, struct
 
+import game
 from core import shared, config
 
 if config.DEBUG >= 3:
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     #prevents infinite recursive loops from wiping out original context
     sys.stdout = Wrap(sys.stdout)
     #ensures that output gets past wraping
-
+    print(".")#Corrects a client bug
     print("This is QFTSOM 0.3. In lieu of a proper interface, use the numbers. "
           " Failure to do so can cause crashs.")
 

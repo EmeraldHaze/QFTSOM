@@ -66,8 +66,10 @@ class LimbInst:
 
         for act in self.actions:
             self.being.actions.remove(act)
-            self.being.act_dict = [a for a in self.being.act_dict if a != act]
-            #There should be a better way to do this
+            for name, a in self.being.act_dict.copy().items():
+                if a is act:
+                    del self.being.act_dict[name]
+                    #There should be a better way to do this
 
         for limb in self.attached:
             limb.kill()

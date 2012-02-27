@@ -76,8 +76,8 @@ class BeingInst:
 
     def buildbody(self, limbs, uplimb=None):
         """
-        Recursivly builds a body.
-        A body looks roughly like this: (limb, (rootlimb, *attached_limbs))
+        Recursivly builds a body. A body looks roughly like this: (limb,
+        limb, (rootlimb, *attached_limbs))
         """
         newlimbs = []
         for item in limbs:
@@ -90,8 +90,8 @@ class BeingInst:
             except TypeError:
                 if item.sym:
                     #If it's symetric
-                    newlimbs.append(item.instance(self, uplimb, 'Left '))
-                    newlimbs.append(item.instance(self, uplimb, 'Right '))
+                    newlimbs.append(item.instance(self, uplimb, 'left '))
+                    newlimbs.append(item.instance(self, uplimb, 'right '))
                 else:
                     newlimbs.append(item.instance(self, uplimb))
 
@@ -129,8 +129,8 @@ class BeingInst:
         "Attempts to equip everything."
         for belong in self.belongs:
             if not self.equip(belong.name, belong.equip)[0]:
-                if not self.equip(belong.name, "Right " + belong.equip)[0]:
-                    R = self.equip(belong.name, "Left " + belong.equip)
+                if not self.equip(belong.name, "right " + belong.equip)[0]:
+                    R = self.equip(belong.name, "left " + belong.equip)
                     if not R[0]:
                         #If it didn't sucessfully equip, print the error msg.
                         print(R[1])

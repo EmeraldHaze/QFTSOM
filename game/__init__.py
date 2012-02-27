@@ -1,2 +1,2 @@
 from game.nodemap import nodemap
-from game import defaults
+#from game import defaults

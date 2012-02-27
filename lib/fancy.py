@@ -71,20 +71,20 @@ boom = api.Action("explode", {"exec":boom, "init":completeinit},
 stab = api.Action("stab"   , {"exec":actions.complete_exec, "init":completeinit},
     data = {"type":"melee", "MPC":0, "change":1, "status":statuses.poison, "data":('poison', 30)})
 
-staff = api.Belong('Staff', "Arm", {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
-axe   = api.Belong("Axe",   "Arm", {"STR":20, "MAXWPNDMG":  10}, [hack])
-helm  = api.Belong("Helm",  "Head", {"DEF":10, "MDEF":5, "MAXWPNDMG":5})
+staff = api.Belong('Staff', "arm", {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
+axe   = api.Belong("Axe",   "arm", {"STR":20, "MAXWPNDMG":  10}, [hack])
+helm  = api.Belong("Helm",  "arm", {"DEF":10, "MDEF":5, "MAXWPNDMG":5})
 
-knife = api.Belong("Knife", "Arm", {"INT":10, "STR":5}, [stab])
-shoes = api.Belong("Shoes", "Leg", {"Dodge": 600, "INT":5})
-bomb  = api.Belong("Bomb",  "Bag", {}, [boom])
+knife = api.Belong("Knife", "arm", {"INT":10, "STR":5}, [stab])
+shoes = api.Belong("Shoes", "leg", {"Dodge": 600, "INT":5})
+bomb  = api.Belong("Bomb",  "bag", {}, [boom])
 
-head = api.Limb("Head")
-arm  = api.Limb("Arm")
-leg  = api.Limb("Leg")
-bag  = api.Limb("Bag")
+arm = api.Limb("arm")
+arm  = api.Limb("arm")
+leg  = api.Limb("leg")
+bag  = api.Limb("bag")
 
-Humanoid = api.Being((head, sym(arm), sym(leg), bag), simplethink, {'STR': 13,'INT': 7})
+Humanoid = api.Being((arm, sym(arm), sym(leg), bag), simplethink, {'STR': 13,'INT': 7})
 dwarf  = Humanoid.instance("Dwarf I", belongs=[axe, helm])
 dwarf2 = Humanoid.instance("Dwarf II", belongs=[axe, helm])
 rouge  = Humanoid.instance("Rouge", thinkers.pthinker, [knife, bomb, shoes], {"STR":-3, "INT":+5})
@@ -98,4 +98,4 @@ game = api.Node([], [], [
             [rules.next, rules.wipe_normal]
         ]
     ), ("send", "hub")
-    ])
+])

@@ -49,9 +49,7 @@ class Battle:
             except KeyError:
                 delay = 0
             self.timeline.addaction(action, delay)
-            print(being.name, "has", action.name + "'d",
-                ', '.join([target.name for target in action.targets]) + "!")
-
+            action.listeners["choosen"](action)
             being.last_act = action
             self.rules['schedule'](self, being)
 
@@ -62,7 +60,7 @@ class Battle:
         at("actions")
         for action in self.timeline.actions():
             info(action)
-            action.listners['exec'](action)
+            action.listeners['exec'](action)
 
     def statuses(self):
         """
@@ -94,7 +92,6 @@ class Battle:
                         self.end = True
                     else:
                         print(len(self.beings), "beings left")
-
 
     def remove_being(self, being):
         at("remove_being")

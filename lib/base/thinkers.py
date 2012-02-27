@@ -43,12 +43,14 @@ def pchoice(choices, extra=None, query="Choice? "):
             choices = dict(zip(namelist, choicelist))
 
     for num, name in enumerate(namelist):
+        printname = name[0].upper() + name[1:]
+        #Because capitalize and title mess up things like "Dwarf II"
         if not extra:
-            print("{}: {}".format(num, name))
+            print("{}: {}".format(num, printname))
         else:
             extraname, code = extra
             choice = choices[name]
-            print("{}: {}, {}: {}".format(num, name, extraname, eval(code)))
+            print("{}: {}, {}: {}".format(num, printname, extraname, eval(code)))
     choicename = None
     while not choicename:
         try:

@@ -25,7 +25,7 @@ def speed(battle, being):
     speed = being.stats["speed"]
     if being.last_act is not None:
         speed += being.last_act.data["speed"]
-        print("{}'s {} has {} speed".format(being.name, being.last_act.name, speed))
+        print("{}'s {} has taken {} turns".format(being.name, being.last_act.name, int(speed)))
     battle.timeline.addbeing(being, int(speed))
 
 @rule('get_actions')
