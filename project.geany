@@ -16,18 +16,21 @@ long_line_behaviour=1
 long_line_column=80
 
 [files]
-current_page=0
-FILE_NAME_0=1005;Python;0;16;0;1;0;/home/glycan/QFTSOM/main.py;0;4
-FILE_NAME_1=9;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/config.py;0;4
-FILE_NAME_2=0;Python;0;16;0;1;0;/home/glycan/QFTSOM/game/__init__.py;0;4
-FILE_NAME_3=652;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/action.py;0;4
-FILE_NAME_4=3260;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/battle.py;0;4
-FILE_NAME_5=581;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/simple.py;0;4
-FILE_NAME_6=741;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/does.py;0;4
-FILE_NAME_7=2952;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/fancy.py;0;4
-FILE_NAME_8=1156;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/being.py;0;4
-FILE_NAME_9=1087;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/base/actions.py;0;4
-FILE_NAME_10=2284;Python;0;16;0;1;0;/home/glycan/QFTSOM/game/defaults.py;0;4
+current_page=8
+FILE_NAME_0=1037;Python;0;16;0;1;0;/home/glycan/QFTSOM/main.py;0;4
+FILE_NAME_1=2645;Python;0;16;0;1;0;/home/glycan/I/Serv/user.py;0;4
+FILE_NAME_2=1392;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/battle.py;0;4
+FILE_NAME_3=5022;Python;0;16;0;1;0;/home/glycan/QFTSOM/game/nodeutils.py;0;4
+FILE_NAME_4=258;Python;0;16;0;1;0;/home/glycan/QFTSOM/game/nodemap.py;0;4
+FILE_NAME_5=25;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/config.py;0;4
+FILE_NAME_6=441;Python;0;16;0;1;0;/home/glycan/QFTSOM/api/thinker.py;0;4
+FILE_NAME_7=851;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/simple.py;0;4
+FILE_NAME_8=3817;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/limb.py;0;4
+FILE_NAME_9=3359;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/fancy.py;0;4
+FILE_NAME_10=1115;Python;0;16;0;1;0;/home/glycan/QFTSOM/lib/base/actions.py;0;4
+FILE_NAME_11=1435;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/does.py;0;4
+FILE_NAME_12=1965;Python;0;16;0;1;0;/home/glycan/QFTSOM/game/defaults.py;0;4
+FILE_NAME_13=358;Python;0;16;0;1;0;/home/glycan/QFTSOM/core/shared.py;0;4
 
 [build-menu]
 EX_00_LB=Run

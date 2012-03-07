@@ -123,7 +123,7 @@ def custombattle(dummy_arg):
 
 def ideas(dummy_arg):
     "Writes an idea with a name to a file"
-    s = input("What is your idea/suggestion/feedback? (One submit per idea)")
+    s = input("What is your idea/suggestion/feedback? (One submit per idea)\n")
     from core.shared import name
     open("ideas", "a").write(name + ": " + s + "\n")
     print("Idea/feedback/suggestion submitted.")

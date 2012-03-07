@@ -5,8 +5,6 @@ Starts the game.
 
 from pdb import pm
 import sys, struct
-
-import game
 from core import shared, config
 
 if config.DEBUG >= 3:
@@ -30,11 +28,10 @@ class Wrap:
 
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(50)
+    sys.setrecursionlimit(200)
     #prevents infinite recursive loops from wiping out original context
     sys.stdout = Wrap(sys.stdout)
     #ensures that output gets past wraping
-    print(".")#Corrects a client bug
     print("This is QFTSOM 0.3. In lieu of a proper interface, use the numbers. "
           " Failure to do so can cause crashs.")
 
@@ -42,4 +39,5 @@ if __name__ == "__main__":
         shared.name = input()
         #Sets player name, which is the first input if run by Socket'd
 
+    import game
     print(game.nodemap.travel())

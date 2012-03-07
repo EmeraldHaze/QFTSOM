@@ -18,7 +18,7 @@ finger = api.Limb("finger", [poke])
 arm    = api.Limb("arm", [hit])
 
 baseman = api.Being([finger], manthinker, {"HP": 5})
-player = baseman.instance("Player", pthinker, statchanges={"HP":1})
+player = baseman.instance(shared.name, pthinker, statchanges={"HP":1})
 oddman = baseman.instance("Oddball", oddthinker)
 man    = baseman.instance("Man")
 man2   = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})

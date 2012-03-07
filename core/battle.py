@@ -35,7 +35,6 @@ class Battle:
             self.rules["tick"](self)
             self.timeline.next_tick()
 
-
     def choices(self):
         """
         Queries every being for an action, and schedules it, with some cleanup
@@ -96,10 +95,17 @@ class Battle:
     def remove_being(self, being):
         at("remove_being")
         line = self.timeline.being
-        for index, tick in enumerate(line):
-            #Loops over all turns in the future
-            line[index] = [item for item in tick if item != being]
-            #Removes the departed being from this tick
+        for tick, beings in enumerate(line):
+            #loops over all turns
+            if tick > self.timeline.tick:
+                #if it's in the future
+                try:
+                    beings.remove(being)
+                    #since the identifier "beings" refers to the object also
+                    #refered to by self.timeline.being[tick], this changes the timeline
+                except ValueError:
+                    pass
+                    #the being is not scheduled for this tick
         del self.beings[being.name]
         self.being_list.remove(being)
 

@@ -1,0 +1,49 @@
+2012-03-06 15:02:41-0500 [-] Log opened.
+2012-03-06 16:47:00-0500 [-] Received unhandled keyID: '\x1a'
+2012-03-06 16:47:03-0500 [-] Received unhandled keyID: '\x1a'
+2012-03-06 16:47:07-0500 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "/usr/lib/python2.7/dist-packages/twisted/python/log.py", line 84, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/usr/lib/python2.7/dist-packages/twisted/python/log.py", line 69, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/usr/lib/python2.7/dist-packages/twisted/python/context.py", line 118, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/usr/lib/python2.7/dist-packages/twisted/python/context.py", line 81, in callWithContext
+	    return func(*args,**kw)
+	--- <exception caught here> ---
+	  File "/usr/lib/python2.7/dist-packages/twisted/internet/selectreactor.py", line 146, in _doReadOrWrite
+	    why = getattr(selectable, method)()
+	  File "/usr/lib/python2.7/dist-packages/twisted/internet/process.py", line 257, in doRead
+	    return fdesc.readFromFD(self.fd, self.dataReceived)
+	  File "/usr/lib/python2.7/dist-packages/twisted/internet/fdesc.py", line 94, in readFromFD
+	    callback(output)
+	  File "/usr/lib/python2.7/dist-packages/twisted/internet/process.py", line 260, in dataReceived
+	    self.proc.childDataReceived(self.name, data)
+	  File "/usr/lib/python2.7/dist-packages/twisted/internet/_posixstdio.py", line 88, in childDataReceived
+	    self.protocol.dataReceived(data)
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/insults/insults.py", line 431, in dataReceived
+	    self.terminalProtocol.keystrokeReceived(ch, None)
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/recvline.py", line 198, in keystrokeReceived
+	    m()
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/recvline.py", line 328, in handle_RETURN
+	    return RecvLine.handle_RETURN(self)
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/recvline.py", line 256, in handle_RETURN
+	    self.lineReceived(line)
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/manhole.py", line 227, in lineReceived
+	    more = self.interpreter.push(line)
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/manhole.py", line 86, in push
+	    more = self.runsource(source, self.filename)
+	  File "/usr/lib/python2.7/code.py", line 87, in runsource
+	    self.runcode(code)
+	  File "/usr/lib/python2.7/dist-packages/twisted/conch/manhole.py", line 96, in runcode
+	    code.InteractiveInterpreter.runcode(self, *a, **kw)
+	  File "/usr/lib/python2.7/code.py", line 103, in runcode
+	    exec code in self.locals
+	  File "<console>", line 1, in <module>
+	    
+	  File "/usr/lib/python2.7/site.py", line 374, in __call__
+	    raise SystemExit(code)
+	exceptions.SystemExit: None
+	
+2012-03-06 16:47:07-0500 [-] Main loop terminated.

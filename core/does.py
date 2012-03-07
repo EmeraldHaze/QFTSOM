@@ -23,6 +23,7 @@ def battle(arg):
         arg.append([])
         #Pads the arg too 3 elements
     debug(arg)
+    #import pdb;pdb.set_trace()
     args = map(_parsearg, arg, game.defaults.battle.args)
     b = core.Battle(*args)
     b.start()

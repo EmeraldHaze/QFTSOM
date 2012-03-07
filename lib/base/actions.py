@@ -32,6 +32,12 @@ def basic_choosen(action):
                     )
                 )
 
-null = Action("pass", {"exec":lambda self:print("%s does nothing.")}, {"speed": 0}, mint=0, maxt=0)
+null = Action(
+    "pass",
+    {"exec": (lambda self: print("%s does nothing." % self.actor.name))},
+    {"speed": 0},
+    mint=0,
+    maxt=0
+)
 
 

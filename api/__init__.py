@@ -7,6 +7,6 @@ from api.being import Being, BeingInst
 from api.thinker import Thinker
 from api.belong import Belong
 from api.limb import Limb
-from api.action import Action
+from api.action import Action, ActionFactory
 from api.status import Status
 from api.rule import rule, Rule

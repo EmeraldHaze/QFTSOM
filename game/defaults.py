@@ -40,12 +40,13 @@ class Defaults:
             return self.made[attr]
         else:
             value = self.defaults[attr]
-            try:
+            if "__call__" in dir(value):
+                #if it has a call interface,  and is therefor lazy
                 value = value(self.module)
-                #If it's lazy
+                #call it with it's module, which is also lazily imported
                 self.made[attr] = value
                 return value
-            except TypeError:
+            else:
                 #If it's not not lazy
                 self.made[attr] = value
                 return value
@@ -60,20 +61,21 @@ actions = Defaults("lib.base.actions", {
 
 ##Other
 
-battle = Defaults(["lib.base.rules", "lib.base.exits", "lib.limb"], {
-    "args": [
-        #beings
-        {},
-        #exits
-        lambda m: {
-                "win": m["exits"].win,
-                "die": m["limb"].limbdie
-            },
-        #rules
-        lambda m: {
-                "schedule":     m["rules"].speed,
-                "get_actions":  m["rules"].get_all,
-                "wipe_hist":    m["rules"].wipe_limbs
-            }
+battle = Defaults(["lib.base.rules", "lib.base.exits", "lib.limb", "game.defaults"], {
+    "beings": {},
+    "exits": lambda m: {
+            "win": m["exits"].win,
+            "die": m["limb"].limbdie
+        },
+    "rules": lambda m: {
+            "schedule":     m["rules"].speed,
+            "get_actions":  m["rules"].get_all,
+            "wipe_hist":    m["rules"].wipe_limbs
+        },
+    "args": lambda m: [
+        m["defaults"].battle.beings,
+        m["defaults"].battle.exits,
+        m["defaults"].battle.rules
     ]
 })
+

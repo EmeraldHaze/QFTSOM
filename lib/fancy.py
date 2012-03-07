@@ -87,8 +87,8 @@ bag  = api.Limb("bag")
 Humanoid = api.Being((arm, sym(arm), sym(leg), bag), simplethink, {'STR': 13,'INT': 7})
 dwarf  = Humanoid.instance("Dwarf I", belongs=[axe, helm])
 dwarf2 = Humanoid.instance("Dwarf II", belongs=[axe, helm])
-rouge  = Humanoid.instance("Rouge", thinkers.pthinker, [knife, bomb, shoes], {"STR":-3, "INT":+5})
-mage   = Humanoid.instance('Magus', thinkers.pthinker, [staff], {'STR':-3, 'INT':+5})
+rouge  = Humanoid.instance("Rouge " + shared.name, thinkers.pthinker, [knife, bomb, shoes], {"STR":-3, "INT":+5})
+mage   = Humanoid.instance("Smart " + shared.name, thinkers.pthinker, [staff], {'STR':-3, 'INT':+5})
 
 game = api.Node([], [], [
     ("battle",

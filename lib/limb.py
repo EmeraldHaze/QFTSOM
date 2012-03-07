@@ -57,10 +57,24 @@ def limbpoison(self):
     self.limb.status_list.append(self)
     being = self.being
     self.limb.data["HP"] -= self.poison
-    print("{}'s {} took {} DMG from poison, it now has {}".format(being.name, self.limb.name, self.poison, self.limb.data["HP"]))
+    print("{}'s {} took {} DMG from poison, it now has {} HP".format(
+        being.name,
+        self.limb.name,
+        self.poison,
+        self.limb.data["HP"])
+    )
     self.poison -= 1
-    if not self.poison:
+    if not self.poison or self.limb.data["HP"] < 1:
         being.status_list.remove(self)
+
+def limbchoosen(self):
+    target_limb = self.targets[0]
+    print("{} has {}'d {}'s {}!".format(
+        self.actor.name,
+        self.name,
+        target_limb.being.name,
+        target_limb.name
+    ))
 
 def limbexec(self):
     targetlimb = self.targets[0]
@@ -87,10 +101,16 @@ def limbexec(self):
 def enchant(self):
     self.targets[0].data['PWR'] *= 2
 
+@api.ActionFactory
+def actf(name, **data):
+    act = api.Action(name, {"exec": limbexec, "choosen": limbchoosen}, data)
+    return act
+
+
 ###REAL###
-bite = api.Action('bite', {"exec":limbexec}, {"dmg":5, "poison":10, 'speed':2})
-whip = api.Action('whip', {'exec':limbexec}, {"dmg":10, 'speed':2})
-sting = api.Action('sting', {'exec':limbexec}, {'dmg':2, 'poison':20, 'speed':2})
+bite = actf('bite', dmg=5, poison=10, speed=2)
+whip = actf('whip', dmg=5, speed=2)
+sting = actf('sting', dmg=2, poison=10, speed=2)
 
 fang = api.Limb("fang", [bite],  data={"HP":5, 'evade':60})
 barb = api.Limb("barb", [sting], data={"HP":10, 'evade':40})
@@ -102,9 +122,9 @@ python = snake.instance('Python')
 monty  = snake.instance('Montey')
 flylord = api.Being((head, barb), loony).instance("Beezulbub")
 
-stab  = api.Action('stab',  {'exec':limbexec}, {'dmg':5 , 'speed':1, 'poison':5})
-punch = api.Action('punch', {'exec':limbexec}, {'dmg':15, 'speed':2})
-kick  = api.Action('kick',  {'exec':limbexec}, {'dmg':20, 'speed':2})
+stab  = actf('stab', dmg=5, speed=1, poison=5)
+punch = actf('punch', dmg=15, speed=4)
+kick  = actf("kick", dmg=20, speed=2)
 
 knife = api.Belong("knife", 'arm', {}, [stab])
 arm   = api.Limb("arm", [punch], 'arm', {"HP":30, "evade":20}, {'speed':0.5})
@@ -113,7 +133,7 @@ torso = api.Limb("torso", data={"HP":60, "vital":True}, stats={"speed":1})
 leg   = api.Limb("leg", [kick], data={"HP":30, "evade":20}, stats={"speed":1})
 
 man = api.Being((torso, (head, sym(fang)), sym(arm), sym(leg)), pthinker, {"speed": -3}, [knife])
-player = man.instance("Player")
+player = man.instance(shared.name)
 mad = man.instance("Huminoid Taco", loony, statchanges={"speed":1})
 
 game = api.Net(0, {
