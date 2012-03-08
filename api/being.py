@@ -9,7 +9,8 @@ class Being:
     Represents a possible entity in the game world
     Has a thinker, limbs, stats, belongs, data
     """
-    def __init__(self, body, thinker, stats=None, belongs=None, data=None, rules=None):
+    def __init__(self, body, thinker,
+                 stats=None, belongs=None, data=None, rules=None):
         if stats is None:
             stats = defaults.beings.stats
         if belongs is None:

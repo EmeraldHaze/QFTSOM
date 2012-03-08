@@ -1,3 +1,4 @@
 *.no
 *.pyc
 __pycache__
+*.geany

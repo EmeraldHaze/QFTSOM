@@ -5,6 +5,7 @@ for several classes (Beings, etc) and objects (Battles, eventually Haggles)
 
 from importlib import import_module
 
+
 class Defaults:
     """
     This is a class used for various defaults. It supports lazy values, so
@@ -61,21 +62,27 @@ actions = Defaults("lib.base.actions", {
 
 ##Other
 
-battle = Defaults(["lib.base.rules", "lib.base.exits", "lib.limb", "game.defaults"], {
-    "beings": {},
-    "exits": lambda m: {
-            "win": m["exits"].win,
-            "die": m["limb"].limbdie
-        },
-    "rules": lambda m: {
-            "schedule":     m["rules"].speed,
-            "get_actions":  m["rules"].get_all,
-            "wipe_hist":    m["rules"].wipe_limbs
-        },
-    "args": lambda m: [
-        m["defaults"].battle.beings,
-        m["defaults"].battle.exits,
-        m["defaults"].battle.rules
-    ]
-})
-
+battle = Defaults([
+        "lib.base.rules",
+        "lib.base.exits",
+        "lib.limb",
+        "game.defaults"
+    ],
+    {
+        "beings": {},
+        "exits": lambda m: {
+                "win": m["exits"].win,
+                "die": m["limb"].limbdie
+            },
+        "rules": lambda m: {
+                "schedule":     m["rules"].speed,
+                "get_actions":  m["rules"].get_all,
+                "wipe_hist":    m["rules"].wipe_limbs
+            },
+        "args": lambda m: [
+            m["defaults"].battle.beings,
+            m["defaults"].battle.exits,
+            m["defaults"].battle.rules
+            ]
+    }
+)

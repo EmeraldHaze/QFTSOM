@@ -1,4 +1,5 @@
-import api, lib
+import api
+import lib
 from api.limb import sym
 from lib.base import actions, thinkers, statuses, exits, rules
 from lib.simple import manthinker as simplethink
@@ -26,16 +27,26 @@ dmg_rules = {\
         target.stats['MDEF'])*self.data['change']"}
 
 
-def healmaker(name, heal, stat, delay, cost, type="magic"):
-    "Returns a healing action"
-    healvalue = 30
+@api.ActionFactory
+def healf(name, heal, stat, **data):
+    if "type" not in data:
+        data["type"] = "magic"
 
     def healer(self):
         self.targets[0].stats[stat] += heal
         print(self.targets[0].name, "has gained", heal, stat)
 
-    return api.Action(name, {"exec": healer, "init": completeinit},
-        data={"type": type, "MPC": cost, "delay": delay})
+    return api.Action(name, {"exec": healer, "init": completeinit}, data=data)
+
+
+@api.ActionFactory
+def attackf(name, **data):
+    if "change" not in data:
+        data["change"] = 1
+    return api.Action(name,
+        {"exec": actions.complete_exec, "init": completeinit},
+        data=data
+    )
 
 
 def completeinit(self):
@@ -58,37 +69,67 @@ def boom(self):
             print(being.name, "lost ", dmg, "vital energy in the blast!")
 
     self.actor.rmbelong("Bomb")
+    self.actor.actions.remove(self)
 
-bolt = api.Action('bolt', {"exec":actions.complete_exec, "init":completeinit},
-    data = {"type":"magic", "MPC":60, 'change':1})
-hack = api.Action('hack', {"exec":actions.complete_exec, "init":completeinit},
-    data = {"type":"melee", 'MPC': 0, 'change':1})
-heal = healmaker ("heal", 30, "HP", 1, 30)
-rest = healmaker ("rest", 20, "MP", 0,  0)
 
-boom = api.Action("explode", {"exec":boom, "init":completeinit},
-    {"delay":1, "type":"melee", "MPC":0, "change":1}, -1, 0)
-stab = api.Action("stab"   , {"exec":actions.complete_exec, "init":completeinit},
-    data = {"type":"melee", "MPC":0, "change":1, "status":statuses.poison, "data":('poison', 30)})
+bolt = attackf('bolt', type="magic", MPC=60)
+hack = attackf('hack', type="melee", MPC=0)
+heal = healf("heal", 30, "HP", delay=1, MPC=30)
+rest = healf("rest", 20, "MP", delay=0, MPC=0, type="melee")
 
-staff = api.Belong('Staff', "arm", {"MAXMP":10, "DEF":10, "MAXWPNDMG":15}, [bolt, heal, rest])
-axe   = api.Belong("Axe",   "arm", {"STR":20, "MAXWPNDMG":  10}, [hack])
-helm  = api.Belong("Helm",  "arm", {"DEF":10, "MDEF":5, "MAXWPNDMG":5})
+boom = api.Action(
+        "explode",
+        {"exec": boom, "init": completeinit},
+        {"delay": 1, "type": "melee", "MPC": 0, "change": 1},
+        -1,
+        0
+    )
 
-knife = api.Belong("Knife", "arm", {"INT":10, "STR":5}, [stab])
-shoes = api.Belong("Shoes", "leg", {"Dodge": 600, "INT":5})
-bomb  = api.Belong("Bomb",  "bag", {}, [boom])
+stab = attackf(
+    "stab",
+    type="melee",
+    MPC=0,
+    status=statuses.poison,
+    status_data={"poison": 5}
+)
+
+staff = api.Belong(
+    'Staff',
+    "arm",
+    {"MAXMP": 10, "DEF": 10, "MAXWPNDMG": 15},
+    [bolt, heal, rest]
+)
+axe = api.Belong("Axe",  "arm", {"STR": 20, "MAXWPNDMG": 10}, [hack])
+helm = api.Belong("Helm", "arm", {"DEF": 10, "MDEF": 5, "MAXWPNDMG": 5})
+
+knife = api.Belong("Knife", "arm", {"INT": 10, "STR": 5}, [stab])
+shoes = api.Belong("Shoes", "leg", {"Dodge": 600, "INT": 5})
+bomb = api.Belong("Bomb",  "bag", {}, [boom])
 
 arm = api.Limb("arm")
-arm  = api.Limb("arm")
-leg  = api.Limb("leg")
-bag  = api.Limb("bag")
+leg = api.Limb("leg")
+bag = api.Limb("bag")
 
-Humanoid = api.Being((arm, sym(arm), sym(leg), bag), simplethink, {'STR': 13,'INT': 7})
-dwarf  = Humanoid.instance("Dwarf I", belongs=[axe, helm])
+Humanoid = api.Being(
+    (arm, sym(arm), sym(leg), bag),
+    simplethink,
+    {'STR': 13, 'INT': 7}
+)
+
+dwarf = Humanoid.instance("Dwarf I",  belongs=[axe, helm])
 dwarf2 = Humanoid.instance("Dwarf II", belongs=[axe, helm])
-rouge  = Humanoid.instance("Rouge " + shared.name, thinkers.pthinker, [knife, bomb, shoes], {"STR":-3, "INT":+5})
-mage   = Humanoid.instance("Smart " + shared.name, thinkers.pthinker, [staff], {'STR':-3, 'INT':+5})
+rouge = Humanoid.instance(
+    "Rouge " + shared.name,
+    thinkers.pthinker,
+    [knife, bomb, shoes],
+    {"STR": -3, "INT": 5}
+)
+mage = Humanoid.instance(
+    "Smart " + shared.name,
+    thinkers.pthinker,
+    [staff],
+    {'STR': -3, 'INT': 5}
+)
 
 game = api.Node([], [], [
     ("battle",

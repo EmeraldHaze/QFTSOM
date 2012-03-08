@@ -1,6 +1,8 @@
-from api import Action
+from api import Action, ActionFactory
 from random import randint
 
+
+@ActionFactory
 def simplemaker(name, dmg):
     def sexec(self):
         target = self.targets[0]
@@ -8,21 +10,25 @@ def simplemaker(name, dmg):
         target.stats["HP"] -= dmg
     return Action(name, {"exec": sexec, "delay": 0})
 
+
 def complete_exec(self):
     rules = self.dmgrules
     if "status" in self.data:
-        status = self.data["status"].instance(self.targets[0], self.battle)
+        status = self.data["status"].instance(
+            self.targets[0],
+            self.battle,
+            **self.data["status_data"]
+        )
         self.targets[0].status_list.append(status)
-    if "data" in self.data:
-        name, value = self.data["data"]
-        self.targets[0].data[name] = value
     for target in self.targets:
         dmg = eval(rules[self.data["type"]])
         target.stats["HP"] -= dmg
         print(target.name, "lost", dmg, "health!")
 
+
 def manainit(self):
     self.actor.stats['MP'] -= self.data["MPC"]
+
 
 def basic_choosen(action):
     print("{} has {}'d {}!".format(
@@ -32,12 +38,14 @@ def basic_choosen(action):
                     )
                 )
 
+
 null = Action(
     "pass",
-    {"exec": (lambda self: print("%s does nothing." % self.actor.name))},
+    {
+        "exec": (lambda self: print("%s does nothing." % self.actor.name)),
+        "choosen": (lambda self: print("%s passes." % self.actor.name))
+    },
     {"speed": 0},
     mint=0,
     maxt=0
 )
-
-

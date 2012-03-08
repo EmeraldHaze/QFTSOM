@@ -2,7 +2,9 @@
 This module contains those functions for those does that can be used in
 node commands. To add a command, simply add a function with the command's name.
 """
+
 from core.config import debug, at, info
+
 
 def say(arg):
     print(arg)
@@ -14,7 +16,8 @@ def battle(arg):
     Any element except the former can be ommited. If both are ommited, the
     second pair of braces is unncerry
     """
-    import game, core
+    import game
+    import core
     at("does.battle")
     if type(arg[0]) is not list:
         #If it's not a nested list

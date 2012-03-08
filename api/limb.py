@@ -8,7 +8,7 @@ class Limb:
     data which could, for example, have an 'HP' key.
     """
     def __init__(self, name,
-            actions=None, equip=None, data=None, stats=None, rules=None):
+            actions=None, data=None, stats=None, rules=None, equip=None):
 
         if actions is None:
             actions = []
@@ -81,8 +81,13 @@ class LimbInst:
             self.uplimb.attached.remove(self)
 
     def applydatarules(self):
-        for name, value in self.rules:
-            self.data[name] = eval(value)
+        for name, value in dict(self.rules).items():
+            #self.rules is sometimes a dict and sometimes a [(k, v)*]
+            try:
+                self.data[name] = eval(value)
+            except TypeError:
+                #if it's not code
+                self.data[name] = value
 
     def applystats(self):
         for stat, value in self.stats.items():

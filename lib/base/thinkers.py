@@ -1,5 +1,6 @@
 from api import Thinker
 
+
 def think_maker(gettarget, getaction):
     @Thinker
     def thinker(self):
@@ -9,7 +10,8 @@ def think_maker(gettarget, getaction):
         return act
     return thinker
 
-def mosttarget(being, battle, cmp = int.__lt__):
+
+def mosttarget(being, battle, cmp=int.__lt__):
     target = [None, float("inf")]
     for enemy in battle.being_list:
         if enemy is not being:
@@ -18,15 +20,17 @@ def mosttarget(being, battle, cmp = int.__lt__):
                 target = [enemy, hp]
     return target[0]
 
+
 least = lambda being, battle: mosttarget(being, battle, int.__gt__)
 firstact = lambda being, battle: being.actions[0]
+
 
 def pchoice(choices, extra=None, query="Choice? "):
     """
     This function gets a choice from the user.
-    choices should be {name:value}, where value is returned if name is choosen
-    It can also be a iterable of values with name attributes
-    extra, if set, prints out some extra information. It should be (name: expr),
+    choices should be {name:value}, where value is returned if name is
+    choosen It can also be a iterable of values with name attributes extra,
+    if set, prints out some extra information. It should be (name: expr),
     and name: eval(expr) is printed as part of the name
     """
     if type(choices) == dict:
@@ -50,7 +54,12 @@ def pchoice(choices, extra=None, query="Choice? "):
         else:
             extraname, code = extra
             choice = choices[name]
-            print("{}: {}, {}: {}".format(num, printname, extraname, eval(code)))
+            print("{}: {}, {}: {}".format(
+                num,
+                printname,
+                extraname,
+                eval(code)
+            ))
     choicename = None
     while not choicename:
         try:
@@ -63,6 +72,15 @@ def pchoice(choices, extra=None, query="Choice? "):
                 print("Bad choice! Bad!")
     return choices[choicename]
 
-ptarget = lambda being, battle: pchoice(battle.being_list, ("HP", "choice.stats['HP']"), "Target? ")
-paction = lambda being, battle: pchoice(being.actions, ("MP", "choice.data['MPC']"), "Actions? ")
+
+ptarget = lambda being, battle: pchoice(
+        battle.being_list,
+        ("HP", "choice.stats['HP']"),
+        "Target? "
+    )
+paction = lambda being, battle: pchoice(
+        being.actions,
+        ("MP", "choice.data['MPC']"),
+        "Actions? "
+    )
 pthinker = think_maker(ptarget, paction)

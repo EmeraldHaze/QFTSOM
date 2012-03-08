@@ -1,10 +1,13 @@
-import api, lib
+import api
+import lib
 from lib.base import thinkers, actions, exits, rules
 from core import shared
 
 shared.blank()
-shared.statrules  = [("MAXHP", "self.stats['HP']")]
-shared.modules["simple"] = "A basic no-frills module. Requires nothing, but will probably not work with anything that requires something, like the speed scheduler"
+shared.statrules = [("MAXHP", "self.stats['HP']")]
+shared.modules["simple"] = """A basic no-frills module. Requires nothing,
+but probably won't work with anything that requires something, like the
+speed scheduler"""
 shared.current_module = "simple"
 
 manthinker = thinkers.think_maker(thinkers.mosttarget, thinkers.firstact)
@@ -12,7 +15,7 @@ oddthinker = thinkers.think_maker(thinkers.least,      thinkers.firstact)
 pthinker   = thinkers.think_maker(thinkers.ptarget,    thinkers.firstact)
 
 poke = actions.simplemaker("poke", 1)
-hit  = actions.simplemaker("hit" , 2)
+hit  = actions.simplemaker("hit", 2)
 
 finger = api.Limb("finger", [poke])
 arm    = api.Limb("arm", [hit])

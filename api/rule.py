@@ -1,5 +1,6 @@
 from core import shared
 
+
 ruletypes = {
     "schedule": ("How a being choice is be scheduled (timeline)", ["being"]),
     "get_actions": ("How to build a being's actionlist", ["being"]),
@@ -8,6 +9,7 @@ ruletypes = {
     "tick": ("What to do each tick", []),
     "being_init": ("What to do when a being is init'd", ["being"])
 }
+
 
 class Rule:
     """

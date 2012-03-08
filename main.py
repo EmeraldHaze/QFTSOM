@@ -3,12 +3,11 @@
 Starts the game.
 """
 
+import sys
+import struct
 from pdb import pm
-import sys, struct
 from core import shared, config
 
-if config.DEBUG >= 3:
-    pdb.set_trace()
 
 class Wrap:
     """
@@ -32,12 +31,16 @@ if __name__ == "__main__":
     #prevents infinite recursive loops from wiping out original context
     sys.stdout = Wrap(sys.stdout)
     #ensures that output gets past wraping
-    print("This is QFTSOM 0.3. In lieu of a proper interface, use the numbers. "
+    print("This is QFTSOM 0.3. In lieu of a proper interface, use the numbers."
           " Failure to do so can cause crashs.")
 
     if config.GET_NAME:
         shared.name = input()
         #Sets player name, which is the first input if run by Socket'd
+    else:
+        shared.name = "Glycan"
 
     import game
+    #if it was imported before, lib and compony would of loaded without the
+    #changes we just made
     print(game.nodemap.travel())

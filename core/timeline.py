@@ -1,6 +1,7 @@
 from collections import deque
 from core.config import info, at, debug
 
+
 class Timeline:
     """A timeline with a number of types of slot (lines) for each tick, and a
     pointer (E.g. each tick has a number of named list

@@ -21,7 +21,7 @@ battle_order = ("beings", "exits", "rules")
 
 modules = {}
 current_module = "Not set"
-registry = defaultdict(lambda : {}, {"rules": defaultdict(lambda : {})})
+registry = defaultdict(lambda *a: {}, {"rules": defaultdict(lambda *a: {})})
 reg_list = []
 
 

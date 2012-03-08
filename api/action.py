@@ -3,12 +3,14 @@ from core.utils import copy
 from game import defaults
 from inspect import getargspec
 
+
 class ActionFactory:
     def __init__(self, func):
             self.func = func
 
     def __call__(self, *args, **kwargs):
         return self.func(*args, **kwargs)
+
 
 class Action:
     def __init__(self, name, listeners, data={}, mint=1, maxt=1):
@@ -22,7 +24,7 @@ class Action:
         """
         self.name = name
         self.listeners = defaultdict(
-            lambda : (lambda *args: None),
+            lambda *a: (lambda *args: None),
             defaults.actions.listeners
         )
         self.listeners.update(listeners)

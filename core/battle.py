@@ -2,6 +2,7 @@ from collections import defaultdict
 from core.timeline import Timeline
 from core.config import info, at, debug
 
+
 class Battle:
     """
     Represents a battle. Call start() to start it.
@@ -16,7 +17,7 @@ class Battle:
         self.end = False
         self.beings = beings
         self.named_exits = exits
-        self.rules = defaultdict(lambda : lambda *args: None, rules)
+        self.rules = defaultdict(lambda *a: lambda *args: None, rules)
         #That's a lambda which takes no arguments and returns a lambda which
         #take any arguments and retunrs None
 
@@ -102,7 +103,8 @@ class Battle:
                 try:
                     beings.remove(being)
                     #since the identifier "beings" refers to the object also
-                    #refered to by self.timeline.being[tick], this changes the timeline
+                    #refered to by self.timeline.being[tick], this changes the
+                    #timeline
                 except ValueError:
                     pass
                     #the being is not scheduled for this tick
@@ -124,7 +126,7 @@ class Battle:
         """
         Builds a dict, {dep: [exits]}
         """
-        self.exits = defaultdict(lambda : [])
+        self.exits = defaultdict(lambda *a: [])
         for exit in self.named_exits.values():
             for dep in exit.deps:
                 self.exits[dep].append(exit)

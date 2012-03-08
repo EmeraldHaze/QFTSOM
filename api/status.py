@@ -4,16 +4,18 @@ class Status:
         self.func = func
         self.name = func.__name__
 
-    def instance(self, being, battle):
-        return StatusInst(self, being, battle)
+    def instance(self, being, battle, **data):
+        return StatusInst(self, being, battle, **data)
 
 
 class StatusInst:
     "Represents a status of a specific person"
-    def __init__(self, parent, being, battle):
+    def __init__(self, parent, being, battle, **data):
         self.func = parent.func
         self.name = parent.name
         self.being = being
+        for key, value in data.items():
+            setattr(self, key, value)
 
     def __call__(self):
         self.func(self)
