@@ -1,5 +1,7 @@
 import lib
-from api import BeingInst, Exit, Rule
+from api.being import RealBeing
+from api.exit import Exit
+from api.rule import Rule
 
 
 def getchoice(*valid, query="Choice? ", change=True):
@@ -55,7 +57,7 @@ def change(battleargs):
                     print(module)
             else:
                 selectors = {\
-                    "b":   lambda item: isinstance(item, BeingInst),
+                    "b":   lambda item: isinstance(item, RealBeing),
                     "r":   lambda item: isinstance(item, Rule),
                     "e":   lambda item: isinstance(item, Exit),
                     "in":  lambda item: item.selected,

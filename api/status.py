@@ -1,14 +1,6 @@
-class Status:
-    "Represents a possible status of a being (e.g, poison)"
-    def __init__(self, func):
-        self.func = func
-        self.name = func.__name__
+from api import Real, PotentialReal
 
-    def instance(self, being, battle, **data):
-        return StatusInst(self, being, battle, **data)
-
-
-class StatusInst:
+class RealStatus(Real):
     "Represents a status of a specific person"
     def __init__(self, parent, being, battle, **data):
         self.func = parent.func
@@ -25,3 +17,12 @@ class StatusInst:
             return self.name == other
         else:
             return self.func == other
+
+
+class Status(PotentialReal):
+    "Represents a possible status of a being (e.g, poison)"
+    inst = RealStatus
+    def __init__(self, func):
+        self.func = func
+        self.name = func.__name__
+

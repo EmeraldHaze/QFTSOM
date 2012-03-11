@@ -1,22 +1,10 @@
-from core.utils import copy
 from types import MethodType
 
-
-class Thinker:
-    """
-    Represents something that makes discions as to the actions of a being
-    Normally one function, think
-    """
-    def __init__(self, func, funcinit=(lambda self: None)):
-        self.name = func.__name__
-        self.func = func
-        self.funcinit = funcinit
-
-    def instance(self, being):
-        return ThinkerInst(self, being)
+from core.utils import copy
+from api import Real, PotentialReal
 
 
-class ThinkerInst:
+class RealThinker(Real):
     "Represents a specific thinker of a specific being"
     def __init__(self, parent, being):
         self.name = parent.name
@@ -34,3 +22,15 @@ class ThinkerInst:
         else:
             from lib.base.actions import null
             return null.instance(self.being, [], self.battle)
+
+
+class Thinker(PotentialReal):
+    """
+    Represents something that makes discions as to the actions of a being
+    Normally one function, think
+    """
+    inst = RealThinker
+    def __init__(self, func, funcinit=(lambda self: None)):
+        self.name = func.__name__
+        self.func = func
+        self.funcinit = funcinit

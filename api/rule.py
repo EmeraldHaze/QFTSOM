@@ -1,5 +1,5 @@
 from core import shared
-
+from api import Abstract
 
 ruletypes = {
     "schedule": ("How a being choice is be scheduled (timeline)", ["being"]),
@@ -11,7 +11,7 @@ ruletypes = {
 }
 
 
-class Rule:
+class Rule(Abstract):
     """
     Represents a way of doing something. Mainly a wrapper for functions.
     These functions are called when the thing the rule is about needs to be

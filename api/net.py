@@ -1,4 +1,6 @@
-class Node:
+from api import Abstract
+
+class Node(Abstract):
     """
     args: names, links, does, q, exit_
     links: names of nodes the user can go to from here.
@@ -17,7 +19,7 @@ class Node:
         self.net = False
 
 
-class Net:
+class Net(Abstract):
     def __init__(self, start, nodes, does=[]):
         """
         Start is the starting possision upon arival.

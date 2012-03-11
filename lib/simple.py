@@ -18,14 +18,15 @@ poke = actions.simplemaker("poke", 1)
 hit  = actions.simplemaker("hit", 2)
 
 finger = api.Limb("finger", [poke])
-arm    = api.Limb("arm", [hit])
+arm = api.Limb("arm", [hit])
 
 baseman = api.Being([finger], manthinker, {"HP": 5})
 player = baseman.instance(shared.name, pthinker, statchanges={"HP":1})
 oddman = baseman.instance("Oddball", oddthinker)
-man    = baseman.instance("Man")
-man2   = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})
-staffo = baseman.instance("Staffo", limbs=[arm])
+man = baseman.instance("Man")
+man2 = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})
+#superman, superarm, new being
+staffo = api.Being([arm], manthinker, {"HP": 5}).instance("Staffo")
 
 game = api.Net(0, {
     0: api.Node([], [],

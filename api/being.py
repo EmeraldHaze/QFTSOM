@@ -1,43 +1,17 @@
 from types import MethodType
+
 from game import defaults
 from core import shared
 from core.utils import copy
+from api import Real, PotentialReal
 
 
-class Being:
-    """
-    Represents a possible entity in the game world
-    Has a thinker, limbs, stats, belongs, data
-    """
-    def __init__(self, body, thinker,
-                 stats=None, belongs=None, data=None, rules=None):
-        if stats is None:
-            stats = defaults.beings.stats
-        if belongs is None:
-            belongs = []
-        if data is None:
-            data = defaults.beings.data
-
-        self.body = body
-        self.thinker = thinker
-        self.stats = stats
-        self.belongs = belongs
-        self.data = data
-
-        if rules is None:
-            from core.shared import statrules as rules
-        self.rules = rules
-
-    def instance(self, name, thinker=None, belongs=[], statchanges={},
-                    **changes):
-        return BeingInst(self, name, thinker, belongs, statchanges, changes)
-
-
-class BeingInst:
-    "Represents a specific entity in the game world"
+class RealBeing(Real):
+    """Represents a specific entity in the game world"""
     plural = "beings"
 
-    def __init__(self, parent, name, thinker, belongs, statchanges, changes):
+    def __init__(self, parent, name,
+                 thinker=None, items=[], statchanges={}, changes={}):
         copy(self, parent, 'stats', 'data')
         self.name = name
 
@@ -58,11 +32,11 @@ class BeingInst:
         self.buildbody(parent.body)
 
         self.equiped = []
-        self.belongs = []
-        self.belong_dict = {}
-        for belong in parent.belongs + belongs:
-            belong = belong.instance(self)
-            self.addbelong(belong)
+        self.items = []
+        self.item_dict = {}
+        for item in parent.items + items:
+            item = item.instance(self)
+            self.additem(item)
         self.equipall()
 
         for name, value in changes.items():
@@ -100,71 +74,97 @@ class BeingInst:
             self.limbs.append(limb)
             self.limb_dict[limb.name] = limb
 
-    def equip(self, belong, limb):
-        "Equips a belong to a limb, by names (so that you can't spoof)"
-        if belong in self.belong_dict:
-            belong = self.belong_dict[belong]
+    def equip(self, item, limb):
+        """Equips a item to a limb, by names (so that you can't spoof)"""
+        if item in self.item_dict:
+            item = self.item_dict[item]
             if limb in self.limb_dict:
                 limb = self.limb_dict[limb]
-                if belong.equip is limb.equip:
-                    if not belong.limb:
-                        if limb.belong:
-                            self.unequip(limb.belong.name)
-                        limb.belong = belong
-                        belong.limb = limb
-                        belong.applystats()
-                        self.equiped.append(belong)
-                        return True, "%s equiped to %s" % (belong.name,
+                if item.equip is limb.equip:
+                    if not item.limb:
+                        if limb.item:
+                            self.unequip(limb.item.name)
+                        limb.item = item
+                        item.limb = limb
+                        item.applystats()
+                        self.equiped.append(item)
+                        return True, "%s equiped to %s" % (item.name,
                             limb.name)
                     else:
-                        return False, "E: %s already equiped" % belong.name
+                        return False, "E: %s already equiped" % item.name
                 else:
                     return False, "E: %s can't be equiped to this limb, %s" % (
-                        belong.name, limb.name)
+                        item.name, limb.name)
             else:
                 return False, "E: No such limb, " + limb
         else:
-            return False, "E: No such belong, " + belong
+            return False, "E: No such item, " + item
 
     def equipall(self):
         "Attempts to equip everything."
-        for belong in self.belongs:
-            if not self.equip(belong.name, belong.equip)[0]:
-                if not self.equip(belong.name, "right " + belong.equip)[0]:
-                    R = self.equip(belong.name, "left " + belong.equip)
+        for item in self.items:
+            if not self.equip(item.name, item.equip)[0]:
+                if not self.equip(item.name, "right " + item.equip)[0]:
+                    R = self.equip(item.name, "left " + item.equip)
                     if not R[0]:
                         #If it didn't sucessfully equip, print the error msg.
                         print(R[1])
 
-    def unequip(self, belong):
-        "Removes an equiped belong, by name"
-        if belong in self.belong_dict:
-            belong = self.belong_dict[belong]
-            if belong.limb:
-                limb = belong.limb
-                limb.belong = None
-                belong.limb = None
-                belong.removestats()
-                self.equiped.remove(belong)
+    def unequip(self, item):
+        "Removes an equiped item, by name"
+        if item in self.item_dict:
+            item = self.item_dict[item]
+            if item.limb:
+                limb = item.limb
+                limb.item = None
+                item.limb = None
+                item.removestats()
+                self.equiped.remove(item)
             else:
                 return "Not equipped"
         else:
-            return "No such belong"
+            return "No such item"
 
-    def addbelong(self, belong):
-        "Adds a belong to this being (this function does it right)"
-        self.belongs.append(belong)
-        self.belong_dict[belong.name] = belong
+    def additem(self, item):
+        "Adds a item to this being (this function does it right)"
+        self.items.append(item)
+        self.item_dict[item.name] = item
 
-    def rmbelong(self, belong):
-        "Removes a belonging from this being"
-        if type(belong) == str:
-            belong = self.belong_dict[belong]
-        self.unequip(belong.name)
-        self.belongs.remove(belong)
-        del self.belong_dict[belong.name]
+    def rmitem(self, item):
+        "Removes a iteming from this being"
+        if type(item) == str:
+            item = self.item_dict[item]
+        self.unequip(item.name)
+        self.items.remove(item)
+        del self.item_dict[item.name]
 
     def __str__(self):
         return self.name
 
     __repr__ = __str__
+
+
+class Being(PotentialReal):
+    """
+    Represents a possible entity in the game world
+    Has a thinker, limbs, stats, items, data
+    """
+    inst = RealBeing
+    def __init__(self, body, thinker,
+                 stats=None, items=None, data=None, rules=None):
+        if stats is None:
+            stats = defaults.beings.stats
+        if items is None:
+            items = []
+        if data is None:
+            data = defaults.beings.data
+
+        self.body = body
+        self.thinker = thinker
+        self.stats = stats
+        self.items = items
+        self.data = data
+
+        if rules is None:
+            from core.shared import statrules as rules
+        self.rules = rules

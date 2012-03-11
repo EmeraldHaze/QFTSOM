@@ -27,7 +27,7 @@ class Wrap:
 
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(200)
+    sys.setrecursionlimit(50)
     #prevents infinite recursive loops from wiping out original context
     sys.stdout = Wrap(sys.stdout)
     #ensures that output gets past wraping
@@ -39,8 +39,8 @@ if __name__ == "__main__":
         #Sets player name, which is the first input if run by Socket'd
     else:
         shared.name = "Glycan"
-
-    import game
+    import api
+    from game.nodemap import nodemap
     #if it was imported before, lib and compony would of loaded without the
     #changes we just made
-    print(game.nodemap.travel())
+    print(nodemap.travel())

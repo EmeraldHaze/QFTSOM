@@ -6,8 +6,8 @@ limb_datarules = []
 statrules = []
 #These rules apply to being.stats
 
-belongdata = []
-#These rules apply to belong.data
+itemdata = []
+#These rules apply to item.data
 
 name = "no-name"
 #The player's name, used for logs and suchlike
@@ -39,7 +39,7 @@ def register(obj):
 
 
 def blank():
-    global limb_datarules, statrules, belongdata
+    global limb_datarules, statrules, itemdata
     limb_datarules = []
     statrules = []
-    belongdata = []
+    itemdata = []

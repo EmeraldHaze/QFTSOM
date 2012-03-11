@@ -1,51 +1,14 @@
 from core.utils import copy
+from api import Real, PotentialReal
 
-
-class Limb:
-    """
-    Represents a possible limb of a being
-    Normally used as equip slots, but exits and actions can be based on their
-    data which could, for example, have an 'HP' key.
-    """
-    def __init__(self, name,
-            actions=None, data=None, stats=None, rules=None, equip=None):
-
-        if actions is None:
-            actions = []
-        if data is None:
-            data = {}
-        if stats is None:
-            stats = {}
-
-        self.name = name
-        if equip:
-            self.equip = equip
-        else:
-            self.equip = name
-
-        self.actions = actions
-        self.data = data
-        self.stats = stats
-        self.sym = False
-        #This will be used for symetric-ness
-        if rules is None:
-            from core.shared import limb_datarules as rules
-        self.rules = rules
-
-    def instance(self, being, uplimb=None, prefix=''):
-        return LimbInst(self, being, uplimb, prefix)
-
-
-class LimbInst:
-    """
-    Represents a specific being's specific limb
-    """
-    def __init__(self, parent, being, uplimb, prefix):
+class RealLimb(Real):
+    """Represents a specific being's specific limb"""
+    def __init__(self, parent, being, uplimb=None, prefix=""):
         copy(self, parent, 'data', 'stats', 'actions', 'equip', 'rules')
         self.prefix = prefix
         self.name = prefix + parent.name
         self.being = being
-        self.belong = None
+        self.item = None
         self.status_list = []
         self.attached = []
         self.uplimb = uplimb
@@ -104,3 +67,37 @@ class LimbInst:
 def sym(limb):
     limb.sym = True
     return limb
+
+
+class Limb(PotentialReal):
+    """
+    Represents a possible limb of a being
+    Normally used as equip slots, but exits and actions can be based on their
+    data which could, for example, have an 'HP' key.
+    """
+    inst = RealLimb
+
+    def __init__(self, name,
+            actions=None, data=None, stats=None, rules=None, equip=None):
+
+        if actions is None:
+            actions = []
+        if data is None:
+            data = {}
+        if stats is None:
+            stats = {}
+
+        self.name = name
+        if equip:
+            self.equip = equip
+        else:
+            self.equip = name
+
+        self.actions = actions
+        self.data = data
+        self.stats = stats
+        self.sym = False
+        #This will be used for symetric-ness
+        if rules is None:
+            from core.shared import limb_datarules as rules
+        self.rules = rules

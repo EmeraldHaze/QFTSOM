@@ -68,7 +68,7 @@ def boom(self):
             being.stats["HP"] -= dmg
             print(being.name, "lost ", dmg, "vital energy in the blast!")
 
-    self.actor.rmbelong("Bomb")
+    self.actor.rmitem("Bomb")
     self.actor.actions.remove(self)
 
 
@@ -93,18 +93,18 @@ stab = attackf(
     status_data={"poison": 5}
 )
 
-staff = api.Belong(
+staff = api.Item(
     'Staff',
     "arm",
     {"MAXMP": 10, "DEF": 10, "MAXWPNDMG": 15},
     [bolt, heal, rest]
 )
-axe = api.Belong("Axe",  "arm", {"STR": 20, "MAXWPNDMG": 10}, [hack])
-helm = api.Belong("Helm", "arm", {"DEF": 10, "MDEF": 5, "MAXWPNDMG": 5})
+axe = api.Item("Axe",  "arm", {"STR": 20, "MAXWPNDMG": 10}, [hack])
+helm = api.Item("Helm", "arm", {"DEF": 10, "MDEF": 5, "MAXWPNDMG": 5})
 
-knife = api.Belong("Knife", "arm", {"INT": 10, "STR": 5}, [stab])
-shoes = api.Belong("Shoes", "leg", {"Dodge": 600, "INT": 5})
-bomb = api.Belong("Bomb",  "bag", {}, [boom])
+knife = api.Item("Knife", "arm", {"INT": 10, "STR": 5}, [stab])
+shoes = api.Item("Shoes", "leg", {"Dodge": 600, "INT": 5})
+bomb = api.Item("Bomb",  "bag", {}, [boom])
 
 arm = api.Limb("arm")
 leg = api.Limb("leg")
@@ -116,8 +116,8 @@ Humanoid = api.Being(
     {'STR': 13, 'INT': 7}
 )
 
-dwarf = Humanoid.instance("Dwarf I",  belongs=[axe, helm])
-dwarf2 = Humanoid.instance("Dwarf II", belongs=[axe, helm])
+dwarf = Humanoid.instance("Dwarf I",  items=[axe, helm])
+dwarf2 = Humanoid.instance("Dwarf II", items=[axe, helm])
 rouge = Humanoid.instance(
     "Rouge " + shared.name,
     thinkers.pthinker,

@@ -151,7 +151,7 @@ stab = actf('stab', dmg=5, speed=1, poison=5)
 punch = actf('punch', dmg=15, speed=4)
 kick = actf("kick", dmg=20, speed=2)
 
-knife = api.Belong("knife", 'arm', {}, [stab])
+knife = api.Item("knife", 'arm', {}, [stab])
 arm = api.Limb("arm", [punch], {"HP": 30, "evade": 20}, {'speed': 0.5})
 head = api.Limb("head", [], {"HP": 20, "vital": True, "evade": 40})
 torso = api.Limb("torso", [], {"HP": 60, "vital": True}, {"speed": 1})

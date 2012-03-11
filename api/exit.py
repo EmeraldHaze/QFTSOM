@@ -1,7 +1,7 @@
 from core import shared
+from api.abstract import Abstract
 
-
-class Exit:
+class Exit(Abstract):
     """
     This represents a possible way to exit a battle, and the consqeuances
     of doing so. It has a condition function that should return whether

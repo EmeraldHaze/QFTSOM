@@ -1,18 +1,25 @@
 from collections import defaultdict
-from core.utils import copy
-from game import defaults
 from inspect import getargspec
 
-
-class ActionFactory:
-    def __init__(self, func):
-            self.func = func
-
-    def __call__(self, *args, **kwargs):
-        return self.func(*args, **kwargs)
+from core.utils import copy
+from game import defaults
+from api import Real, PotentialReal
 
 
-class Action:
+class RealAction(Real):
+    "Represents a concrete action done by a being to another being(s)"
+    def __init__(self, parent, actor, targets, battle):
+        copy(self, parent, "name", "listeners", "data")
+        self.actor = actor
+        self.targets = targets
+        self.battle = battle
+
+    def __repr__(self):
+        return "<{}>".format(self.name)
+
+
+class Action(PotentialReal):
+    inst = RealAction
     def __init__(self, name, listeners, data={}, mint=1, maxt=1):
         """
         Represents a possible action. Args:
@@ -61,7 +68,7 @@ class Action:
                 raise invalid
         else:
             raise Exception("Wierd maxt-mint")
-        new = ActionInstance(self, actor, targets, battle)
+        new = RealAction(self, actor, targets, battle)
         new.listeners["init"](new)
         return new
 
@@ -69,18 +76,9 @@ class Action:
         return "<%s>" % self.name
 
 
-class ActionInstance:
-    "Represents a concrete action done by a being to another being(s)"
-    def __init__(self, parent, actor, targets, battle):
-        copy(self, parent, "name", "listeners", "data")
-        self.actor = actor
-        self.targets = targets
-        self.battle = battle
+class ActionFactory:
+    def __init__(self, func):
+            self.func = func
 
-    def __repr__(self):
-        return "<{}>".format(self.name)
-
-#class PossibleAction(Action):
-#    """I have no idea how I'm going to do this... it would have to have an
-#    player attribute, and no more?"""
-#    pass
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
