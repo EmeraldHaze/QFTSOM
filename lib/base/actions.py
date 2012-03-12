@@ -1,14 +1,15 @@
 from api import Action, ActionFactory
 from random import randint
 
+def sexec(self):
+        target = self.targets[0]
+        dmg = self.data["dmg"]
+        print(target.name, "has lost", dmg, "health!")
+        target.stats["HP"] -= dmg
 
 @ActionFactory
 def simplemaker(name, dmg):
-    def sexec(self):
-        target = self.targets[0]
-        print(target.name, "has lost", dmg, "health!")
-        target.stats["HP"] -= dmg
-    return Action(name, {"exec": sexec, "delay": 0})
+    return Action(name, {"exec": sexec, "delay": 0}, {"dmg": dmg})
 
 
 def complete_exec(self):

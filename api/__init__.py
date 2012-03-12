@@ -5,7 +5,7 @@ from api.thinker import Thinker
 from api.exit import Exit
 from api.item import Item
 from api.limb import Limb
-from api.action import Action, ActionFactory
+from api.action import AbstractAction, Action, ActionFactory
 from api.status import Status
 
 ###Abstract###

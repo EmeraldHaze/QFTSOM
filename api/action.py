@@ -8,13 +8,13 @@ from api import Real, PotentialReal
 
 class RealAction(Real):
     """Represents a concrete action done by a being to another being(s)"""
-    def __init__(self, parent, targets, **args):
+    def __init__(self, parent, targets=[], **args):
         if type(targets) != list:
             targets = [targets]
 
         if not (parent.min_targets <= len(targets) <= parent.max_targets):
             raise Exception("%s tried to %s an invalid amount of targets" % (
-                                actor.name,
+                                self.actor.name,
                                 self.name
                             ))
 
@@ -48,7 +48,8 @@ class PotentialAction(PotentialReal):
             "data",
             "max_targets",
             "min_targets",
-            "inverted"
+            "inverted",
+            "argsinfo"
         )
         self.parent = parent
         self.actor = actor
@@ -60,8 +61,8 @@ class PotentialAction(PotentialReal):
 class AbstractAction(PotentialReal):
     inst = PotentialAction
 
-    def __init__(self, name, listeners,
-                 data={}, min_targets=1, max_targets=1, inverted=False):
+    def __init__(self, name, listeners, data={},
+                 min_targets=1, max_targets=1, inverted=False, argsinfo=None):
         """
         Represents a possible action. Args:
         name: str
@@ -70,6 +71,7 @@ class AbstractAction(PotentialReal):
         min_targets = 1, minimum targets
         max_targets = 1, -1 = all, -2 = all but one, etc
         """
+
         self.name = name
         self.listeners = defaultdict(
             lambda *a: (lambda *args: None),
@@ -87,6 +89,9 @@ class AbstractAction(PotentialReal):
         self.data = defaults.actions.data.copy()
         self.data.update(data)
 
+        if not argsinfo:
+            argsinfo = {"targets": "self.battle.beings"}
+        self.argsinfo = argsinfo
 
     def __repr__(self):
         return "<%s>" % self.name

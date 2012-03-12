@@ -17,23 +17,47 @@ pthinker   = thinkers.think_maker(thinkers.ptarget,    thinkers.firstact)
 
 @api.Thinker
 def smarty(self):
-    action = thinker.pchoice(self.actions)
-    #if action is
+    action = thinkers.pchoice(self.being.actions)
+    args = {}
+    for arg, info in action.argsinfo.items():
+        if arg is "targets":
+            value = thinkers.pchoice(eval(info), ("HP", "choice.stats['HP']"))
+        else:
+            value = thinkers.pchoice(eval(info))
+        args[arg] = value
+    return action.instance(**args)
 
+def power_exec(self):
+    act = self.args["act"]
+    act.data["dmg"] += self.data["mod"]
+    print(act.name, "powered up!")
 
+power_choosen = lambda self: print(self.actor, "powers up!")
+power = api.AbstractAction(
+    "power",
+    {"exec": power_exec, "choosen": power_choosen},
+    {"mod": 1},
+    0,
+    0,
+    argsinfo={"act": "self.being.actions"}
+)
 poke = actions.simplemaker("poke", 1)
 hit  = actions.simplemaker("hit", 2)
 
 finger = api.Limb("finger", [poke])
 arm = api.Limb("arm", [hit])
 
+fist = api.Item("fist", "arm", {}, [power])
+
 baseman = api.Being([finger], manthinker, {"HP": 5})
-player = baseman.instance(shared.name, pthinker, statchanges={"HP":1})
+#player = baseman.instance(shared.name, pthinker, statchanges={"HP":1})
 oddman = baseman.instance("Oddball", oddthinker)
 man = baseman.instance("Man")
 man2 = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})
 #superman, superarm, new being
 staffo = api.Being([arm], manthinker, {"HP": 5}).instance("Staffo")
+
+player = api.Being([finger, arm], smarty, {"HP": 6}, [fist]).instance(shared.name)
 
 game = api.Net(0, {
     0: api.Node([], [],
