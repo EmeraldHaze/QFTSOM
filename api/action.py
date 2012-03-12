@@ -7,29 +7,68 @@ from api import Real, PotentialReal
 
 
 class RealAction(Real):
-    "Represents a concrete action done by a being to another being(s)"
-    def __init__(self, parent, actor, targets, battle, args):
-        copy(self, parent, "name", "listeners", "data")
+    """Represents a concrete action done by a being to another being(s)"""
+    def __init__(self, parent, targets, **args):
+        if type(targets) != list:
+            targets = [targets]
+
+        if not (parent.min_targets <= len(targets) <= parent.max_targets):
+            raise Exception("%s tried to %s an invalid amount of targets" % (
+                                actor.name,
+                                self.name
+                            ))
+
+        if parent.inverted:
+            newtargets = []
+            for being in battle.beings.values():
+                if being not in targets:
+                    newtargets.append(target)
+            targets = newtargets
+
+        copy(self, parent, "name", "listeners", "data", "actor", "battle")
         self.args = args
-        self.actor = actor
         self.targets = targets
-        self.battle = battle
         self.parent = parent
+        self.listeners["init"](self)
 
     def __repr__(self):
         return "<{}>".format(self.name)
 
 
-class Action(PotentialReal):
+class PotentialAction(PotentialReal):
+    """Represents an action that an specific being is capable of doing"""
     inst = RealAction
-    def __init__(self, name, listeners, data={}, mint=1, maxt=1):
+
+    def __init__(self, parent, actor, battle):
+        copy(
+            self,
+            parent,
+            "name",
+            "listeners",
+            "data",
+            "max_targets",
+            "min_targets",
+            "inverted"
+        )
+        self.parent = parent
+        self.actor = actor
+        self.battle = battle
+
+    def __repr__(self):
+        return "<{}'s potential {}>".format(self.actor.name, self.name)
+
+class AbstractAction(PotentialReal):
+    inst = PotentialAction
+
+    def __init__(self, name, listeners,
+                 data={}, min_targets=1, max_targets=1, inverted=False):
         """
         Represents a possible action. Args:
-        name:str
+        name: str
         listeners:dict, listeners[event] is called at event (e.g, exec)
         data = {}, arbitrary data
-        mint = 1, minimum targets
-        maxt = 1, -1 = all, -2 = all but one, etc
+        min_targets = 1, minimum targets
+        max_targets = 1, -1 = all, -2 = all but one, etc
         """
         self.name = name
         self.listeners = defaultdict(
@@ -37,46 +76,22 @@ class Action(PotentialReal):
             defaults.actions.listeners
         )
         self.listeners.update(listeners)
-        self.mint = mint
-        self.maxt = maxt
+
+        if max_targets < min_targets:
+            raise Exception(name + "'s max is greater than it's min")
+
+        self.min_targets = min_targets
+        self.max_targets = max_targets
+        self.inverted = inverted
 
         self.data = defaults.actions.data.copy()
         self.data.update(data)
 
-    def instance(self, actor, targets, battle, args=None):
-        """
-        Creates an instance of this action
-        """
-        if type(targets) != list:
-            targets = [targets]
-
-        ##Check that # of argumenst is within boundries
-        invalid = Exception("%s tried to %s an invalid amount of targets" % (
-            actor.name, self.name))
-
-        if self.mint >= 0 and self.maxt >= 0:
-            #If both boundries are positive
-            if not (self.mint <= len(targets) <= self.maxt):
-                #If the targets are not within the boundrys
-                raise invalid
-
-        elif self.mint <= 0 and self.maxt <= 0:
-            #If both boundrys are negative or 0
-            if abs(self.mint + 1) <= len(targets) <= abs(self.maxt + 1):
-                #Accept this as a dogmatic condition which works magically
-                targets = [being for being in battle.beings.values()\
-                            if being not in targets]
-            else:
-                raise invalid
-        else:
-            raise Exception("Wierd maxt-mint")
-        new = RealAction(self, actor, targets, battle, args)
-        new.listeners["init"](new)
-        return new
 
     def __repr__(self):
         return "<%s>" % self.name
 
+Action = AbstractAction
 
 class ActionFactory:
     def __init__(self, func):

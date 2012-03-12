@@ -10,9 +10,16 @@ but probably won't work with anything that requires something, like the
 speed scheduler"""
 shared.current_module = "simple"
 
+
 manthinker = thinkers.think_maker(thinkers.mosttarget, thinkers.firstact)
 oddthinker = thinkers.think_maker(thinkers.least,      thinkers.firstact)
 pthinker   = thinkers.think_maker(thinkers.ptarget,    thinkers.firstact)
+
+@api.Thinker
+def smarty(self):
+    action = thinker.pchoice(self.actions)
+    #if action is
+
 
 poke = actions.simplemaker("poke", 1)
 hit  = actions.simplemaker("hit", 2)

@@ -43,7 +43,7 @@ def lthinkmaker(actchoice, targetchoice):
                 #sets target to someone who isn't us
         targetlimb = targetchoice(target.limbs)
         act = actchoice(self.being.act_dict)
-        return act.instance(self.being, targetlimb, self.battle)
+        return act.instance(target, limb=targetlimb)
     return limbthinker
 
 loony = lthinkmaker(
@@ -76,17 +76,16 @@ def limbpoison(self):
         being.status_list.remove(self)
 
 def limbchoosen(self):
-    target_limb = self.targets[0]
     print("{} has {}'d {}'s {}!".format(
         self.actor.name,
         self.name,
-        target_limb.being.name,
-        target_limb.name
+        self.targets[0],
+        self.args["limb"].name
     ))
 
 def limbexec(self):
-    targetlimb = self.targets[0]
-    target = targetlimb.being
+    targetlimb = self.args["limb"]
+    target = self.targets[0]
     if randint(0, 100) > targetlimb.data["evade"]:
         #Hit
         dmg = self.data['dmg'] - targetlimb.data["DEF"]

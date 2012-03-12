@@ -50,6 +50,7 @@ def get_all(battle, being):
                 name = actgiver.prefix + action.name
             except AttributeError:
                 name = action.name
+            action = action.instance(being, battle)
             being.actions.append(action)
             being.act_dict[name] = action
 

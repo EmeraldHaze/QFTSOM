@@ -28,11 +28,12 @@ class RealLimb(Real):
         del self.being.limb_dict[self.name]
 
         for act in self.actions:
-            self.being.actions.remove(act)
-            for name, a in self.being.act_dict.copy().items():
-                if a is act:
+            for being_act in self.being.actions:
+                if being_act.parent is act:
+                    self.being.actions.remove(being_act)
+            for name, act in self.being.act_dict.copy().items():
+                if being_act.parent is act:
                     del self.being.act_dict[name]
-                    #There should be a better way to do this
 
         for limb in self.attached:
             limb.kill()

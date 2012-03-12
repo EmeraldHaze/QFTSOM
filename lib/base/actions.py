@@ -54,8 +54,8 @@ move = Action(
     "move",
     {"exec": move_exec, "choosen": lambda a: None},
     {"speed": 1},
-    mint=0,
-    maxt=0
+    min_targets=0,
+    max_targets=0
 )
 
 null = Action(
@@ -65,6 +65,6 @@ null = Action(
         "choosen": (lambda self: print("%s passes." % self.actor.name))
     },
     {"speed": 0},
-    mint=0,
-    maxt=0
+    min_targets=0,
+    max_targets=0
 )

@@ -6,7 +6,7 @@ def think_maker(gettarget, getaction):
     def thinker(self):
         target = gettarget(self.being, self.battle)
         action = getaction(self.being, self.battle)
-        act = action.instance(self.being, target, self.battle)
+        act = action.instance(target)
         return act
     return thinker
 

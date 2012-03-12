@@ -92,7 +92,3 @@ class Place(Node):
         self.info = info
         self.items = items
         self.beings = beings
-
-
-
-
