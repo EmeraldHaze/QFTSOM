@@ -1,4 +1,6 @@
 from api import Abstract
+from core import does
+
 
 class Node(Abstract):
     """
@@ -9,8 +11,9 @@ class Node(Abstract):
     q: Query when asking for choice
     exit_: If set, exits the player to a higher network as named.
     """
+    net = True
     def __init__(self, names, links,
-            does={}, q="Where do you want to go?", exit_=False):
+            does={}, q="Where do you want to go?", exit_=False, name=None):
         self.names = names
         self.links = links
         self.does = does
@@ -20,23 +23,24 @@ class Node(Abstract):
 
 
 class Net(Abstract):
+    net = True
     def __init__(self, start, nodes, does=[]):
         """
         Start is the starting possision upon arival.
         Nodes are a dict of all nodes in this network.
         Do is node commands
         """
+        if type(nodes) is list:
+            nodes = {node.name: node for node in nodes}
         self.nodes = nodes
         self.start = start
         self.does = does
-        self.net = True
 
     def __getitem__(self, item):
         return self.nodes[item]
 
     def travel(self):
-        "Travles the nodemap. Is recursive and calls itself on any submaps"
-        from core import does
+        """Recursivly travel the nodemap."""
         name = startname = self.start
         node = startnode = self[startname]
         while 1:
@@ -70,3 +74,25 @@ class Net(Abstract):
                         print("Bad answer! User a number in range")
             node = self[nodename]
             #Set the node
+
+
+class AbstractNode(Node):
+    """An abstract node used for conversations and other logical networks"""
+
+
+class Place(Node):
+    """A node that represents a place"""
+    def __init__(self, name, linked, info, items=None, beings=None):
+        if items is None:
+            items = []
+        if beings is None:
+            beings = []
+        self.name = name
+        self.linked = linked
+        self.info = info
+        self.items = items
+        self.beings = beings
+
+
+
+

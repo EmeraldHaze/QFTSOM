@@ -8,11 +8,13 @@ from api import Real, PotentialReal
 
 class RealAction(Real):
     "Represents a concrete action done by a being to another being(s)"
-    def __init__(self, parent, actor, targets, battle):
+    def __init__(self, parent, actor, targets, battle, args):
         copy(self, parent, "name", "listeners", "data")
+        self.args = args
         self.actor = actor
         self.targets = targets
         self.battle = battle
+        self.parent = parent
 
     def __repr__(self):
         return "<{}>".format(self.name)
@@ -41,7 +43,7 @@ class Action(PotentialReal):
         self.data = defaults.actions.data.copy()
         self.data.update(data)
 
-    def instance(self, actor, targets, battle):
+    def instance(self, actor, targets, battle, args=None):
         """
         Creates an instance of this action
         """
@@ -68,7 +70,7 @@ class Action(PotentialReal):
                 raise invalid
         else:
             raise Exception("Wierd maxt-mint")
-        new = RealAction(self, actor, targets, battle)
+        new = RealAction(self, actor, targets, battle, args)
         new.listeners["init"](new)
         return new
 

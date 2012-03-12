@@ -39,6 +39,25 @@ def basic_choosen(action):
                 )
 
 
+def move_exec(self):
+    being = self.actor
+    dest = self.args["dest"]
+    loc = being.location
+    if dest in loc.linked:
+        loc.beings.remove(being)
+        dest.beings.append(being)
+        being.loc = dest
+        print(being.name, "has moved too", dest.name)
+        print(dest.info)
+
+move = Action(
+    "move",
+    {"exec": move_exec, "choosen": lambda a: None},
+    {"speed": 1},
+    mint=0,
+    maxt=0
+)
+
 null = Action(
     "pass",
     {

@@ -69,7 +69,7 @@ def boom(self):
             print(being.name, "lost ", dmg, "vital energy in the blast!")
 
     self.actor.rmitem("Bomb")
-    self.actor.actions.remove(self)
+    self.actor.actions.remove(self.parent)
 
 
 bolt = attackf('bolt', type="magic", MPC=60)
