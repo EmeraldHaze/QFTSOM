@@ -67,8 +67,44 @@ null = Action(
         "exec": (lambda self: print("%s does nothing." % self.actor.name)),
         "choosen": (lambda self: print("%s passes." % self.actor.name))
     },
-    {"speed": 0, "type": "null"},
+    {"speed": 0, "type": "misc"},
     min_targets=0,
     max_targets=0,
     argsinfo={}
 )
+
+equip = Action(
+    "equip",
+    {
+        "exec": (
+            lambda s: print(s.actor.equip(s.args["item"], s.args["limb"])[1])
+        ),
+        "choosen": lambda s: None
+    },
+    {"speed": 1, "type": "misc"},
+    min_targets=0,
+    max_targets=0,
+    argsinfo={"item": "self.being.items", "limb": "self.being.limbs"}
+)
+
+unequip = Action(
+    "unequip",
+    {
+        "exec": (
+            lambda s: print(s.actor.equip(
+                s.args["item"].name,
+                s.args["limb"].name
+            )[1])
+        ),
+        "choosen": lambda s: None
+    },
+    {"speed": 1, "type": "misc"},
+    min_targets=0,
+    max_targets=0,
+    argsinfo=[
+        ("item", "self.being.items"),
+        ("limb", "self.being.limbs")
+    ]
+)
+
+normal_base_actions = [move, null, equip, unequip]

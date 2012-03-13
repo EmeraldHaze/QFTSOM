@@ -1,5 +1,5 @@
 from types import MethodType
-
+from collections import defaultdict
 from core.utils import copy
 from api import Real, PotentialReal
 
@@ -14,6 +14,12 @@ class RealThinker(Real):
 
     def init(self, game):
         self.game = game
+        self.typed_acts = defaultdict(lambda *a: [])
+        for act in self.being.actions:
+            try:
+                self.typed_acts[act.data["type"]].append(act)
+            except KeyError:
+                self.typed_acts["untyped"].append(act)
         self.funcinit()
 
     def __call__(self):

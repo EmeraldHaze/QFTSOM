@@ -39,7 +39,7 @@ class PotentialAction(PotentialReal):
     """Represents an action that an specific being is capable of doing"""
     inst = RealAction
 
-    def __init__(self, parent, actor, game):
+    def __init__(self, parent, actor, game=None):
         copy(
             self,
             parent,
@@ -53,6 +53,9 @@ class PotentialAction(PotentialReal):
         )
         self.parent = parent
         self.actor = actor
+        if not game:
+            import main
+            game = main.game
         self.game = game
 
     def __repr__(self):
@@ -91,6 +94,10 @@ class AbstractAction(PotentialReal):
 
         if argsinfo is None:
             argsinfo = {"targets": "self.being.location.beings"}
+
+        if type(argsinfo) is dict:
+            argsinfo = argsinfo.items()
+
         self.argsinfo = argsinfo
 
     def __repr__(self):

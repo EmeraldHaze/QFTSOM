@@ -1,12 +1,12 @@
 from api import PlaceNet, Place
 from core import Game
 import lib
-from lib import simple
+from lib import new
 from lib.base import rules, exits
 
 placenet = PlaceNet([
-    Place("Groove", ["Clearing"], "You're in the groove!", simple.drunkard),
-    Place("Clearing", ["Groove"], "A rather plain clearing", simple.player)
+    Place("Groove", ["Clearing"], "You're in the groove!", new.drunkard),
+    Place("Clearing", ["Groove"], "A rather plain clearing", new.player)
 ])
 
 rules = {

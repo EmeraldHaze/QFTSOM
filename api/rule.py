@@ -4,7 +4,7 @@ from api import Abstract
 ruletypes = {
     "schedule": ("How a being choice is be scheduled (timeline)", ["being"]),
     "get_actions": ("How to build a being's actionlist", ["being"]),
-    "wipe_hist": ("How to remove previous battle history", ["being"]),
+    "wipe_hist": ("How to remove previous game history", ["being"]),
     "init": ("What to do once, at first", []),
     "tick": ("What to do each tick", []),
     "being_init": ("What to do when a being is init'd", ["being"])

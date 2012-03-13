@@ -37,7 +37,7 @@ class RealBeing(Real):
         for item in parent.items + items:
             item = item.instance(self)
             self.additem(item)
-        self.equipall()
+        #self.equipall()
 
         for name, value in changes.items():
             if type(value) in (str, int, dict, list):
@@ -76,6 +76,10 @@ class RealBeing(Real):
 
     def equip(self, item, limb):
         """Equips a item to a limb, by names (so that you can't spoof)"""
+        if type(item) is not str:
+            item = item.name
+        if type(limb) is not str:
+            limb = limb.name
         if item in self.item_dict:
             item = self.item_dict[item]
             if limb in self.limb_dict:
@@ -86,14 +90,19 @@ class RealBeing(Real):
                             self.unequip(limb.item.name)
                         limb.item = item
                         item.limb = limb
+                        for action in item.actions:
+                            self.addaction(action, self.thinker.game)
                         item.applystats()
                         self.equiped.append(item)
-                        return True, "%s equiped to %s" % (item.name,
-                            limb.name)
+                        return True, "{} equiped his {} to his {}".format(
+                            self.name,
+                            item.name,
+                            limb.name
+                        )
                     else:
                         return False, "E: %s already equiped" % item.name
                 else:
-                    return False, "E: %s can't be equiped to this limb, %s" % (
+                    return False, "E: %s can't be equiped to %s" % (
                         item.name, limb.name)
             else:
                 return False, "E: No such limb, " + limb
@@ -119,6 +128,8 @@ class RealBeing(Real):
                 limb.item = None
                 item.limb = None
                 item.removestats()
+                for action in item.actions:
+                    self.rmaction(action)
                 self.equiped.remove(item)
             else:
                 return "Not equipped"
@@ -137,6 +148,19 @@ class RealBeing(Real):
         self.unequip(item.name)
         self.items.remove(item)
         del self.item_dict[item.name]
+
+    def addaction(self, action, game=False):
+        action = action.instance(self, game)
+        self.actions.append(action)
+        self.act_dict[action.name] = action
+
+    def rmaction(self, action):
+        if type(action) is str:
+            action = self.act_dict[action]
+        else:
+            action = filter(self.actions, lambda a: a.parent is action)[0]
+        self.actions.remove(action)
+        del self.act_dict[action]
 
     def __str__(self):
         return self.name
