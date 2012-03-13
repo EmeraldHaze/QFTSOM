@@ -2,9 +2,10 @@ from api import Real, PotentialReal
 
 class RealStatus(Real):
     "Represents a status of a specific person"
-    def __init__(self, parent, being, battle, **data):
+    def __init__(self, parent, being, game, **data):
         self.func = parent.func
         self.name = parent.name
+        self.game = game
         self.being = being
         for key, value in data.items():
             setattr(self, key, value)

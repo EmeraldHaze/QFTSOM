@@ -44,15 +44,18 @@ def get_all(battle, being):
     "Gets actions from both equipment and limbs. Should always work."
     being.actions = []
     being.act_dict = {}
+    actions = being.base_actions
     for actgiver in being.limbs + being.equiped:
         for action in actgiver.actions:
             try:
                 name = actgiver.prefix + action.name
             except AttributeError:
                 name = action.name
-            action = action.instance(being, battle)
-            being.actions.append(action)
-            being.act_dict[name] = action
+            actions.append(action)
+    for action in actions:
+        action = action.instance(being, battle)
+        being.actions.append(action)
+        being.act_dict[action.name] = action
 
 
 @rule('wipe_hist')

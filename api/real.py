@@ -6,4 +6,5 @@ class PotentialReal:
 
 class Real:
     """Base class for a specific real thing in the game"""
-    pass
+    def __repr__(self):
+        return self.name

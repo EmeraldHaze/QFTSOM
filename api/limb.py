@@ -1,6 +1,7 @@
 from core.utils import copy
 from api import Real, PotentialReal
 
+
 class RealLimb(Real):
     """Represents a specific being's specific limb"""
     def __init__(self, parent, being, uplimb=None, prefix=""):
@@ -100,5 +101,6 @@ class Limb(PotentialReal):
         self.sym = False
         #This will be used for symetric-ness
         if rules is None:
-            from core.shared import limb_datarules as rules
+            from core.shared import rules
+            rules = rules.limb_data
         self.rules = rules

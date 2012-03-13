@@ -9,8 +9,12 @@ from api import Real, PotentialReal
 class RealAction(Real):
     """Represents a concrete action done by a being to another being(s)"""
     def __init__(self, parent, targets=[], **args):
+        copy(self, parent, "name", "listeners", "data", "actor", "game")
         if type(targets) != list:
             targets = [targets]
+        self.args = args
+        self.targets = targets
+        self.parent = parent
 
         if not (parent.min_targets <= len(targets) <= parent.max_targets):
             raise Exception("%s tried to %s an invalid amount of targets" % (
@@ -20,15 +24,11 @@ class RealAction(Real):
 
         if parent.inverted:
             newtargets = []
-            for being in battle.beings.values():
+            for being in game.beings.values():
                 if being not in targets:
                     newtargets.append(target)
             targets = newtargets
 
-        copy(self, parent, "name", "listeners", "data", "actor", "battle")
-        self.args = args
-        self.targets = targets
-        self.parent = parent
         self.listeners["init"](self)
 
     def __repr__(self):
@@ -39,7 +39,7 @@ class PotentialAction(PotentialReal):
     """Represents an action that an specific being is capable of doing"""
     inst = RealAction
 
-    def __init__(self, parent, actor, battle):
+    def __init__(self, parent, actor, game):
         copy(
             self,
             parent,
@@ -53,7 +53,7 @@ class PotentialAction(PotentialReal):
         )
         self.parent = parent
         self.actor = actor
-        self.battle = battle
+        self.game = game
 
     def __repr__(self):
         return "<{}'s potential {}>".format(self.actor.name, self.name)
@@ -89,8 +89,8 @@ class AbstractAction(PotentialReal):
         self.data = defaults.actions.data.copy()
         self.data.update(data)
 
-        if not argsinfo:
-            argsinfo = {"targets": "self.battle.beings"}
+        if argsinfo is None:
+            argsinfo = {"targets": "self.being.location.beings"}
         self.argsinfo = argsinfo
 
     def __repr__(self):

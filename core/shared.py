@@ -1,19 +1,28 @@
 from collections import defaultdict
 
-limb_datarules = []
-#These rules apply to limb.data
+class Settings:
+    def __init__(self, **settings):
+        self.default = settings
+        for setting, value in settings.items():
+            setattr(self, setting, value)
 
-statrules = []
-#These rules apply to being.stats
+    def blank(self):
+        for setting, value in self.default.items():
+            setattr(self, setting, value)
 
-itemdata = []
-#These rules apply to item.data
+
+rules = Settings(
+    limb_data=[],
+    being_stats=[],
+    item_data=[]
+)
+
+misc = Settings(
+    base_actions=[]
+)
 
 name = "no-name"
-#The player's name, used for logs and suchlike
 
-battle_order = ("beings", "exits", "rules")
-#The order in which battle arguments are across the project
 
 #The following items are used for the registry. So that your module's objects
 #register right, set current_module to the module's name and add {name: info}
@@ -37,9 +46,3 @@ def register(obj):
     else:
         registry[obj.plural][obj.name] = obj
 
-
-def blank():
-    global limb_datarules, statrules, itemdata
-    limb_datarules = []
-    statrules = []
-    itemdata = []

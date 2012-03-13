@@ -12,8 +12,8 @@ class RealThinker(Real):
         self.funcinit = MethodType(parent.funcinit, self)
         self.being = being
 
-    def init(self, battle):
-        self.battle = battle
+    def init(self, game):
+        self.game = game
         self.funcinit()
 
     def __call__(self):
@@ -21,7 +21,7 @@ class RealThinker(Real):
             return self.func()
         else:
             from lib.base.actions import null
-            return null.instance(self.being, [], self.battle)
+            return null.instance(self.being, [], self.game)
 
 
 class Thinker(PotentialReal):

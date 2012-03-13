@@ -9,7 +9,7 @@ def sexec(self):
 
 @ActionFactory
 def simplemaker(name, dmg):
-    return Action(name, {"exec": sexec, "delay": 0}, {"dmg": dmg})
+    return Action(name, {"exec": sexec}, {"dmg": dmg, "delay": 0, "type": "attack"})
 
 
 def complete_exec(self):
@@ -42,21 +42,23 @@ def basic_choosen(action):
 
 def move_exec(self):
     being = self.actor
-    dest = self.args["dest"]
+    dest_name = self.args["dest"]
     loc = being.location
-    if dest in loc.linked:
+    if dest_name in loc.linked:
+        dest = loc.parent[dest_name]
         loc.beings.remove(being)
         dest.beings.append(being)
-        being.loc = dest
+        being.location = dest
         print(being.name, "has moved too", dest.name)
         print(dest.info)
 
 move = Action(
     "move",
     {"exec": move_exec, "choosen": lambda a: None},
-    {"speed": 1},
+    {"speed": 1, "type": "move"},
     min_targets=0,
-    max_targets=0
+    max_targets=0,
+    argsinfo={"dest": "self.being.location.linked"}
 )
 
 null = Action(
@@ -65,7 +67,8 @@ null = Action(
         "exec": (lambda self: print("%s does nothing." % self.actor.name)),
         "choosen": (lambda self: print("%s passes." % self.actor.name))
     },
-    {"speed": 0},
+    {"speed": 0, "type": "null"},
     min_targets=0,
-    max_targets=0
+    max_targets=0,
+    argsinfo={}
 )

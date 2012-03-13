@@ -39,8 +39,5 @@ if __name__ == "__main__":
         #Sets player name, which is the first input if run by Socket'd
     else:
         shared.name = "Glycan"
-    import api
-    from game.nodemap import nodemap
-    #if it was imported before, lib and compony would of loaded without the
-    #changes we just made
-    print(nodemap.travel())
+    from game.games import choosen_game
+    choosen_game.play()

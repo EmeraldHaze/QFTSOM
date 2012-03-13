@@ -1,6 +1,7 @@
 from core.utils import copy
 from api import Real, PotentialReal
 
+
 class RealItem(Real):
     """Represents an specific iteming of a specific person."""
     def __init__(self, parent, owner):
@@ -36,7 +37,7 @@ class Item(PotentialReal):
         self.data = data
         if not datarules:
             from core import shared
-            datarules = shared.itemdata
+            datarules = shared.rules.item_data
         for name, value in datarules:
             self.data[name] = eval(value)
 

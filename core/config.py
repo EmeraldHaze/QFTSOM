@@ -1,5 +1,5 @@
 DEBUG = 0
-GET_NAME = False
+GET_NAME = True
 PREFIX = "###"
 
 

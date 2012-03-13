@@ -12,7 +12,7 @@ class RealBeing(Real):
 
     def __init__(self, parent, name,
                  thinker=None, items=[], statchanges={}, changes={}):
-        copy(self, parent, 'stats', 'data')
+        copy(self, parent, 'stats', 'data', "base_actions")
         self.name = name
 
         if not thinker:
@@ -166,5 +166,9 @@ class Being(PotentialReal):
         self.data = data
 
         if rules is None:
-            from core.shared import statrules as rules
+            from core.shared import rules
+            rules = rules.being_stats
         self.rules = rules
+
+        from core.shared import misc
+        self.base_actions = misc.base_actions
