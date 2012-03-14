@@ -21,6 +21,13 @@ misc = Settings(
     base_actions=[]
 )
 
+actions = Settings(
+    min_targets=1,
+    max_targets=1,
+    listeners={},
+    argsinfo={"targets": "self.being.location.beings"},
+    data={}
+)
 name = "no-name"
 
 

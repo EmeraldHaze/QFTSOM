@@ -1,6 +1,10 @@
 from api import Action, ActionFactory
 from random import randint
+from core import shared
 
+shared.actions.max_targets = 0
+shared.actions.min_targets = 0
+shared.actions.argsinfo = {}
 def sexec(self):
         target = self.targets[0]
         dmg = self.data["dmg"]
@@ -9,7 +13,7 @@ def sexec(self):
 
 @ActionFactory
 def simplemaker(name, dmg):
-    return Action(name, {"exec": sexec}, {"dmg": dmg, "delay": 0, "type": "attack"})
+    return Action(name, {"exec": sexec}, {"dmg": dmg, "speed": 1, "type": "attack"})
 
 
 def complete_exec(self):
@@ -50,14 +54,13 @@ def move_exec(self):
         dest.beings.append(being)
         being.location = dest
         print(being.name, "has moved too", dest.name)
-        print(dest.info)
+        if being.name is shared.name:
+            print(dest.info)
 
 move = Action(
     "move",
     {"exec": move_exec, "choosen": lambda a: None},
     {"speed": 1, "type": "move"},
-    min_targets=0,
-    max_targets=0,
     argsinfo={"dest": "self.being.location.linked"}
 )
 
@@ -67,11 +70,16 @@ null = Action(
         "exec": (lambda self: print("%s does nothing." % self.actor.name)),
         "choosen": (lambda self: print("%s passes." % self.actor.name))
     },
-    {"speed": 0, "type": "misc"},
-    min_targets=0,
-    max_targets=0,
-    argsinfo={}
+    {"speed": 1, "type": "misc"}
 )
+
+def equip_init(self):
+    if self.args["item"] in self.actor.items and\
+       self.args["limb"] in self.actor.limbs and\
+       self.args["item"].equip is self.args["limb"].equip:
+        self.data["speed"] = 1
+    else:
+        self.data["speed"] = 0
 
 equip = Action(
     "equip",
@@ -79,11 +87,13 @@ equip = Action(
         "exec": (
             lambda s: print(s.actor.equip(s.args["item"], s.args["limb"])[1])
         ),
-        "choosen": lambda s: None
+        "choosen": lambda s: None,
+        "init": equip_init
     },
-    {"speed": 1, "type": "misc"},
-    min_targets=0,
-    max_targets=0,
+    {"speed": 0, "type": "items", "arg_queries": {
+        "item": "Equip what item? ",
+        "limb": "Equip to what limb? "
+    }},
     argsinfo={"item": "self.being.items", "limb": "self.being.limbs"}
 )
 
@@ -98,13 +108,60 @@ unequip = Action(
         ),
         "choosen": lambda s: None
     },
-    {"speed": 1, "type": "misc"},
-    min_targets=0,
-    max_targets=0,
-    argsinfo=[
-        ("item", "self.being.items"),
-        ("limb", "self.being.limbs")
-    ]
+    {"speed": 0, "type": "items", "arg_queries": {"item", "Unequip what? "}},
+    argsinfo=[("item", "self.being.items")]
 )
 
-normal_base_actions = [move, null, equip, unequip]
+def look_init(self):
+    loc = self.actor.location
+    print(loc.info)
+    print("Beings in", loc.name)
+    for n, being in enumerate(loc.beings):
+        print(str(n) + ".", being.name + ", HP:", being.stats["HP"])
+    if loc.items:
+        print("Items in", loc.name)
+        for n, item in enumerate(loc.items):
+            print(str(n) + ".", item.name.capitalize())
+    else:
+        print("There are no items in", loc.name)
+
+look = Action(
+    "look",
+    {
+        "init": look_init,
+        "choosen": lambda s: None
+    },
+    {"delay": 0, "speed": -1, "type": "misc"},
+    #-1 speed compensates for waiting for the turn after it's executed
+)
+
+def pickup_exec(self):
+    item = self.args["item"]
+    self.actor.additem(item)
+    self.actor.location.items.remove(item)
+    print(self.actor.name, "picked up", item.name)
+
+pickup = Action(
+    "pick up",
+    {"exec": pickup_exec},
+    {"speed": 1, "type": "items", "arg_queries": {"item": "Pick up what? "}},
+    argsinfo={"item": "self.being.location.items"})
+
+def drop_exec(self):
+    item = self.args["item"]
+    if item in self.actor.equipped:
+        print(self.actor.unequip(item.name))
+    self.actor.rmitem(item)
+    self.actor.location.items.append(item)
+    print(self.actor.name, "dropped", item.name)
+
+drop = Action(
+    "drop",
+    {"exec": drop_exec},
+    {"speed": 1, "type": "items", "arg_queries": {"item": "Drop what? "}},
+    argsinfo={"item": "self.being.items"})
+
+def viewinv_exec(self):
+    pass
+    for item in
+normal_base_actions = [move, null, equip, unequip, look, drop, pickup]

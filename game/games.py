@@ -6,11 +6,11 @@ from lib.base import rules, exits
 
 placenet = PlaceNet([
     Place("Groove", ["Clearing"], "You're in the groove!", new.drunkard),
-    Place("Clearing", ["Groove"], "A rather plain clearing", new.player)
+    Place("Clearing", ["Groove"], "A rather plain clearing", new.player, new.knife)
 ])
 
 rules = {
-    "schedule": rules.next,
+    "schedule": rules.speed,
     "get_actions": rules.get_all,
     "wipe_hist": rules.wipe_normal
 }

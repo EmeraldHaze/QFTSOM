@@ -31,11 +31,10 @@ class RealBeing(Real):
         self.limb_dict = {}
         self.buildbody(parent.body)
 
-        self.equiped = []
+        self.equipped = []
         self.items = []
         self.item_dict = {}
         for item in parent.items + items:
-            item = item.instance(self)
             self.additem(item)
         #self.equipall()
 
@@ -93,16 +92,16 @@ class RealBeing(Real):
                         for action in item.actions:
                             self.addaction(action, self.thinker.game)
                         item.applystats()
-                        self.equiped.append(item)
-                        return True, "{} equiped his {} to his {}".format(
+                        self.equipped.append(item)
+                        return True, "{} equipped his {} to his {}".format(
                             self.name,
                             item.name,
                             limb.name
                         )
                     else:
-                        return False, "E: %s already equiped" % item.name
+                        return False, "E: %s already equipped" % item.name
                 else:
-                    return False, "E: %s can't be equiped to %s" % (
+                    return False, "E: %s can't be equipped to %s" % (
                         item.name, limb.name)
             else:
                 return False, "E: No such limb, " + limb
@@ -120,7 +119,7 @@ class RealBeing(Real):
                         print(R[1])
 
     def unequip(self, item):
-        "Removes an equiped item, by name"
+        "Removes an equipped item, by name"
         if item in self.item_dict:
             item = self.item_dict[item]
             if item.limb:
@@ -130,16 +129,18 @@ class RealBeing(Real):
                 item.removestats()
                 for action in item.actions:
                     self.rmaction(action)
-                self.equiped.remove(item)
+                self.equipped.remove(item)
+                return "{} unequipped from {}".format(item.name, limb.name)
             else:
                 return "Not equipped"
         else:
             return "No such item"
 
     def additem(self, item):
-        "Adds a item to this being (this function does it right)"
+        """Adds a item to this being (this function does it right)"""
         self.items.append(item)
         self.item_dict[item.name] = item
+        item.owner = self
 
     def rmitem(self, item):
         "Removes a iteming from this being"
@@ -148,19 +149,24 @@ class RealBeing(Real):
         self.unequip(item.name)
         self.items.remove(item)
         del self.item_dict[item.name]
+        item.owner = None
 
     def addaction(self, action, game=False):
         action = action.instance(self, game)
         self.actions.append(action)
         self.act_dict[action.name] = action
+        try:
+            self.thinker.typed_acts[action.data["type"]].append(action)
+        except KeyError:
+            self.thinker.typed_acts["untyped"].append(action)
 
     def rmaction(self, action):
         if type(action) is str:
             action = self.act_dict[action]
         else:
-            action = filter(self.actions, lambda a: a.parent is action)[0]
+            action = next(filter(lambda a: a.parent is action, self.actions))
         self.actions.remove(action)
-        del self.act_dict[action]
+        del self.act_dict[action.name]
 
     def __str__(self):
         return self.name

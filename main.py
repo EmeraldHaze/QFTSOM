@@ -38,6 +38,7 @@ if __name__ == "__main__":
         shared.name = input()
         #Sets player name, which is the first input if run by Socket'd
     else:
+        print("In offline mode")
         shared.name = "Glycan"
     from game.games import choosen_game as game
     game.play()

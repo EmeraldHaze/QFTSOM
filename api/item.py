@@ -4,9 +4,10 @@ from api import Real, PotentialReal
 
 class RealItem(Real):
     """Represents an specific iteming of a specific person."""
-    def __init__(self, parent, owner):
-        copy(self, parent, 'name', 'equip', 'stats', 'actions', 'data')
-        self.owner = owner
+    def __init__(self, parent, name):
+        copy(self, parent, 'equip', 'stats', 'actions', 'data')
+        self.name = name
+        self.owner = None
         self.limb = None
         #This item is equipped to no limb
 
@@ -26,9 +27,7 @@ class Item(PotentialReal):
     Represents something that can be possesed (e.g, a sword, a spell)
     """
     inst = RealItem
-    def __init__(self, name, equip,
-            stats={}, actions=[], data={}, datarules=None):
-        self.name = name
+    def __init__(self, equip, stats={}, actions=[], data={}, datarules=None):
         self.equip = equip
         #What type of limb this item can be equipped to
         self.actions = actions

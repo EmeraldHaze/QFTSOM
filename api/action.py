@@ -2,7 +2,7 @@ from collections import defaultdict
 from inspect import getargspec
 
 from core.utils import copy
-from game import defaults
+from core import shared
 from api import Real, PotentialReal
 
 
@@ -28,8 +28,6 @@ class RealAction(Real):
                 if being not in targets:
                     newtargets.append(target)
             targets = newtargets
-
-        self.listeners["init"](self)
 
     def __repr__(self):
         return "<{}>".format(self.name)
@@ -64,8 +62,8 @@ class PotentialAction(PotentialReal):
 class AbstractAction(PotentialReal):
     inst = PotentialAction
 
-    def __init__(self, name, listeners, data={},
-                 min_targets=1, max_targets=1, inverted=False, argsinfo=None):
+    def __init__(self, name, listeners, data={}, min_targets=None,
+                 max_targets=None, inverted=False, argsinfo=None):
         """
         Represents a possible action. Args:
         name: str
@@ -78,9 +76,14 @@ class AbstractAction(PotentialReal):
         self.name = name
         self.listeners = defaultdict(
             lambda *a: (lambda *args: None),
-            defaults.actions.listeners
+            shared.actions.listeners
         )
         self.listeners.update(listeners)
+
+        if max_targets is None:
+            max_targets = shared.actions.max_targets
+        if min_targets is None:
+            min_targets = shared.actions.min_targets
 
         if max_targets < min_targets:
             raise Exception(name + "'s max is greater than it's min")
@@ -89,11 +92,11 @@ class AbstractAction(PotentialReal):
         self.max_targets = max_targets
         self.inverted = inverted
 
-        self.data = defaults.actions.data.copy()
+        self.data = shared.actions.data.copy()
         self.data.update(data)
 
         if argsinfo is None:
-            argsinfo = {"targets": "self.being.location.beings"}
+            argsinfo = shared.actions.argsinfo
 
         if type(argsinfo) is dict:
             argsinfo = argsinfo.items()
@@ -101,7 +104,7 @@ class AbstractAction(PotentialReal):
         self.argsinfo = argsinfo
 
     def __repr__(self):
-        return "<%s>" % self.name
+        return "<abstract %s>" % self.name
 
 Action = AbstractAction
 

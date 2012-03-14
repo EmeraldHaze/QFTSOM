@@ -25,7 +25,7 @@ def next(game, being):
 
 
 @rule('schedule')
-def speed(game, being):
+def combined_speed(game, being):
     """Players go their speed stat + last action's speed turns from now, these
     turns may overlap. Will error when speed is not defined"""
     speed = int(being.stats["speed"])
@@ -38,6 +38,19 @@ def speed(game, being):
             ))
     game.timeline.addbeing(being, speed)
 
+@rule("schedule")
+def speed(game, being):
+    try:
+        ticks_taken = being.last_act.data["speed"]
+        print("{}'s {} takes {} turns".format(
+            being.name,
+            being.last_act.name,
+            ticks_taken
+        ))
+    except AttributeError:
+        ticks_taken = 0
+    game.timeline.addbeing(being, ticks_taken + 1)
+
 
 @rule('get_actions')
 def get_all(game, being):
@@ -45,7 +58,7 @@ def get_all(game, being):
     being.actions = []
     being.act_dict = {}
     actions = being.base_actions
-    for actgiver in being.limbs + being.equiped:
+    for actgiver in being.limbs + being.equipped:
         for action in actgiver.actions:
             try:
                 name = actgiver.prefix + action.name

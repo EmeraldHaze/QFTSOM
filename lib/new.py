@@ -9,16 +9,30 @@ shared.current_module = "new"
 shared.modules["new"] = """This is a module for trying out the refactored
 changes"""
 shared.misc.base_actions = actions.normal_base_actions
+shared.actions.blank()
+shared.actions.listners = {"choosen": actions.basic_choosen}
 
 @api.Thinker
 def smart_user(self):
-    action = thinkers.pchoice(self.being.actions)
+    act_type = thinkers.pchoice(list(self.typed_acts.keys()))
+    action = thinkers.pchoice(self.typed_acts[act_type])
     args = {}
+    arg_queries = {}
+    if "arg_queries" in action.data:
+        arg_queries = action.data["arg_queries"]
     for arg, info in action.argsinfo:
+        try:
+            query = arg_queries[arg]
+        except KeyError:
+            query = "Choice? "
         if arg is "targets":
-            value = thinkers.pchoice(eval(info), ("HP", "choice.stats['HP']"))
+            value = thinkers.pchoice(
+                eval(info),
+                ("HP", "choice.stats['HP']"),
+                query=query
+            )
         else:
-            value = thinkers.pchoice(eval(info))
+            value = thinkers.pchoice(eval(info), query=query)
         args[arg] = value
     return action.instance(**args)
 
@@ -46,7 +60,7 @@ power_choosen = lambda self: print(self.actor, "powers up!")
 power = api.AbstractAction(
     "power",
     {"exec": power_exec, "choosen": power_choosen},
-    {"dmg": 1, "type": "buff"},
+    {"dmg": 1, "type": "buff", "speed": 1},
     0,
     0,
     argsinfo={"act": "self.being.actions"}
@@ -59,13 +73,14 @@ stab = actions.simplemaker("stab", 5)
 ab = api.Limb("finger", [power])
 arm = api.Limb("arm", [punch, poke])
 
-knife = api.Item("knife", "arm", {}, [stab])
+knife = api.Item("arm", {}, [stab]).instance("knife")
+rknife = api.Item("arm", {}, [stab]).instance("red knife")
 
 player = api.Being(
     [ab, arm],
     smart_user,
     {"HP": 6},
-    [knife]
+    [rknife]
 ).instance(shared.name)
 
 drunkard = api.Being(

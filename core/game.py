@@ -17,6 +17,7 @@ class Game:
 
     def play(self):
         while not self.end:
+            print("Turn", self.timeline.tick)
             self.choices()
             self.actions()
             self.statuses()
@@ -31,14 +32,17 @@ class Game:
         for being in self.timeline.beings():
             action = being.thinker()
             #Thinkers should return ActionInsts
-            try:
+            if "delay" in action.data:
                 delay = action.data["delay"]
-            except KeyError:
+            elif "speed" in action.data:
+                delay = action.data["speed"]
+            else:
                 delay = 0
             self.timeline.addaction(action, delay)
             action.listeners["choosen"](action)
             being.last_act = action
             self.rules['schedule'](self, being)
+            action.listeners["init"](action)
 
     def actions(self):
         """
