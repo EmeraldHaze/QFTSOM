@@ -46,10 +46,9 @@ def basic_choosen(action):
 
 def move_exec(self):
     being = self.actor
-    dest_name = self.args["dest"]
+    dest = self.args["dest"]
     loc = being.location
-    if dest_name in loc.linked:
-        dest = loc.parent[dest_name]
+    if dest in loc.links:
         loc.beings.remove(being)
         dest.beings.append(being)
         being.location = dest
@@ -61,7 +60,7 @@ move = Action(
     "move",
     {"exec": move_exec, "choosen": lambda a: None},
     {"speed": 1, "type": "move"},
-    argsinfo={"dest": "self.being.location.linked"}
+    argsinfo={"dest": "self.being.location.links"}
 )
 
 null = Action(
@@ -161,7 +160,44 @@ drop = Action(
     {"speed": 1, "type": "items", "arg_queries": {"item": "Drop what? "}},
     argsinfo={"item": "self.being.items"})
 
-def viewinv_exec(self):
-    pass
-    for item in
-normal_base_actions = [move, null, equip, unequip, look, drop, pickup]
+def viewinv_init(self):
+    if self.actor.items:
+        print("Your items:")
+        for n, item in enumerate(self.actor.items):
+            msg = item.name.capitalize()
+            if item.limb:
+                msg += ", which is equipped to your " + item.limb.name + ". "
+            else:
+                prefix = "a" + "n" if item.equip[0] in "aeiouy" else ""
+                msg += ", which could be equipped to {} {}. ".format(
+                    prefix,
+                    item.equip
+                )
+            if item.actions:
+                msg += "It allows you to "
+                msg += ", ".join(map(str, item.actions))
+                msg += ". "
+            else:
+                msg += "It doesn't allow you to do any actions. "
+            if item.stats:
+                msg += "It gives you "
+                for stat, value in item.stats.items():
+                    msg += "{}: {}".format(stat, value)
+                msg += "."
+            else:
+                msg += "It doesn't change your stats."
+            print(msg)
+    else:
+        print("You don't have any items")
+
+viewinv = Action(
+    "view inventory",
+    {
+        "init": viewinv_init,
+    },
+    {"delay": 0, "speed": -1, "type": "items"},
+    #-1 speed compensates for waiting for the turn after it's executed
+)
+
+
+normal_base_actions = [move, null, equip, unequip, look, drop, pickup, viewinv]

@@ -83,7 +83,7 @@ class Limb(PotentialReal):
             actions=None, data=None, stats=None, rules=None, equip=None):
 
         if actions is None:
-            actions = []
+            actions = action or []
         if data is None:
             data = {}
         if stats is None:

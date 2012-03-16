@@ -1,5 +1,6 @@
 from collections import defaultdict
 from inspect import getargspec
+from types import MethodType
 
 from core.utils import copy
 from core import shared
@@ -15,6 +16,9 @@ class RealAction(Real):
         self.args = args
         self.targets = targets
         self.parent = parent
+
+        for name, listener in self.listeners.items():
+            self.listeners[name] = MethodType(listener, self)
 
         if not (parent.min_targets <= len(targets) <= parent.max_targets):
             raise Exception("%s tried to %s an invalid amount of targets" % (
@@ -105,6 +109,9 @@ class AbstractAction(PotentialReal):
 
     def __repr__(self):
         return "<abstract %s>" % self.name
+
+    def __str__(self):
+        return self.name
 
 Action = AbstractAction
 

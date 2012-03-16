@@ -39,10 +39,10 @@ class Game:
             else:
                 delay = 0
             self.timeline.addaction(action, delay)
-            action.listeners["choosen"](action)
+            action.listeners["choosen"]()
             being.last_act = action
             self.rules['schedule'](self, being)
-            action.listeners["init"](action)
+            action.listeners["init"]()
 
     def actions(self):
         """
@@ -51,7 +51,7 @@ class Game:
         at("actions")
         for action in self.timeline.actions():
             info(action)
-            action.listeners['exec'](action)
+            action.listeners['exec']()
 
     def statuses(self):
         """
@@ -109,19 +109,20 @@ class Game:
         self.findbeings(self.placenet)
 
     def findbeings(self, net):
-        for place in net.nodes.values():
-            if place.net:
-                self.findbeings(place)
-            else:
-                for being in place.beings:
-                    self.rules["wipe_hist"](self, being)
-                    being.last_act = None
-                    being.location = place
-                    self.rules["get_actions"](self, being)
-                    self.rules['schedule'](self, being)
-                    self.being_list.append(being)
-                    self.beings[being.name] = being
-                    being.thinker.init(self)
+        for name, place in net.nodes.items():
+            if name is not "parent":
+                if place.net:
+                    self.findbeings(place)
+                else:
+                    for being in place.beings:
+                        self.rules["wipe_hist"](self, being)
+                        being.last_act = None
+                        being.location = place
+                        self.rules["get_actions"](self, being)
+                        self.rules['schedule'](self, being)
+                        self.being_list.append(being)
+                        self.beings[being.name] = being
+                        being.thinker.init(self)
 
     def exit_startup(self):
         """

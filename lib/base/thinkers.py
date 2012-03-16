@@ -33,16 +33,20 @@ def pchoice(choices, extra=None, query="Choice? "):
     if set, prints out some extra information. It should be (name: expr),
     and name: eval(expr) is printed as part of the name
     """
-    if type(choices) == dict:
+    try:
         namelist = list(choices.keys())
-    else:
+    except AttributeError:
+    #it's doesn't have keys, so it's a normal sequance object
         try:
-            namelist, choices, choicelist = [], {}, choices
+            namelist = []
+            choices = {}
+            choicelist = list(choices)
+            #so that we don't get any nasty surprises later on
             for choice in choicelist:
                 namelist.append(choice.name)
                 choices[choice.name] = choice
-
         except AttributeError:
+            #no name attribute
             namelist = choicelist
             choices = dict(zip(namelist, choicelist))
 

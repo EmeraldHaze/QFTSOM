@@ -11,4 +11,4 @@ from api.status import Status
 ###Abstract###
 from api.abstract import Abstract
 from api.rule import rule, Rule
-from api.net import PlaceNet, Place, AbstractNet, AbstractNode
+from api.node import PlaceNet, Place, AbstractNet, AbstractNode
