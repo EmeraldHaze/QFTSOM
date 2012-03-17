@@ -33,14 +33,17 @@ def pchoice(choices, extra=None, query="Choice? "):
     if set, prints out some extra information. It should be (name: expr),
     and name: eval(expr) is printed as part of the name
     """
+    ochoices = choices
+    if "?" not in query:
+        query += "? "
+    query = query[0].upper() + query[1:]
     try:
         namelist = list(choices.keys())
     except AttributeError:
     #it's doesn't have keys, so it's a normal sequance object
         try:
             namelist = []
-            choices = {}
-            choicelist = list(choices)
+            choices, choicelist = {}, list(choices)
             #so that we don't get any nasty surprises later on
             for choice in choicelist:
                 namelist.append(choice.name)

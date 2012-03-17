@@ -59,19 +59,22 @@ class Net(Abstract):
             nodes = node_dict
         self.nodes = nodes
         for node in nodes.values():
-            node.parent = self
-            if node.net:
-                newnodes = OrderedDict(back=self)
-                newnodes.update(node.nodes)
-                #This causes the back to be the 'first' node in that net
-                node.nodes = newnodes
-            else:
-                links = []
-                for link in node.links:
-                    links.append(self.nodes[link])
-                node.links = links
+            self.addnode(node)
         self.does = does
         self.start = start
+
+    def addnode(self, node):
+        if node.net:
+            newnodes = OrderedDict(back=self)
+            #this causes the 'back' to be the 'first' node in that net
+            newnodes.update(node.nodes)
+            node.nodes = newnodes
+        else:
+            links = []
+            for link in node.links:
+                links.append(self.nodes[link])
+            node.links = links
+        self.nodes[node.name] = node
 
 
 class PlaceNet(Net):
@@ -97,4 +100,8 @@ class AbstractNet(Net):
                 if state.exit_:
                     return state
                 else:
-                    state = chooser(state.links)
+                    try:
+                        state = chooser(state.links, query=state.name)
+                    except TypeError:
+                        #no query argument
+                        state = chooser(state.links)

@@ -103,7 +103,7 @@ class AbstractAction(PotentialReal):
             argsinfo = shared.actions.argsinfo
 
         if type(argsinfo) is dict:
-            argsinfo = argsinfo.items()
+            argsinfo = list(argsinfo.items())
 
         self.argsinfo = argsinfo
 

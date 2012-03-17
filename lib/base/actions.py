@@ -89,11 +89,8 @@ equip = Action(
         "choosen": lambda s: None,
         "init": equip_init
     },
-    {"speed": 0, "type": "items", "arg_queries": {
-        "item": "Equip what item? ",
-        "limb": "Equip to what limb? "
-    }},
-    argsinfo={"item": "self.being.items", "limb": "self.being.limbs"}
+    {"speed": 0, "type": "items"},
+    argsinfo=[("item", "self.being.items"), ("limb", "self.being.limbs")]
 )
 
 unequip = Action(
@@ -107,7 +104,7 @@ unequip = Action(
         ),
         "choosen": lambda s: None
     },
-    {"speed": 0, "type": "items", "arg_queries": {"item", "Unequip what? "}},
+    {"speed": 0, "type": "items"},
     argsinfo=[("item", "self.being.items")]
 )
 
@@ -143,7 +140,7 @@ def pickup_exec(self):
 pickup = Action(
     "pick up",
     {"exec": pickup_exec},
-    {"speed": 1, "type": "items", "arg_queries": {"item": "Pick up what? "}},
+    {"speed": 1, "type": "items"},
     argsinfo={"item": "self.being.location.items"})
 
 def drop_exec(self):
@@ -157,7 +154,7 @@ def drop_exec(self):
 drop = Action(
     "drop",
     {"exec": drop_exec},
-    {"speed": 1, "type": "items", "arg_queries": {"item": "Drop what? "}},
+    {"speed": 1, "type": "items"},
     argsinfo={"item": "self.being.items"})
 
 def viewinv_init(self):
