@@ -10,14 +10,14 @@ from api import Real, PotentialReal
 class RealAction(Real):
     """Represents a concrete action done by a being to another being(s)"""
     def __init__(self, parent, targets=[], **args):
-        copy(self, parent, "name", "listeners", "data", "actor", "game")
+        copy(self, parent, "name", "data", "actor", "game")
         if type(targets) != list:
             targets = [targets]
         self.args = args
         self.targets = targets
         self.parent = parent
-
-        for name, listener in self.listeners.items():
+        self.listeners = defaultdict(lambda *a: lambda *a: None)
+        for name, listener in parent.listeners.items():
             self.listeners[name] = MethodType(listener, self)
 
         if not (parent.min_targets <= len(targets) <= parent.max_targets):

@@ -6,6 +6,7 @@ from core.config import info, at, debug
 class Game:
     def __init__(self, placenet, rules, exits):
         """Initilizes the game"""
+        at("game initilization")
         self.end = False
         self.placenet = placenet
         self.exit_list = exits
@@ -16,6 +17,7 @@ class Game:
         self.rules['init'](self)
 
     def play(self):
+        at("game play")
         while not self.end:
             print("Turn", self.timeline.tick)
             self.choices()
@@ -29,6 +31,7 @@ class Game:
         """
         Queries every being for an action, and schedules it, with some cleanup
         """
+        at("choices")
         for being in self.timeline.beings():
             action = being.thinker()
             #Thinkers should return ActionInsts
@@ -50,7 +53,7 @@ class Game:
         """
         at("actions")
         for action in self.timeline.actions():
-            info(action)
+            info(action, "is execing")
             action.listeners['exec']()
 
     def statuses(self):
@@ -103,12 +106,14 @@ class Game:
         self.being_list.remove(being)
 
     def being_startup(self):
+        at("being startup")
         self.rules["being_init"](self)
         self.being_list = []
         self.beings = {}
         self.findbeings(self.placenet)
 
     def findbeings(self, net):
+        at("find beings")
         for name, place in net.nodes.items():
             if name is not "parent":
                 if place.net:
@@ -125,6 +130,7 @@ class Game:
                         being.thinker.init(self)
 
     def exit_startup(self):
+        at("exit startup")
         """
         Builds a dict, {dep: [exits]}
         """

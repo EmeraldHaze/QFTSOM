@@ -34,7 +34,7 @@ if __name__ == "__main__":
     print("This is QFTSOM 0.3.5. In lieu of a proper interface, use the numbers."
           " Failure to do so can cause crashs.")
 
-    if config.GET_NAME:
+    if config.ONLINE:
         shared.name = input()
         #Sets player name, which is the first input if run by Socket'd
     else:

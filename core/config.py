@@ -1,5 +1,5 @@
 DEBUG = 0
-GET_NAME = False
+ONLINE = False
 PREFIX = "###"
 
 
@@ -11,7 +11,7 @@ def info(*msg):
 
 def at(loc):
     if DEBUG >= 1:
-        print(PREFIX + "At %s" % loc)
+        print(PREFIX + "at %s" % loc)
 
 
 def debug(*msg):

@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from api import Abstract
-from core import does
+from core import shared
 
 
 class Node(Abstract):
@@ -20,7 +20,8 @@ class AbstractNode(Node):
 
 class Place(Node):
     """A node that represents a place"""
-    def __init__(self, name, links, info, beings=None, items=None):
+    def __init__(self, name, links, info, beings=None, items=None,
+                 named_links=False):
         if items is None:
             items = []
         if type(items) is not list:
@@ -30,11 +31,14 @@ class Place(Node):
         if type(beings) is not list:
             beings = [beings]
         self.name = name
-        self.links = links
+        if named_links is False:
+            named_links = links
+        self.links = OrderedDict(zip(named_links, links))
         self.info = info
         self.items = items
         self.beings = beings
         self.parent = None
+
 
     def __repr__(self):
         return "<{} with {} in it>".format(
@@ -70,9 +74,9 @@ class Net(Abstract):
             newnodes.update(node.nodes)
             node.nodes = newnodes
         else:
-            links = []
-            for link in node.links:
-                links.append(self.nodes[link])
+            links = OrderedDict()
+            for name, link in node.links.items():
+                links[name] = self.nodes[link]
             node.links = links
         self.nodes[node.name] = node
 

@@ -25,20 +25,21 @@ least = lambda being, battle: mosttarget(being, battle, int.__gt__)
 firstact = lambda being, battle: being.actions[0]
 
 
-def pchoice(choices, extra=None, query="Choice? "):
+def pchoice(choices, extra=None, query="Choice? ", back=False):
     """
     This function gets a choice from the user.
     choices should be {name:value}, where value is returned if name is
     choosen It can also be a iterable of values with name attributes extra,
     if set, prints out some extra information. It should be (name: expr),
     and name: eval(expr) is printed as part of the name
+    back adds an back option
     """
-    ochoices = choices
     if "?" not in query:
         query += "? "
     query = query[0].upper() + query[1:]
     try:
         namelist = list(choices.keys())
+        choices = dict(choices)
     except AttributeError:
     #it's doesn't have keys, so it's a normal sequance object
         try:
@@ -52,7 +53,9 @@ def pchoice(choices, extra=None, query="Choice? "):
             #no name attribute
             namelist = choicelist
             choices = dict(zip(namelist, choicelist))
-
+    if back:
+        namelist = ["back"] + namelist
+        choices["back"] = "back"
     for num, name in enumerate(namelist):
         printname = name[0].upper() + name[1:]
         #Because capitalize and title mess up things like "Dwarf II"

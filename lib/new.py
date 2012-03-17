@@ -24,7 +24,11 @@ def drunk(self):
         action = self.being.act_dict["move"]
     args = {}
     for arg, info in action.argsinfo:
-        args[arg] = choice(eval(info))
+        choices = eval(info)
+        try:
+            args[arg] = choice(list(choices.values()))
+        except AttributeError:
+            args[arg] = choice(choices)
     return action.instance(**args)
 
 

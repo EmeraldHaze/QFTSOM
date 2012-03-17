@@ -46,21 +46,23 @@ def basic_choosen(action):
 
 def move_exec(self):
     being = self.actor
-    dest = self.args["dest"]
+    dest = self.args["go where"]
     loc = being.location
-    if dest in loc.links:
+    if dest in loc.links.values():
         loc.beings.remove(being)
         dest.beings.append(being)
         being.location = dest
         print(being.name, "has moved too", dest.name)
         if being.name is shared.name:
             print(dest.info)
+    else:
+        print("Bad location")
 
 move = Action(
     "move",
     {"exec": move_exec, "choosen": lambda a: None},
     {"speed": 1, "type": "move"},
-    argsinfo={"dest": "self.being.location.links"}
+    argsinfo={"go where": "self.being.location.links"}
 )
 
 null = Action(

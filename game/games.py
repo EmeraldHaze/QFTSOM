@@ -1,4 +1,5 @@
 from api import PlaceNet, Place
+from game import maze
 from core import Game
 import lib
 from lib import new
@@ -8,7 +9,7 @@ placenet = PlaceNet("Places", [
     Place("Groove", ["Clearing"], "You're in the groove!", new.drunkard),
     Place("Clearing", ["Groove"], "A rather plain clearing", new.player, new.knife)
 ])
-
+placenet = maze.maze
 rules = {
     "schedule": rules.speed,
     "get_actions": rules.get_all,
