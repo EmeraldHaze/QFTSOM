@@ -1,27 +1,20 @@
 import api
-import lib
 from lib.base import thinkers, actions, exits, rules
-from lib.base.user import user
-from core import shared
+from lib.base.user import UI
 from random import choice
 
-shared.statrules = [("MAXHP", "self.stats['HP']")]
-shared.current_module = "new"
-shared.modules["new"] = """This is a module for trying out the refactored
-changes"""
-shared.misc.base_actions = actions.normal_base_actions
-shared.actions.blank()
-shared.actions.listners = {"choosen": actions.basic_choosen}
+api.reset_defaults()
+api.Being.defaults.statrules = [("MAXHP", "self.stats['HP']")]
+api.Being.defaults.base_actions = actions.normal_base_actions
+api.Action.defaults.listners = {"choosen": actions.basic_choosen}
 
 
 @api.Thinker
 def drunk(self):
-    if len(self.being.location.beings) > 1:
-        action = choice([
-            act for act in self.being.actions if act.data["type"] is "attack"
-        ])
-    else:
+    if self.being.location.alone():
         action = self.being.act_dict["move"]
+    else:
+        action = choice([act for act in self.being.actions if act.data["type"] is "attack"])
     args = {}
     for arg, info in action.argsinfo:
         choices = eval(info)
@@ -62,7 +55,7 @@ player = api.Being(
     user,
     {"HP": 6},
     [rknife]
-).instance(shared.name)
+).instance(config.name)
 
 drunkard = api.Being(
     [arm],

@@ -1,4 +1,4 @@
-from core.utils import copy
+from core.utils import copy, Settings
 from api import Real, PotentialReal
 
 
@@ -27,6 +27,10 @@ class Item(PotentialReal):
     Represents something that can be possesed (e.g, a sword, a spell)
     """
     inst = RealItem
+    defaults = Settings(
+        datarules = []
+        data = {}
+    )
     def __init__(self, equip, stats={}, actions=[], data={}, datarules=None):
         self.equip = equip
         #What type of limb this item can be equipped to
@@ -34,9 +38,8 @@ class Item(PotentialReal):
         #Actions this item confers
         self.stats = stats
         self.data = data
-        if not datarules:
-            from core import shared
-            datarules = shared.rules.item_data
+        if datarules is None:
+            datarules = self.defaults.datarules
         for name, value in datarules:
             self.data[name] = eval(value)
 

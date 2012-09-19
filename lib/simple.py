@@ -1,15 +1,11 @@
 import api
 import lib
 from lib.base import thinkers, actions, exits, rules
-from core import shared
 from random import choice
 
-shared.statrules = [("MAXHP", "self.stats['HP']")]
-shared.modules["simple"] = """A basic no-frills module. Requires nothing,
-but probably won't work with anything that requires something, like the
-speed scheduler"""
-shared.current_module = "simple"
-shared.misc.base_actions = actions.normal_base_actions
+api.reset_defaults()
+api.Being.defaults.statrules = [("MAXHP", "self.stats['HP']")]
+api.Action.defaults.base_actions = actions.normal_base_actions
 
 manthinker = thinkers.think_maker(thinkers.mosttarget, thinkers.firstact)
 oddthinker = thinkers.think_maker(thinkers.least,      thinkers.firstact)
@@ -25,7 +21,7 @@ arm = api.Limb("arm", [hit])
 fist = api.Item("fist", "arm", {}, [power])
 
 baseman = api.Being([finger], manthinker, {"HP": 5})
-#player = baseman.instance(shared.name, pthinker, statchanges={"HP":1})
+#player = baseman.instance(config.name, pthinker, statchanges={"HP":1})
 oddman = baseman.instance("Oddball", oddthinker)
 man = baseman.instance("Man")
 man2 = baseman.instance("OtherMan", manthinker, statchanges={'HP':-1})

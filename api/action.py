@@ -1,9 +1,7 @@
 from collections import defaultdict
-from inspect import getargspec
 from types import MethodType
 
-from core.utils import copy
-from core import shared
+from core.utils import copy, Settings
 from api import Real, PotentialReal
 
 
@@ -13,8 +11,8 @@ class RealAction(Real):
         copy(self, parent, "name", "data", "actor", "game")
         if type(targets) != list:
             targets = [targets]
-        self.args = args
         self.targets = targets
+        self.args = args
         self.parent = parent
         self.listeners = defaultdict(lambda *a: lambda *a: None)
         for name, listener in parent.listeners.items():
@@ -26,7 +24,7 @@ class RealAction(Real):
                                 self.name
                             ))
 
-        if parent.inverted:
+        if parent.inverted_targets:
             newtargets = []
             for being in game.beings.values():
                 if being not in targets:
@@ -64,43 +62,54 @@ class PotentialAction(PotentialReal):
         return "<{}'s potential {}>".format(self.actor.name, self.name)
 
 class AbstractAction(PotentialReal):
+    "Represents a potential action that a potential being could do"
     inst = PotentialAction
-
+    defaults = Settings(
+        min_targets=1,
+        max_targets=1,
+        listeners={},
+        argsinfo={"targets": "self.being.location.beings"},
+        data={}
+    )
     def __init__(self, name, listeners, data={}, min_targets=None,
-                 max_targets=None, inverted=False, argsinfo=None):
+                 max_targets=None, inverted_targets=False, argsinfo=None):
         """
         Represents a possible action. Args:
-        name: str
-        listeners:dict, listeners[event] is called at event (e.g, exec)
+        name = ""
+        listeners = {}, listeners[event] is called at event (e.g, exec)
         data = {}, arbitrary data
         min_targets = 1, minimum targets
         max_targets = 1, -1 = all, -2 = all but one, etc
+        inverted_targets = False, selects every being but the targetted ones
+        argsinfo = ?, ???
         """
 
         self.name = name
         self.listeners = defaultdict(
-            lambda *a: (lambda *args: None),
-            shared.actions.listeners
+            lambda : (lambda *args: None),
+            self.defaults.listeners
         )
+        #creates a dict the values of which default to a function that takes
+        #any number of args and returns None
         self.listeners.update(listeners)
 
         if max_targets is None:
-            max_targets = shared.actions.max_targets
+            max_targets = self.defaults.max_targets
         if min_targets is None:
-            min_targets = shared.actions.min_targets
+            min_targets = self.defaults.min_targets
 
         if max_targets < min_targets:
             raise Exception(name + "'s max is greater than it's min")
 
         self.min_targets = min_targets
         self.max_targets = max_targets
-        self.inverted = inverted
+        self.inverted_targets = inverted_targets
 
-        self.data = shared.actions.data.copy()
+        self.data = self.defaults.data.copy()
         self.data.update(data)
 
         if argsinfo is None:
-            argsinfo = shared.actions.argsinfo
+            argsinfo = self.defaults.argsinfo
 
         if type(argsinfo) is dict:
             argsinfo = list(argsinfo.items())

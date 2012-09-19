@@ -4,9 +4,9 @@ Starts the game.
 """
 
 import sys
-import struct
+#import struct
 from pdb import pm
-from core import shared, config
+from core import config
 
 
 class Wrap:
@@ -35,11 +35,11 @@ if __name__ == "__main__":
           " Failure to do so can cause crashs.")
 
     if config.ONLINE:
-        shared.name = input()
+        config.name = input()
         #Sets player name, which is the first input if run by Socket'd
     else:
         print("In offline mode")
-        shared.name = "Glycan"
+        config.name = "Glycan"
 
     from game.games import choosen_game as game
     game.play()

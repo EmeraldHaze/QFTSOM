@@ -1,18 +1,18 @@
 import api
 from api.limb import sym
-from lib.base import thinkers, statuses, exits, rules
+from lib.base import thinkers, statuses, exits, rules, actions
 from random import choice, randint
-from core import shared
+from core import config
 
-shared.blank()
-shared.limb_datarules = [
-    ("MAXHP", "self.data['HP']"),
+api.reset_defaults()
+api.Being.defaults.base_actions = actons.normal_base_actions
+api.Limb.defaults.data = [
     ("DEF", "0"),
     ("evade", "0")
 ]
-shared.current_module = "limb"
-shared.modules["limb"] = """This module allows you to attack limbs. It
-requires limbs that have HP, limbdie exit (for killing limbs)."""
+api.Limb.defaults.datarules = [
+    ("MAXHP", "self.data['HP']")
+]
 
 def ldie_check(being, battle):
     total = 0
@@ -163,7 +163,7 @@ man = api.Being(
     [knife]
 )
 
-player = man.instance(shared.name)
+player = man.instance(config.name)
 mad = man.instance("Huminoid Taco", loony, statchanges={"speed":1})
 
 

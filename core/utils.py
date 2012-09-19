@@ -1,7 +1,22 @@
 import types
+from core import config
 
 
-def copy(target, source, *tocopy):
+class Settings:
+    """
+    Stores settings (like defaults), which can be changed and reset.
+    """
+    def __init__(self, **settings):
+        self.default = settings
+        for setting, value in settings.items():
+            setattr(self, setting, value)
+
+    def reset(self):
+        for setting, value in self.default.items():
+            setattr(self, setting, value)
+
+
+def copy_attrs(target, source, *tocopy):
     """
     Copies attributes listed in tocopy from source to target, making new
     instances of str, dict, list objects
@@ -12,3 +27,20 @@ def copy(target, source, *tocopy):
             value = type(value)(value)
             #This makes a new object with the same content
         setattr(target, attr, value)
+
+###debug levels
+def info(*msg):
+    if config.DEBUG_LEVEL >= 1:
+        print(config.config.DEBUG_PREFIX, end="")
+        print(*msg)
+
+
+def at(loc):
+    if config.DEBUG_LEVEL >= 1:
+        print(config.config.DEBUG_REFIX + "at %s" % loc)
+
+
+def config.DEBUG_LEVEL(*msg):
+    if config.DEBUG_LEVEL >= 2:
+        print(config.config.DEBUG_PREFIX, end="")
+        print(*msg)

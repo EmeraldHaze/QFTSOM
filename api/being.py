@@ -1,8 +1,5 @@
 from types import MethodType
-
-from game import defaults
-from core import shared
-from core.utils import copy
+from core.utils import copy_attrs, Settings
 from api import Real, PotentialReal
 
 
@@ -12,7 +9,7 @@ class RealBeing(Real):
 
     def __init__(self, parent, name,
                  thinker=None, items=[], statchanges={}, changes={}):
-        copy(self, parent, 'stats', 'data', "base_actions")
+        copy_attrs(self, parent, 'stats', 'data', "base_actions")
         self.name = name
 
         if not thinker:
@@ -46,7 +43,6 @@ class RealBeing(Real):
                 value = value.instance(self)
             setattr(self, name, value)
 
-        shared.register(self)
 
     def buildbody(self, limbs, uplimb=None):
         """
@@ -180,25 +176,29 @@ class Being(PotentialReal):
     Has a thinker, limbs, stats, items, data
     """
     inst = RealBeing
+    defaults = Settings(
+        base_actions = [],
+        statrules = [("MAXHP", "self.stats['HP']")],
+        stats = {"speed": 0},
+        data = {}
+        items = []
+    )
+
     def __init__(self, body, thinker,
                  stats=None, items=None, data=None, rules=None):
         if stats is None:
-            stats = defaults.beings.stats
+            stats = self.defaults.stats
         if items is None:
-            items = []
+            items = self.defaults.items
         if data is None:
-            data = defaults.beings.data
+            data = self.defaults.data
+        if rules is None:
+            rules = self.defaults.statrules
 
         self.body = body
         self.thinker = thinker
         self.stats = stats
         self.items = items
         self.data = data
-
-        if rules is None:
-            from core.shared import rules
-            rules = rules.being_stats
         self.rules = rules
-
-        from core.shared import misc
-        self.base_actions = misc.base_actions
+        self.base_actions = self.defaults.base_actions

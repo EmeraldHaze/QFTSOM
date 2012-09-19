@@ -1,0 +1,1 @@
+ - ACTOR: the Being who's doing an Action

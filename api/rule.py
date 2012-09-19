@@ -1,4 +1,3 @@
-from core import shared
 from api import Abstract
 
 ruletypes = {
@@ -24,7 +23,6 @@ class Rule(Abstract):
         self.name = func.__name__
         self.info = self.func.__doc__
         self.type_ = type_
-        shared.register(self)
 
     def __call__(self, *args):
         self.func(*args)

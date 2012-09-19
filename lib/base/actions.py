@@ -1,10 +1,12 @@
 from api import Action, ActionFactory
 from random import randint
-from core import shared
+from core import config
 
-shared.actions.max_targets = 0
-shared.actions.min_targets = 0
-shared.actions.argsinfo = {}
+Action.defaults.reset()
+Action.defaults.max_targets = 0
+Action.defaults.min_targets = 0
+Action.defaults.argsinfo = {}
+
 def sexec(self):
         target = self.targets[0]
         dmg = self.data["dmg"]
@@ -37,11 +39,11 @@ def manainit(self):
 
 def basic_choosen(action):
     print("{} has {}'d {}!".format(
-                        action.actor.name,
-                        action.name,
-                        ', '.join([target.name for target in action.targets])
-                    )
-                )
+                action.actor.name,
+                action.name,
+                ', '.join([target.name for target in action.targets])
+            )
+        )
 
 
 def move_exec(self):
@@ -53,7 +55,7 @@ def move_exec(self):
         dest.beings.append(being)
         being.location = dest
         print(being.name, "has moved too", dest.name)
-        if being.name is shared.name:
+        if being.name is config.name:
             print(dest.info)
     else:
         print("Bad location")

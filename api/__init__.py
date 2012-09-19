@@ -12,3 +12,8 @@ from api.status import Status
 from api.abstract import Abstract
 from api.rule import rule, Rule
 from api.node import PlaceNet, Place, AbstractNet, AbstractNode
+
+def reset_defaults():
+    Being.defaults.reset()
+    Limb.defaults.reset()
+    Action.defaults.reset()

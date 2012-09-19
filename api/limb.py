@@ -1,11 +1,11 @@
-from core.utils import copy
+from core.utils import copy_attrs, Settings
 from api import Real, PotentialReal
 
 
 class RealLimb(Real):
     """Represents a specific being's specific limb"""
     def __init__(self, parent, being, uplimb=None, prefix=""):
-        copy(self, parent, 'data', 'stats', 'actions', 'equip', 'rules')
+        copy_attrs(self, parent, 'data', 'stats', 'actions', 'equip', 'rules')
         self.prefix = prefix
         self.name = prefix + parent.name
         self.being = being
@@ -32,7 +32,7 @@ class RealLimb(Real):
             for being_act in self.being.actions:
                 if being_act.parent is act:
                     self.being.actions.remove(being_act)
-            for name, act in self.being.act_dict.copy().items():
+            for name, act in self.being.act_dict.copy_attrs().items():
                 if being_act.parent is act:
                     del self.being.act_dict[name]
 
@@ -78,22 +78,24 @@ class Limb(PotentialReal):
     data which could, for example, have an 'HP' key.
     """
     inst = RealLimb
-
+    defaults = Settings(
+        datarules = [],
+        data = {},
+        actions = {},
+        stats = {}
+    )
     def __init__(self, name,
             actions=None, data=None, stats=None, rules=None, equip=None):
 
         if actions is None:
-            actions = action or []
+            actions = self.defaults.actions
         if data is None:
-            data = {}
+            data = self.defaults.data
         if stats is None:
-            stats = {}
+            stats = self.defaults.stats
 
         self.name = name
-        if equip:
-            self.equip = equip
-        else:
-            self.equip = name
+        self.equip = equip or name
 
         self.actions = actions
         self.data = data
@@ -101,6 +103,5 @@ class Limb(PotentialReal):
         self.sym = False
         #This will be used for symetric-ness
         if rules is None:
-            from core.shared import rules
-            rules = rules.limb_data
+            rules = self.defaults.datarules
         self.rules = rules

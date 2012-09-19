@@ -1,7 +1,6 @@
 from collections import OrderedDict
 
 from api import Abstract
-from core import shared
 
 
 class Node(Abstract):
@@ -46,6 +45,17 @@ class Place(Node):
             ", ".join(map(repr, self.beings + self.items))
         )
 
+    def alone(self):
+        """
+        Returns True if there's nobody in this place, the Being if
+        their's one, and False if there's more than one
+        """
+        if len(self.beings) is 0:
+            return True
+        elif len(self.beings) is 1:
+            return self.beings[0]
+        else:
+            return False
 
 class Net(Abstract):
     net = True

@@ -1,4 +1,3 @@
-from core import shared
 from api.abstract import Abstract
 
 class Exit(Abstract):
@@ -9,16 +8,12 @@ class Exit(Abstract):
     It should also list it's dependancies (what the condition depends on)
     and what the effect changes
     '"""
-    plural = "exits"
-
-    def __init__(self, name, condition,
-            effect=(lambda p, b: None), deps=[], changes=[]):
+    def __init__(self, name, condition, effect=None, deps=None, changes=None)
         self.name = name
         self.condition = condition
-        self.effect = effect
-        self.deps = deps
-        self.changes = changes
-        shared.register(self)
+        self.effect = effect or lambda p, b: None
+        self.deps = deps or []
+        self.changes = changes or []
 
     def __str__(self):
         return self.name

@@ -1,0 +1,6 @@
+clean core
+game -> games
+remove defaults, shared, merge into API
+fix smart_user
+clean actions
+argsinfo

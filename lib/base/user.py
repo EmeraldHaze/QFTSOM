@@ -1,3 +1,4 @@
+"""User inerfaces"""
 import api
 from api import Thinker
 from lib.base.thinkers import pchoice
@@ -5,6 +6,9 @@ from lib.base.thinkers import pchoice
 
 @api.Thinker
 def smart_user(self):
+    """
+    A number-choice-based UI that provides relevent choices
+    """
     choices = 2
     choice = 0
     if len(self.being.location.beings) is 1:
@@ -39,4 +43,4 @@ def smart_user(self):
     return act.instance(**args)
 
 
-user = smart_user
+UI = smart_user
