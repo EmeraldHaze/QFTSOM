@@ -2,6 +2,7 @@ import api
 from lib.base import thinkers, actions, exits, rules
 from lib.base.user import UI
 from random import choice
+from core import config
 
 api.reset_defaults()
 api.Being.defaults.statrules = [("MAXHP", "self.stats['HP']")]
@@ -52,7 +53,7 @@ rknife = api.Item("arm", {}, [stab]).instance("red knife")
 
 player = api.Being(
     [ab, arm],
-    user,
+    UI,
     {"HP": 6},
     [rknife]
 ).instance(config.name)

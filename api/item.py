@@ -1,11 +1,11 @@
-from core.utils import copy, Settings
+from core.utils import copy_attrs, Settings
 from api import Real, PotentialReal
 
 
 class RealItem(Real):
     """Represents an specific iteming of a specific person."""
     def __init__(self, parent, name):
-        copy(self, parent, 'equip', 'stats', 'actions', 'data')
+        copy_attrs(self, parent, 'equip', 'stats', 'actions', 'data')
         self.name = name
         self.owner = None
         self.limb = None
@@ -28,7 +28,7 @@ class Item(PotentialReal):
     """
     inst = RealItem
     defaults = Settings(
-        datarules = []
+        datarules = [],
         data = {}
     )
     def __init__(self, equip, stats={}, actions=[], data={}, datarules=None):

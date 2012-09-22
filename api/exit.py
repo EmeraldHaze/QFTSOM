@@ -8,10 +8,10 @@ class Exit(Abstract):
     It should also list it's dependancies (what the condition depends on)
     and what the effect changes
     '"""
-    def __init__(self, name, condition, effect=None, deps=None, changes=None)
+    def __init__(self, name, condition, effect=None, deps=None, changes=None):
         self.name = name
         self.condition = condition
-        self.effect = effect or lambda p, b: None
+        self.effect = effect or (lambda p, b: None)
         self.deps = deps or []
         self.changes = changes or []
 

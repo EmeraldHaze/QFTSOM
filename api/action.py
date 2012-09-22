@@ -1,14 +1,14 @@
 from collections import defaultdict
 from types import MethodType
 
-from core.utils import copy, Settings
+from core.utils import copy_attrs, Settings
 from api import Real, PotentialReal
 
 
 class RealAction(Real):
     """Represents a concrete action done by a being to another being(s)"""
     def __init__(self, parent, targets=[], **args):
-        copy(self, parent, "name", "data", "actor", "game")
+        copy_attrs(self, parent, "name", "data", "actor", "game")
         if type(targets) != list:
             targets = [targets]
         self.targets = targets
@@ -40,7 +40,7 @@ class PotentialAction(PotentialReal):
     inst = RealAction
 
     def __init__(self, parent, actor, game=None):
-        copy(
+        copy_attrs(
             self,
             parent,
             "name",
@@ -48,7 +48,7 @@ class PotentialAction(PotentialReal):
             "data",
             "max_targets",
             "min_targets",
-            "inverted",
+            "inverted_targets",
             "argsinfo"
         )
         self.parent = parent
@@ -65,11 +65,11 @@ class AbstractAction(PotentialReal):
     "Represents a potential action that a potential being could do"
     inst = PotentialAction
     defaults = Settings(
-        min_targets=1,
-        max_targets=1,
-        listeners={},
-        argsinfo={"targets": "self.being.location.beings"},
-        data={}
+        min_targets = 1,
+        max_targets = 1,
+        listeners = {},
+        argsinfo = {"targets": "self.being.location.beings"},
+        data = {"delay": 0, "target": "norm", "MPC": 0}
     )
     def __init__(self, name, listeners, data={}, min_targets=None,
                  max_targets=None, inverted_targets=False, argsinfo=None):

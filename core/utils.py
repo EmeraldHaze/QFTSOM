@@ -31,16 +31,16 @@ def copy_attrs(target, source, *tocopy):
 ###debug levels
 def info(*msg):
     if config.DEBUG_LEVEL >= 1:
-        print(config.config.DEBUG_PREFIX, end="")
+        print(config.DEBUG_PREFIX, end="")
         print(*msg)
 
 
 def at(loc):
     if config.DEBUG_LEVEL >= 1:
-        print(config.config.DEBUG_REFIX + "at %s" % loc)
+        print(config.DEBUG_REFIX + "at %s" % loc)
 
 
-def config.DEBUG_LEVEL(*msg):
+def debug(*msg):
     if config.DEBUG_LEVEL >= 2:
-        print(config.config.DEBUG_PREFIX, end="")
+        print(config.DEBUG_PREFIX, end="")
         print(*msg)

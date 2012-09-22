@@ -180,7 +180,7 @@ class Being(PotentialReal):
         base_actions = [],
         statrules = [("MAXHP", "self.stats['HP']")],
         stats = {"speed": 0},
-        data = {}
+        data = {},
         items = []
     )
 

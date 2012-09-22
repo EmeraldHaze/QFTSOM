@@ -1,5 +1,5 @@
 from collections import deque
-from core.config import info, at, debug
+from core.utils import info, at, debug
 
 
 class Timeline:

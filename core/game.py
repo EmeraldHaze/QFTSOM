@@ -1,6 +1,6 @@
 from collections import defaultdict
 from core.timeline import Timeline
-from core.config import info, at, debug
+from core.utils import info, at, debug
 
 
 class Game:

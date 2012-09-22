@@ -1,6 +1,5 @@
 from types import MethodType
 from collections import defaultdict
-from core.utils import copy
 from api import Real, PotentialReal
 
 

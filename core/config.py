@@ -1,5 +1,5 @@
 #engine config
-DEBUG = 0
+DEBUG_LEVEL = 0
 ONLINE = False
 DEBUG_PREFIX = "###"
 

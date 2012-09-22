@@ -5,7 +5,7 @@ from random import choice, randint
 from core import config
 
 api.reset_defaults()
-api.Being.defaults.base_actions = actons.normal_base_actions
+api.Being.defaults.base_actions = actions.normal_base_actions
 api.Limb.defaults.data = [
     ("DEF", "0"),
     ("evade", "0")

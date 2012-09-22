@@ -40,6 +40,6 @@ if __name__ == "__main__":
     else:
         print("In offline mode")
         config.name = "Glycan"
-
+    import api
     from game.games import choosen_game as game
     game.play()

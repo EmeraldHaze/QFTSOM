@@ -1,6 +1,7 @@
 clean core
 game -> games
-remove defaults, shared, merge into API
+move lib games
 fix smart_user
 clean actions
 argsinfo
+commandline config

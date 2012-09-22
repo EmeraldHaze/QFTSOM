@@ -1,6 +1,3 @@
 """
-Defines objects through the API classes which used by games
+Defines objects through the API classes which are used by games
 """
-import new
-import simple
-import limbs
