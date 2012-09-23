@@ -5,3 +5,4 @@ DEBUG_PREFIX = "###"
 
 #game config
 name = "no-name"
+choosen_game = "new"

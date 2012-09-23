@@ -40,6 +40,7 @@ def combined_speed(game, being):
 
 @rule("schedule")
 def speed(game, being):
+    """Playesr go {their last action's speed} + 1 turns from now"""
     try:
         ticks_taken = being.last_act.data["speed"]
         print("{}'s {} takes {} turns".format(
@@ -48,7 +49,7 @@ def speed(game, being):
             ticks_taken
         ))
     except AttributeError:
-        ticks_taken = 0
+        ticks_taken = -1
     game.timeline.addbeing(being, ticks_taken + 1)
 
 

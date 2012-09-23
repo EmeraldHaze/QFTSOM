@@ -60,8 +60,8 @@ class RealBeing(Real):
             except TypeError:
                 if item.sym:
                     #If it's symetric
-                    newlimbs.append(item.instance(self, uplimb, 'left '))
-                    newlimbs.append(item.instance(self, uplimb, 'right '))
+                    newlimbs.append(item.instance(self, uplimb, prefix='left'))
+                    newlimbs.append(item.instance(self, uplimb, prefix='right'))
                 else:
                     newlimbs.append(item.instance(self, uplimb))
 

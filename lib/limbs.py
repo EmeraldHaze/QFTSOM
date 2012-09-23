@@ -5,6 +5,8 @@ from random import choice, randint
 from core import config
 
 api.reset_defaults()
+api.Being.defaults.stats = {"HP": 0, "speed": 0}
+#HP and speed are added on by each limb
 api.Being.defaults.base_actions = actions.normal_base_actions
 api.Limb.defaults.data = [
     ("DEF", "0"),
@@ -117,8 +119,6 @@ def limbexec(self):
     else:
         print("{}'s {} missed!".format(self.actor.name, self.name))
 
-def enchant(self):
-    self.targets[0].data['PWR'] *= 2
 
 @api.ActionFactory
 def actf(name, **data):
@@ -165,22 +165,3 @@ man = api.Being(
 
 player = man.instance(config.name)
 mad = man.instance("Huminoid Taco", loony, statchanges={"speed":1})
-
-
-game = api.Net(0, {
-    0: api.Node([], [], [
-        ('say', "You'll fight a taco! (Hint: choose a limb, then an attack)"),
-        ("battle", [player, mad]),
-        ('say',"You must go on to fight wierder stuff!"),
-        ("send", 1)
-        ]),
-    1: api.Node([], [], {'battle': [player, python],  "send": 2}),
-    2: api.Node([], [], {'battle': [player, monty],   "send": 3}),
-    3: api.Node([], [], {'battle': [player, flylord], "send": 4}),
-    4: api.Node(
-            [],
-            [],
-            {"say": "That's all the battles to be had"},
-            exit_='hub'
-        )
-})

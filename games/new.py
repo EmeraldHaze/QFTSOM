@@ -1,5 +1,5 @@
 from api import PlaceNet, Place
-from game import maze
+from games import maze
 import core
 from core import Game
 import lib

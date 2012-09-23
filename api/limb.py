@@ -6,7 +6,7 @@ class RealLimb(Real):
     """Represents a specific being's specific limb"""
     def __init__(self, parent, being, uplimb=None, prefix=""):
         copy_attrs(self, parent, 'data', 'stats', 'actions', 'equip', 'rules')
-        self.prefix = prefix
+        self.prefix = prefix + " "
         self.name = prefix + parent.name
         self.being = being
         self.item = None
